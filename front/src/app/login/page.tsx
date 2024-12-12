@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import React, { useState } from "react";
+import Swal from "sweetalert2"; // Importar SweetAlert
 
+// Tipo para los datos de inicio de sesión
 type LoginData = {
   email: string;
   password: string;
@@ -15,33 +18,42 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const registeredUsers = [
-      { email: "test@example.com", password: "password123" },
-    ];
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
 
-    const user = registeredUsers.find(
-      (u) => u.email === loginData.email && u.password === loginData.password
-    );
+      if (!response.ok) {
+        throw new Error("Credenciales incorrectas");
+      }
 
-    if (user) {
-      setIsLoggedIn(true);
-      setError(null);
-      console.log("Inicio de sesión exitoso:", user);
-    } else {
-      setIsLoggedIn(false);
-      setError("Credenciales incorrectas. Verifica tu email y contraseña.");
+      const data = await response.json();
+
+      Swal.fire({
+        icon: "success",
+        title: "Inicio de sesión exitoso",
+        text: `Bienvenido, ${data.user.name}!`,
+        confirmButtonColor: "#3085d6",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Credenciales incorrectas. Verifica tu email y contraseña.",
+        confirmButtonColor: "#d33",
+      });
     }
   };
 
@@ -96,7 +108,7 @@ const Login: React.FC = () => {
               Ingresar
             </button>
             <button
-              type="submit"
+              type="button"
               className="w-full bg-black text-white py-2 rounded-lg flex items-center justify-center hover:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
               <span className="flex items-center">
@@ -126,7 +138,6 @@ const Login: React.FC = () => {
               </p>
             </div>
           </form>
-          {error && <p className="text-red-500 text-center mt-4">{error}</p>}
         </div>
       </div>
     </div>
