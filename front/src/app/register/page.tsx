@@ -39,13 +39,14 @@ const RegisterForm = () => {
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:3002/users", {
+      const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+      console.log(response)
 
       if (!response.ok) {
         throw new Error("Error al registrar al usuario");
