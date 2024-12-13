@@ -1,7 +1,7 @@
 export default interface IUser {
     reservations(reservations: any): unknown;
-    firstname: string;
-    lastname: string;
+    name: string;
+    lastName: string;
     birthdate: string;
     phone: string;
     email: string;
@@ -9,4 +9,7 @@ export default interface IUser {
     profileImgUrl: string;
     registeredAt: string;
     active: boolean;
+    nationality: string;
+    dni: string;
+    DOB: string;
   }

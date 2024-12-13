@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import React, { useState } from "react";
-import Swal from "sweetalert2"; // Importar SweetAlert
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
-// Tipo para los datos de inicio de sesión
 type LoginData = {
   email: string;
   password: string;
@@ -18,6 +18,8 @@ const Login: React.FC = () => {
     password: "",
   });
 
+  const router = useRouter();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData({ ...loginData, [name]: value });
@@ -26,8 +28,10 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    console.log("Datos de login enviados:", loginData);
+
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch("http://localhost:3002/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,18 +39,29 @@ const Login: React.FC = () => {
         body: JSON.stringify(loginData),
       });
 
+      if (response.status === 201) {
+        const data = await response.json();
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión con éxito",
+          text: `Bienvenido, ${data.user.email}!`,
+          confirmButtonColor: "#3085d6",
+        });
+        router.push("/profile");
+        return;
+      }
+
       if (!response.ok) {
         throw new Error("Credenciales incorrectas");
       }
 
       const data = await response.json();
 
-      Swal.fire({
-        icon: "success",
-        title: "Inicio de sesión exitoso",
-        text: `Bienvenido, ${data.user.name}!`,
-        confirmButtonColor: "#3085d6",
-      });
+      const { token, user } = data;
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -59,7 +74,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex lg:flex-row items-center justify-center min-h-screen bg-gray-100">
-      {/* Imagen a la izquierda */}
       <div className="flex-1 flex items-center justify-center bg-gray-200 h-full">
         <img
           src="https://i.postimg.cc/qBC7wtdC/pexels-rutger-van-rees-2147548108-29650203.jpg"
@@ -68,7 +82,6 @@ const Login: React.FC = () => {
         />
       </div>
 
-      {/* Tarjeta de inicio de sesión */}
       <div className="flex-1 flex items-center justify-center">
         <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-center mb-6 text-black">

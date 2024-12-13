@@ -1,3 +1,5 @@
+// "use client"
+
 // react
 import React from 'react';
 
@@ -5,13 +7,16 @@ import React from 'react';
 import BackButton from '@/components/back_button';
 import CardDetail from '@/components/card_detail';
 import DescriptionDetail from '@/components/description_detail';
+import BookingDetail from '../booking_detail';
+import Map from '../map';
+import ReviewsContainer from '../reviews_container';
 
 
 
 export const ContainerDetail: React.FC = () => {
 console.log("eestoy en el contenedor");
 
-    const propiedad_prueba = {
+    const propiedadPrueba = {
         place: "Bogotá, Colombia",
         guests: 4,
         bedrooms: 2,
@@ -21,7 +26,7 @@ console.log("eestoy en el contenedor");
         checkout:"",
         owner: "user",
         img:[""],
-        description:"",
+        description:"Descubre esta encantadora casa ubicada en el corazón de Colombia, rodeada de paisajes exuberantes y llena de calidez. Diseñada para brindar confort y tranquilidad, esta propiedad combina a la perfección un estilo moderno con detalles tradicionales que resaltan la esencia de la cultura colombiana.",
         options: []
 
     }
@@ -35,9 +40,24 @@ console.log("eestoy en el contenedor");
       {/* Detalles de la Propiedad */}
       <CardDetail/>
 
-      {/* Descripción y Mapa */}
-      <DescriptionDetail/>
+      <div className='flex flex-col lg:flex-row lg:gap-8 lg:mx-12 mb-8'>
+      {/* Descripción */}
+      <div className='lg:w-1/2'>
+        <DescriptionDetail/>
+      </div>
       
+      {/* Calendario y cantidad de viajeros */}
+      <div className='lg:w-1/2'>
+        <BookingDetail/>
+      </div>
+
+      </div>
+      
+      {/* Mapa */}
+      <Map/>
+
+      <ReviewsContainer/>
+
     </div>
   );
 }

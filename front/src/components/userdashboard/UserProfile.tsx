@@ -8,24 +8,34 @@ const UserProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState<IUser | null>(null);
 
-  const defaultUser: IUser = {
-    id: "1",
-    firstname: "Juan",
-    lastname: "Pérez",
-    birthdate: "1990-01-01",
-    phone: "+34 123 456 789",
-    email: "juan.perez@example.com",
-    profileImgUrl: "https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2526512481.jpg",
-    registeredAt: "2023-01-01",
-    active: true,
-    reservations: () => null,
-  };
-
   useEffect(() => {
-    // Simulación de carga de datos
-    setUser(defaultUser);
-    setLoading(false);
+    const fetchUserById = async () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        const userId = userData.id;
+        try {
+          const response = await fetch(`http://localhost:3002/users/${userId}`);
+          if (!response.ok) {
+            throw new Error("Error en la solicitud");
+          }
+          const user = await response.json();
+          console.log("Usuario:", user);
+          setUser(user);
+        } catch (error) {
+          console.error("Error al obtener el usuario:", error);
+          setError("No se pudo obtener la información del usuario.");
+        }
+      } else {
+        setError("No se encontró información del usuario en el localStorage.");
+      }
+      setLoading(false);
+    };
+  
+    fetchUserById();
   }, []);
+  
+ 
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -35,6 +45,7 @@ const UserProfile: React.FC = () => {
   const handleSaveClick = () => {
     if (editedUser) {
       setUser(editedUser);
+      localStorage.setItem('user', JSON.stringify(editedUser));
     }
     setIsEditing(false);
   };
@@ -51,10 +62,13 @@ const UserProfile: React.FC = () => {
 
   return (
     <section className="bg-white p-6 rounded-md shadow-md mb-8 flex relative">
-      <img
-        src={user?.profileImgUrl}
+    <img
+        src={user?.profileImgUrl || "https://cdn-icons-png.flaticon.com/512/61/61205.png"}
         alt="Foto de perfil"
         className="w-24 h-24 rounded-full object-cover shadow-sm"
+        onError={(e) => {
+        (e.target as HTMLImageElement).src = "https://cdn-icons-png.flaticon.com/512/61/61205.png";
+        }}
       />
       <div className="ml-6">
         <h3 className="text-xl font-bold mb-4">Mi Perfil</h3>
@@ -69,8 +83,8 @@ const UserProfile: React.FC = () => {
                 <label className="block font-semibold">Nombre:</label>
                 <input
                   type="text"
-                  name="firstname"
-                  value={editedUser?.firstname || ""}
+                  name="name"
+                  value={editedUser?.name || ""}
                   onChange={handleInputChange}
                   className="border border-gray-300 rounded-md p-2 w-full"
                 />
@@ -79,8 +93,8 @@ const UserProfile: React.FC = () => {
                 <label className="block font-semibold">Apellido:</label>
                 <input
                   type="text"
-                  name="lastname"
-                  value={editedUser?.lastname || ""}
+                  name="lastName"
+                  value={editedUser?.lastName || ""}
                   onChange={handleInputChange}
                   className="border border-gray-300 rounded-md p-2 w-full"
                 />
@@ -121,13 +135,23 @@ const UserProfile: React.FC = () => {
           ) : (
             <div className="mb-4">
               <p>
-                <span className="font-semibold">Nombre:</span> {user.firstname} {user.lastname}
+                <span className="font-semibold">Nombre:</span> {user.name} {user.lastName}
               </p>
               <p>
                 <span className="font-semibold">Correo electrónico:</span> {user.email}
               </p>
               <p>
                 <span className="font-semibold">Teléfono:</span> {user.phone}
+              </p>
+              <p>
+                <span className="font-semibold">Nacionalidad:</span> {user.nationality}
+              </p>
+              <p>
+                <span className="font-semibold">DNI:</span> {user.dni}
+              </p>
+              <p>
+                <span className="font-semibold">Fecha de Nacimiento:</span>{" "}
+                {user.DOB ? new Date(user.DOB).toLocaleDateString("es-ES") : ""}
               </p>
             </div>
           )

@@ -24,15 +24,19 @@ export default function HeroHome() {
               objectFit="cover"
             />
             <div
-              className="absolute inset-0 bg-blue-800 bg-opacity-65"
+              className="absolute inset-0 bg-blue-900 bg-opacity-65"
               aria-hidden="true"
             ></div>
           </div>
         </div>
-        <div className="container relative mx-auto px-4 pb-24 pt-32">
-          <h1 className="text-7xl text-white font-bold mb-12 text-center">
-            RENTAFACIL
-          </h1>
+        <div className="container relative mx-auto px-4 pb-24 pt-10">
+          <Image
+            className="mx-auto"
+            src="/logoBaner.png"
+            alt="logoBaner"
+            width={600}
+            height={800}
+          ></Image>
           <h2 className="text-4xl text-white font-bold mb-4 text-center">
             ¡Encuentra el alojamiento que estás buscando para una estadía
             soñada!
@@ -41,7 +45,7 @@ export default function HeroHome() {
             Miles de propiedades te esperan
           </p>
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <div className="flex flex-col md:flex-row md:items-end space-y-4 md:space-y-0 md:space-x-4">
               <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
                 <span className="text-gray-500 text-sm">Fecha de llegada</span>
                 <Input type="date" className="w-full" />
@@ -84,10 +88,11 @@ export default function HeroHome() {
                   </SelectContent>
                 </Select>
               </label>
-
-              <Button type="submit" className="w-full h-auto md:w-1/8">
-                Buscar
-              </Button>
+              <div className="w-full md:w-1/5 px-3">
+                <Button type="submit" className="w-full h-10">
+                  Buscar
+                </Button>
+              </div>
             </div>
           </div>
         </div>

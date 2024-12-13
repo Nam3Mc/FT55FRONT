@@ -32,7 +32,15 @@ return (
           <p className="text-gray-600 mb-2">
             Check-in: 12:00 PM | Check-out: 10:00 AM
           </p>
-          <div className="flex items-center mb-4">
+          <div className='flex'>
+          <i className="fi fi-ss-star text-yellow-500"></i>
+          <i className="fi fi-ss-star text-yellow-500"></i>
+          <i className="fi fi-ss-star text-yellow-500"></i>
+          <i className="fi fi-ss-star text-yellow-500"></i>
+          <i className="fi fi-ss-star text-yellow-500"></i>
+
+          </div>
+          <div className="flex items-center mt-10">
             <Image
               src={persona}
               alt="Propietario"
@@ -40,10 +48,6 @@ return (
             />
             <span className="text-gray-800">Nombre del propietario</span>
           </div>
-
-          <button className="bg-champagne text-pearl py-2 px-4 rounded-lg hover:bg-velvet hover:scale-110">
-            Reservar ya
-          </button>
         </div>
     </div>
 )
