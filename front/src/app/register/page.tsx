@@ -1,6 +1,8 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Swal from "sweetalert2";
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -17,6 +19,8 @@ const RegisterForm = () => {
     confirmPassword: "",
     role: "USER",
   });
+  const [showpassword, setShowpassword] = useState(false);
+  const router = useRouter();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -27,22 +31,58 @@ const RegisterForm = () => {
       [name]: value,
     }));
   };
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const { password, confirmPassword, DOB, phone, dni } = formData;
+
+    if (formData.name.length < 2 || formData.lastName.length < 2) {
+      alert("El nombre y el apellido deben tener al menos 2 caracteres.");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      alert("Por favor, introduce un correo electrónico válido.");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      alert(
+        "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números"
+      );
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
+    if (!/^[0-9]+$/.test(phone)) {
+      alert("El número de teléfono debe tener el formato ");
+      return;
+    }
+
+    if (!/^[0-9]+$/.test(dni)) {
+      alert("El número de DNI debe tener el formato xxxxxxxxxx");
+      return;
+    }
+
     console.log(formData);
 
     const formDataWithNumbers = {
       ...formData,
       phone: parseInt(formData.phone, 10),
       dni: parseInt(formData.dni, 10),
-      DOB: DOB, 
+      DOB: DOB,
     };
 
     console.log(formDataWithNumbers);
@@ -65,6 +105,12 @@ const RegisterForm = () => {
 
       const data = await response.json();
       console.log("Usuario registrado exitosamente:", data);
+
+      Swal.fire("Éxito", "Usuario registrado exitosamente", "success").then(
+        () => {
+          router.push("/login");
+        }
+      );
     } catch (error) {
       console.error("Error al registrar el usuario:", error);
     }
@@ -179,6 +225,7 @@ const RegisterForm = () => {
           value={formData.dni}
           onChange={handleChange}
           className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          maxLength={9}
           required
         />
       </div>
@@ -265,15 +312,24 @@ const RegisterForm = () => {
         >
           Contraseña
         </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          required
-        />
+        <div className="relative">
+          <input
+            type={showpassword ? "text" : "password"}
+            name="password"
+            id="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowpassword(!showpassword)}
+            className="absolute right-2 top-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {showpassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">
@@ -283,15 +339,24 @@ const RegisterForm = () => {
         >
           Confirmar Contraseña
         </label>
-        <input
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          required
-        />
+        <div className="relative">
+          <input
+            type={showpassword ? "text" : "password"}
+            name="confirmPassword"
+            id="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowpassword(!showpassword)}
+            className="absolute right-2 top-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {showpassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">
