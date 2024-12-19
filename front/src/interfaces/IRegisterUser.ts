@@ -12,12 +12,9 @@ export interface IRegisterUser {
 export interface IUserSession {
   token: string;
   user: {
-    name: string;
-    lastName: string;
+    id: string;
     email: string;
-    nationality: string;
-    userName: string;
-    phone: number;
-    role: string;
+    isActive: boolean;
+    roles: string;
   };
 }

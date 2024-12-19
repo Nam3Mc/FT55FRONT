@@ -1,46 +1,39 @@
 "use client";
-
-// react
 import React, { useEffect, useState } from "react";
-
-// next
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { IUserSession } from "@/interfaces/IRegisterUser";
-import Cookies from "js-cookie";
+import { useAuthStore } from "@/store/authStore";
 
 export const Navbar: React.FC = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-
+  const { user, resetForm } = useAuthStore();
+  const [userData, setUserData] = useState(user);
   const [isClick, setIsClick] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    setUserData(user);
+  }, [user]);
+
+  useEffect(() => {
+    const dataUser = localStorage.getItem("user");
+    setUserData(JSON.parse(dataUser!));
+  }, [pathname]);
+
   const toggleMenu = (): void => {
     setIsClick(!isClick);
   };
 
-  const [userSession, setUserSession] = useState<IUserSession>();
-  //console.log(userSession);
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const userData = localStorage.getItem("userSession");
-      //console.log(userData);
-      setUserSession(JSON.parse(userData!));
-    }
-  }, [pathname]);
-  //console.log(userSession);
-
   const handleLogOut = () => {
-    localStorage.removeItem("userSession");
-    Cookies.remove("test");
-    setUserSession(undefined);
+    useAuthStore.getState().logoutUser();
+    setUserData(null);
     router.push("/");
   };
 
   return (
     <nav className="bg-velvet">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        {/* Boton Hamburguesa */}
         <div className="md:hidden flex items-center">
           <button
             className="p-2 rounded-md text-silk focus:outline-none focus:ring-2 focus:ring-inset focus:ring-silk"
@@ -82,13 +75,13 @@ export const Navbar: React.FC = () => {
 
         <div className="hidden md:flex space-x-4">
           <Link href="/">
-            <div className="text-silk hover:bg-champagne hover:text-velvet rounded-lg p-2">
+            <div className="text-silk hover:border-b-2 hover:border-champagne p-2">
               Inicio
             </div>
           </Link>
 
           <Link href="/about">
-            <div className="text-silk hover:bg-champagne hover:text-velvet rounded-lg p-2">
+            <div className="text-silk hover:border-b-2 hover:border-champagne p-2">
               Sobre nosotros
             </div>
           </Link>
@@ -96,32 +89,27 @@ export const Navbar: React.FC = () => {
 
         <div className="flex justify-center flex-1 lg:mr-32">
           <Link href="/">
-            <Image
-              src="/logofinal.png"
-              alt="logo"
-              width={200}
-              height={70}
-            ></Image>
+            <Image src="/logofinal.png" alt="logo" width={200} height={70} />
           </Link>
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
-          {userSession && userSession.token ? (
+          {userData ? (
             <>
               <Link href="/favs">
-                <i className="fi fi-rr-heart text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
+                <i className="text-silk hover:border-b-2 hover:border-champagne p-2">
                   Favoritos
                 </i>
               </Link>
               <Link href="/profile">
-                <i className="fi fi-rr-user text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
+                <i className="text-silk hover:border-b-2 hover:border-champagne p-2">
                   Perfil
                 </i>
               </Link>
 
               <button
                 onClick={handleLogOut}
-                className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk mt-4"
+                className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-white mt-4"
               >
                 Cerrar Sesion
               </button>
@@ -143,7 +131,6 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Menu hamburguesa */}
       {isClick && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link href="/">
@@ -156,7 +143,7 @@ export const Navbar: React.FC = () => {
               Sobre nosotros
             </div>
           </Link>
-          {!userSession || !userSession.token ? (
+          {!userData ? (
             <>
               <Link href="/login">
                 <button className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk">
@@ -171,7 +158,7 @@ export const Navbar: React.FC = () => {
             </>
           ) : (
             <>
-              <Link href="/userProfile">
+              <Link href="/profile">
                 <i className="fi fi-rr-user text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
                   Perfil
                 </i>

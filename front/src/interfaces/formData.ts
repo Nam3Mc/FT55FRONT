@@ -1,5 +1,5 @@
 export default interface IFormData {
-    title: string;              
+    name: string;              
     description: string;        
     price: any;              
     state: string;              

@@ -11,9 +11,12 @@
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.3.1",
     "@radix-ui/react-select": "^2.1.2",
-    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@react-oauth/google": "^0.12.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.5.1",
+    "embla-carousel-react": "^8.5.1",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.468.0",
@@ -25,7 +28,8 @@
     "sweetalert2": "^11.14.5",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "yup": "^1.5.0"
+    "yup": "^1.5.0",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

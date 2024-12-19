@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 
+// next
+import { useRouter } from "next/navigation";
+
 // libreria del calendario
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
@@ -32,6 +35,8 @@ const BookingDetail: React.FC = () => {
     pets: false,
   });
 
+  const router = useRouter();
+
   // prueba
   const huespedes = 4;
   const precio = 120;
@@ -55,11 +60,21 @@ const BookingDetail: React.FC = () => {
     setDateRange(ranges.selection);
   };
 
+  const handleReserv = () => {
+    router.push("/CheckoutPreview")
+  }
+
   
-  const updateTravelers = (key: "adults" | "children" | "babies", value: number) => {
+  const updateTravelers = (key: "adults" | "children", value: number) => {
     const total = value + (key === "adults" ? travelers.children : travelers.adults);
     if (total <= huespedes) {
       setTravelers({ ...travelers, [key]: value });
+    }
+  };
+
+  const updateBabies = (value: number) => {
+    if (value >= 0 && value <= 4) {
+      setTravelers({ ...travelers, babies: value });
     }
   };
 
@@ -78,7 +93,7 @@ const BookingDetail: React.FC = () => {
           <h1 className="text-xl font-extrabold">${precio}USD</h1>
           <p className="text-gray-500">por noche</p>
         </div>
-        ) : (<></>)}
+        ) : null}
 
       {/* Título */}
       <h2 className="text-xl font-semibold mb-4">Reserva tu estadía</h2>
@@ -158,7 +173,7 @@ const BookingDetail: React.FC = () => {
                 min="0"
                 max="4"
                 value={travelers.babies}
-                onChange={(e) => updateTravelers("babies", Number(e.target.value))}
+                onChange={(e) => updateBabies(Number(e.target.value))}
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -201,7 +216,8 @@ const BookingDetail: React.FC = () => {
                 <h2>${finalpriceWD.toFixed(2)}</h2>
               </div>
 
-              <button className="bg-champagne text-pearl py-2 px-4 mb-4 rounded-lg hover:bg-velvet hover:scale-110">
+              <button className="bg-champagne text-pearl py-2 px-4 mb-4 rounded-lg hover:bg-velvet hover:scale-110"
+              onClick={handleReserv}>
                 Reserva
               </button>
             </div>
@@ -213,7 +229,9 @@ const BookingDetail: React.FC = () => {
                   <h2  className="font-semibold">Reserva total</h2>
                   <h2>${totalPrecio.toFixed(2)}</h2>
                 </div>
-                <button className="bg-champagne text-pearl py-2 px-4 mb-4 rounded-lg hover:bg-velvet hover:scale-110">
+                <button 
+                className="bg-champagne text-pearl py-2 px-4 mb-4 rounded-lg hover:bg-velvet hover:scale-110"
+                onClick={handleReserv}>
                   Reserva
                 </button>
               </div>

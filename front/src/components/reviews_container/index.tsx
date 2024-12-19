@@ -22,10 +22,13 @@ const ReviewsContainer: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4 mx-40 mb-6">
-      {reviews.map((review) => (
-        <ReviewCard key={review.id} {...review} />
-      ))}
+    <div className="px-4 sm:px-6 lg:px-40 mb-6">
+      <h2 className="text-xl font-bold mb-4 text-center sm:text-left">Comentarios</h2>
+      <div className="space-y-4">
+        {reviews.map((review) => (
+          <ReviewCard key={review.id} {...review} />
+        ))}
+      </div>
     </div>
   );
 };

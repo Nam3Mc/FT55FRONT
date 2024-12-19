@@ -1,13 +1,14 @@
 // react
+import { IProduct } from '@/interfaces/IProduct';
 import React from 'react';
 
 
-export const DescriptionDetail: React.FC = () => {
+export const DescriptionDetail: React.FC<IProduct> = (product) => {
 return (
    <div className="p-8 rounded-lg">
         <h3 className="text-xl font-semibold mb-2">Acerca de este alojamiento</h3>
         <p className="text-gray-600 mb-4">
-        Descubre esta encantadora casa ubicada en el corazón de Colombia, rodeada de paisajes exuberantes y llena de calidez. Diseñada para brindar confort y tranquilidad, esta propiedad combina a la perfección un estilo moderno con detalles tradicionales que resaltan la esencia de la cultura colombiana.
+        {product.description}
         </p>
         <h3 className="text-xl font-bold mb-2">¿Qué ofrece este lugar?</h3>
         <ul className="list-disc list-inside mb-4">

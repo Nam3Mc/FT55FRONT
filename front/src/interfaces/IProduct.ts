@@ -1,13 +1,21 @@
 export interface IProduct {
   id: number;
+  owner: string;
+  active: boolean;
   title: string;
   description: string;
-  location: string;
-  rooms: number;
-  guests: number;
+
+  state: string;
+  city: string;
   price: number;
-  image: string;
+  bedrooms: number;
+  bathrooms: number;
   isAvailable: boolean;
+  capacity: number;
+  photos: string[];
+  checkin: string;
+  checkout:string;
+  rating: number;
 }
 
 export interface IProductListProps {

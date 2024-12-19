@@ -1,109 +1,130 @@
 "use client";
-import IFormData from '@/interfaces/formData';
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dddh5wrx3/image/upload";
 const UPLOAD_PRESET = "ml_default";
 
 const PropertyForm: React.FC = () => {
-  const [formData, setFormData] = useState<IFormData>({
-    title: '',
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    price: number;
+    address: string;
+    hasMinor: boolean;
+    pets: boolean;
+    accountId: string;
+    image: string[]; 
+  }>({
+    name: '',
     description: '',
-    state: '',
-    city: '',
     price: 0,
-    bedrooms: 0,
-    bathrooms: 0,
-    isAvailable: true,
-    capacity: 1,
-    street: '',          
-    number: 0,         
-    postalCode: '',     
-    photos: [],
+    address: '',
+    hasMinor: false,
+    pets: false,
+    accountId: '',
+    image: [], 
   });
   
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       const uploadedPhotos: string[] = [];
-  
+
       for (const file of files) {
         const uploadData = new FormData();
         uploadData.append("file", file);
         uploadData.append("upload_preset", UPLOAD_PRESET);
-  
+
         try {
           const response = await fetch(CLOUDINARY_URL, {
             method: "POST",
             body: uploadData,
           });
-  
+
           if (!response.ok) {
-            throw new Error("Failed to upload image.");
+            throw new Error("Error al subir la imagen.");
           }
-  
+
           const data = await response.json();
           uploadedPhotos.push(data.secure_url);
         } catch (error) {
-          console.error("Error uploading image:", error);
-          setErrorMessage("Upload error: " + (error instanceof Error ? error.message : "Unknown error"));
+          console.error("Error subiendo imagen:", error);
         }
       }
-  
+
       setFormData((prevData) => ({
         ...prevData,
-        photos: [...prevData.photos, ...uploadedPhotos],
+        image: [...prevData.image, ...uploadedPhotos],
       }));
-      setErrorMessage("");
     }
   };
+ 
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   }));
+  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const inputValue = type === 'checkbox' && e.target instanceof HTMLInputElement ? e.target.checked : value;
-    
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: inputValue,
-    }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Datos del formulario que se enviarán:", formData);
-    const propertyData = new FormData(e.target as HTMLFormElement);
+    const target = e.target;
 
-    try {
-      const response = await fetch("http://localhost:3000/properties", {
-        method: "POST",
-        body: propertyData,
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error al crear la propiedad');
+    if (target instanceof HTMLInputElement) {
+      if (target.type === "checkbox") {
+        setFormData((prevData) => ({
+          ...prevData,
+          [target.name]: target.checked, 
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          [target.name]: target.value,  
+        }));
       }
-  
-      const data = await response.json();
-      console.log('Property created:', data);
-
-    } catch (error) {
-      console.error('Error creating property:', error);
+    } else if (target instanceof HTMLTextAreaElement) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [target.name]: target.value, 
+      }));
     }
   };
   
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3002/property", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al crear la propiedad");
+      }
+
+      const data = await response.json();
+      console.log("Propiedad creada:", data);
+    } catch (error) {
+      console.error("Error creando propiedad:", error);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg space-y-6">
       <h2 className="text-3xl font-semibold text-gray-800 text-center">Crear Propiedad</h2>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-gray-800 text-lg">Título:</label>
+          <label className="block text-gray-800 text-lg">Nombre:</label>
           <input
             type="text"
-            name="title"
-            value={formData.title}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
             className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
@@ -122,28 +143,6 @@ const PropertyForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-gray-800 text-lg">Provincia:</label>
-          <input
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-800 text-lg">Ciudad:</label>
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-
-        <div>
           <label className="block text-gray-800 text-lg">Precio:</label>
           <input
             type="number"
@@ -156,44 +155,11 @@ const PropertyForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-gray-800 text-lg">Habitaciones:</label>
+          <label className="block text-gray-800 text-lg">Dirección:</label>
           <input
-            type="number"
-            name="bedrooms"
-            value={formData.bedrooms}
-            onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-800 text-lg">Baños:</label>
-          <input
-            type="number"
-            name="bathrooms"
-            value={formData.bathrooms}
-            onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-800 text-lg">¿Está disponible?</label>
-          <input
-            type="checkbox"
-            name="isAvailable"
-            checked={formData.isAvailable}
-            onChange={handleChange}
-            className="mt-2"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-800 text-lg">Capacidad:</label>
-          <input
-            type="number"
-            name="capacity"
-            value={formData.capacity}
+            type="text"
+            name="address"
+            value={formData.address}
             onChange={handleChange}
             required
             className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
@@ -201,62 +167,41 @@ const PropertyForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-gray-800 text-lg">Calle:</label>
+          <label className="block text-gray-800 text-lg">Permite menores:</label>
           <input
-            type="text"
-            name="street"
-            value={formData.street}
+            type="checkbox"
+            name="hasMinor"
+            checked={formData.hasMinor}
             onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            className="mt-2"
           />
         </div>
 
         <div>
-          <label className="block text-gray-800 text-lg">Número:</label>
+          <label className="block text-gray-800 text-lg">Permite mascotas:</label>
           <input
-            type="text"
-            name="number"
-            value={formData.number}
+            type="checkbox"
+            name="pets"
+            checked={formData.pets}
             onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            className="mt-2"
           />
         </div>
 
         <div>
-          <label className="block text-gray-800 text-lg">Código Postal:</label>
+          <label className="block text-gray-800 text-lg">Imágenes:</label>
           <input
-            type="text"
-            name="postalCode"
-            value={formData.postalCode}
-            onChange={handleChange}
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-800 text-lg">Fotos:</label>
-          <input
-            name="photos"
             type="file"
-            accept="image/*"
-            onChange={handleFileChange}
             multiple
-            className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            onChange={handleFileChange}
+            className="mt-2 w-full"
           />
-          <div className="mt-2">
-            {formData.photos.map((uploadedPhotos, index) => (
-              <img key={index} src={uploadedPhotos} alt={`Foto ${index + 1}`} className="w-24 h-24 object-cover mb-2" />
-            ))}
-          </div>
         </div>
-
-        <button
-          type="submit"
-          className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-black focus:outline-none focus:ring-2 transition"
-        >
-          Crear Propiedad
-        </button>
       </div>
+
+      <button type="submit" className="w-full p-3 bg-champagne text-black rounded-md hover:bg-[#e2c595]">
+        Crear Propiedad
+      </button>
     </form>
   );
 };
