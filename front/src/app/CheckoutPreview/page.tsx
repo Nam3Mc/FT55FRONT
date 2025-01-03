@@ -1,12 +1,42 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const CheckoutPreview = () => {
   const router = useRouter(); // Hook para manejar la navegación
+  const [loading, setLoading] = useState(false); // Para manejar el estado de carga
 
-  const handlePayment = () => {
-    router.push("/successPage"); // Cambia "/payment" por la ruta del componente destino
+  const handlePayment = async () => {
+    setLoading(true); // Activa el estado de carga
+    try {
+      // Enviar datos al backend para crear la preferencia de pago
+      const response = await fetch("/api/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: "Casa con hermosa vista",
+          price: 593.41, // Total calculado
+          quantity: 1,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.init_point) {
+        // Redirigir al usuario al enlace de pago de Mercado Pago
+        window.location.href = data.init_point;
+      } else {
+        console.error("Error al generar el enlace de pago");
+        alert("Hubo un error al procesar tu pago. Intenta nuevamente.");
+      }
+    } catch (error) {
+      console.error("Error al procesar el pago:", error);
+      alert("Ocurrió un error. Por favor, inténtalo más tarde.");
+    } finally {
+      setLoading(false); // Desactiva el estado de carga
+    }
   };
 
   return (
@@ -21,14 +51,12 @@ const CheckoutPreview = () => {
           {/* Fechas */}
           <div className="flex justify-between mb-4">
             <span>Fechas</span>
-            <button className="text-champagne underline">Editar</button>
           </div>
           <p className="mb-4">14 – 19 de ene. de 2025</p>
 
           {/* Huéspedes */}
           <div className="flex justify-between mb-4">
             <span>Húespedes</span>
-            <button className="text-champagne underline">Editar</button>
           </div>
           <p>1 viajero</p>
         </div>
@@ -62,7 +90,7 @@ const CheckoutPreview = () => {
           <span className="font-semibold">$20,00 USD</span>
         </div>
         <div className="flex justify-between mb-2">
-          <span>Tarifa por servicio de Airbnb</span>
+          <span>Tarifa por servicio de Renta Facil</span>
           <span className="font-semibold">$73,41 USD</span>
         </div>
 
@@ -76,8 +104,9 @@ const CheckoutPreview = () => {
         <button
           onClick={handlePayment}
           className="w-full py-3 bg-champagne text-pearl font-bold rounded-lg hover:bg-velvet hover:text-champagne transition"
+          disabled={loading}
         >
-          Pagar
+          {loading ? "Procesando..." : "Pagar"}
         </button>
       </div>
     </div>
