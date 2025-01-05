@@ -5,8 +5,8 @@ import Image from "next/image";
 import casadef from "@/assets/casadef.png";
 
 interface CarouselProps {
-  photos?: string[]; 
-  image_?: { id: string; url: string }[]; 
+  photos?: string[];
+  image_?: { id: string; url: string }[];
 }
 
 export const ImageCarousel: React.FC<CarouselProps> = ({ photos }) => {
@@ -17,22 +17,28 @@ export const ImageCarousel: React.FC<CarouselProps> = ({ photos }) => {
   const validPhotos = photos && photos.length > 0 ? photos : [defaultImage];
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? validPhotos.length - 1 : prevIndex - 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? validPhotos.length - 1 : prevIndex - 1
+    );
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === validPhotos.length - 1 ? 0 : prevIndex + 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === validPhotos.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
   return (
     <div className="relative w-full h-64 overflow-hidden rounded-lg bg-gray-100">
       {/* Imagen actual */}
-      <Image
-        src={validPhotos[currentIndex]}
-        alt={`Imagen ${currentIndex + 1}`}
-        fill
-        className="transition-transform duration-500 ease-in-out object-contain"
-      />
+      {photos && (
+        <Image
+          src={validPhotos[currentIndex]}
+          alt={`Imagen ${currentIndex + 1}`}
+          fill
+          className="transition-transform duration-500 ease-in-out object-contain"
+        />
+      )}
 
       {/* Botón anterior */}
       <button
@@ -67,4 +73,3 @@ export const ImageCarousel: React.FC<CarouselProps> = ({ photos }) => {
 };
 
 export default ImageCarousel;
-

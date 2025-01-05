@@ -1,15 +1,10 @@
 // react
-import React from 'react';
+import React from "react";
 
-
-import ContentFavorite from '@/components/content_favorite'
+import ContentFavorite from "@/components/content_favorite";
 
 export const Favorite: React.FC = () => {
-
-  
-return (
-  <ContentFavorite/>
-)
-}
+  return <ContentFavorite />;
+};
 
 export default Favorite;

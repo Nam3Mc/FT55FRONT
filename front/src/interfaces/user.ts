@@ -10,10 +10,10 @@ export default interface IUser {
     active?: boolean;
     nationality?: string;
     dni?: number;
-    DOB?:string,
+    DOB?: string,
     civilStatus?: string;
     photo?: string;
     employmentStatus?: string;
     role?: string;
     isActive?: boolean;
-  }
+}

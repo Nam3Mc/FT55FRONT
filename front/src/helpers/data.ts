@@ -12,7 +12,7 @@ export interface user {
   nationality: string;
   dni: string;
   DOB: string;
-  employmentStatus:string;
+  employmentStatus: string;
 }
 
 export const productsToPreLoad: IProduct[] = [
@@ -216,4 +216,4 @@ export const productsToPreLoad: IProduct[] = [
   },
 ];
 
-  
+

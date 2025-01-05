@@ -3,19 +3,19 @@ import { IAccountUser } from '@/interfaces/IAccount'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-export const getPropertyDB = async(): Promise<IProperty[]> => {
+export const getPropertyDB = async (): Promise<IProperty[]> => {
     try {
         const res = await fetch(`${API_URL}/property`, {
-            next: { revalidate: 1200}
+            next: { revalidate: 1200 }
         });
         console.log(res);
-        
+
         if (!res.ok) {
             throw new Error(`Fallo al realizar el fetch a Propiedades: ${res.status} ${res.statusText}`);
         }
         const properties: IProperty[] = await res.json();
         console.log(properties);
-        
+
         return properties;
     } catch (error: any) {
         console.error("Error in getPropertyDB:", error.message || error);
@@ -24,10 +24,10 @@ export const getPropertyDB = async(): Promise<IProperty[]> => {
 
 }
 
-export const getPropertyById = async(id: string): Promise<IProperty> => {
+export const getPropertyById = async (id: string): Promise<IProperty> => {
     try {
         const res = await fetch(`${API_URL}/property/unique/${id}`, {
-            next: { revalidate: 1200}
+            next: { revalidate: 1200 }
         });
 
         if (!res.ok) {
@@ -36,7 +36,7 @@ export const getPropertyById = async(id: string): Promise<IProperty> => {
 
         const property: IProperty[] = await res.json();
         console.log(property[0]);
-        
+
         if (Array.isArray(property) && property.length > 0) {
             return property[0];
         }
@@ -49,19 +49,19 @@ export const getPropertyById = async(id: string): Promise<IProperty> => {
 
 }
 
-export const getPropertyOwner = async(id: string): Promise<IAccountUser> => {
+export const getPropertyOwner = async (id: string): Promise<IAccountUser> => {
     try {
         const res = await fetch(`${API_URL}/account/user/${id}`, {
-            next: { revalidate: 1200}
+            next: { revalidate: 1200 }
         });
         console.log(res);
-        
+
         if (!res.ok) {
             throw new Error(`Fallo al realizar el fetch a Owner por ID: ${res.status} ${res.statusText}`);
         };
 
-        const owner: IAccountUser= await res.json();
-        
+        const owner: IAccountUser = await res.json();
+
         return owner;
     } catch (error: any) {
         console.error("Error in getPropertyOwner:", error.message || error);

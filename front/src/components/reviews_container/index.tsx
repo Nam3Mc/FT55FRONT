@@ -1,23 +1,23 @@
-import React from 'react';
-import ReviewCard from '../review_card';
+import React from "react";
+import ReviewCard from "../review_card";
 
 const ReviewsContainer: React.FC = () => {
   const reviews = [
     {
       id: 1,
-      title: 'Hermosa casa en la montaña',
-      comment: 'Un lugar increíble para descansar. Todo estuvo perfecto.',
+      title: "Hermosa casa en la montaña",
+      comment: "Un lugar increíble para descansar. Todo estuvo perfecto.",
       rating: 5,
-      date: '10 de diciembre de 2024',
-      photo: 'https://via.placeholder.com/50',
+      date: "10 de diciembre de 2024",
+      photo: "https://via.placeholder.com/50",
     },
     {
       id: 2,
-      title: 'Apartamento cómodo en la ciudad',
-      comment: 'Muy bien ubicado y cómodo, aunque un poco ruidoso.',
+      title: "Apartamento cómodo en la ciudad",
+      comment: "Muy bien ubicado y cómodo, aunque un poco ruidoso.",
       rating: 4,
-      date: '5 de diciembre de 2024',
-      photo: 'https://via.placeholder.com/50',
+      date: "5 de diciembre de 2024",
+      photo: "https://via.placeholder.com/50",
     },
   ];
 
@@ -32,4 +32,3 @@ const ReviewsContainer: React.FC = () => {
 };
 
 export default ReviewsContainer;
-

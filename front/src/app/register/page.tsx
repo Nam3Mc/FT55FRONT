@@ -34,7 +34,8 @@ const RegisterForm = () => {
   };
 
   const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&])(?=.*[a-zA-Z]).{8,}$/;
+
     return passwordRegex.test(password);
   };
 
@@ -150,7 +151,7 @@ const RegisterForm = () => {
             id="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full px-10 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px- py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           />
         </div>

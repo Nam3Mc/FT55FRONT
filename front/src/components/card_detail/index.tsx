@@ -63,6 +63,7 @@ return (
 
           </div>
           <div className="flex items-center mt-10">
+          {owner?.photo && (
             <Image
               src={imageSrc || "https://cdn-icons-png.flaticon.com/512/61/61205.png"}
               alt="Propietario"
