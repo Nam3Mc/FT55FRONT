@@ -10,7 +10,7 @@ const AllReviews: React.FC = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch("http://localhost:3001/reviews/");
+        const response = await fetch("http://localhost:3002/reviews/");
         if (!response.ok) {
           throw new Error('Error al cargar las reseñas');
         }
@@ -81,7 +81,7 @@ const AllReviews: React.FC = () => {
                   
                   {review.user && (
                     <div className="mt-4">
-                      <p><strong>Reseñado por:</strong> {review.user.firstname}{review.user.lastname}</p>
+                      <p><strong>Reseñado por:</strong> {review.user.name}{review.user.lastName}</p>
                       <p><strong>Email:</strong> {review.user.email}</p>
                     </div>
                   )}

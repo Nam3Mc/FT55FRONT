@@ -1,29 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { IReservationDetail } from "../../interfaces/reservationDetail";
+import React from "react";
+import useReservations from "../../hooks/AdminDashboard/useReservations";
 
 const AllReservations: React.FC = () => {
-  const [reservations, setReservations] = useState<IReservationDetail[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(`http://localhost:3001/reservations/`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al obtener reservas");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setReservations(data); 
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error al obtener reservas:", error);
-        setError("Error al obtener reservas");
-        setLoading(false);
-      });
-  }, []);
+  const { reservations, loading, error } = useReservations();
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>{error}</p>;
@@ -65,4 +44,3 @@ const AllReservations: React.FC = () => {
 };
 
 export default AllReservations;
-

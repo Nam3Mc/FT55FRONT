@@ -7,12 +7,12 @@ export default function HeroOwner() {
     <div>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="h-[700px] w-full">
+          <div className="relative h-[700px] w-full">
             <Image
               src="/banner-owner.jpg"
               alt="Background"
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
             />
           </div>
         </div>

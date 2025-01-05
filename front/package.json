@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@flaticon/flaticon-uicons": "^3.3.1",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-oauth/google": "^0.12.1",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
@@ -22,6 +25,7 @@
     "lucide-react": "^0.468.0",
     "mercadopago": "^2.1.0",
     "next": "15.0.4",
+    "next-cloudinary": "^6.16.0",
     "react": "^19.0.0",
     "react-date-range": "^2.0.1",
     "react-dom": "^19.0.0",
@@ -33,6 +37,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.58.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",

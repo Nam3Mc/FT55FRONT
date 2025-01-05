@@ -1,137 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import useFetchProperties from "../../hooks/AdminDashboard/useFetchProperties";
 import { IPropiedad } from "../../interfaces/properties";
 import { FiArrowLeftCircle } from "react-icons/fi";
 
-interface MyPropertiesProps {}
-
-const AllProperties: React.FC<MyPropertiesProps> = () => {
-  const [properties, setProperties] = useState<IPropiedad[]>([]);
-  const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(null);
-  
-  const propertiesData = [
-    {
-      id: 1,
-      owner: {
-        id: "user1",
-        firstname: "Juan",
-        lastname: "Pérez",
-        birthdate: "1990-01-01",
-        phone: "1234567890",
-        email: "juan@email.com",
-        profileImgUrl: "https://example.com/juan.jpg",
-        registeredAt: "2020-01-01",
-        active: true,
-        reservations: () => {} 
-      },
-      active: true,
-      title: "Casa en la playa",
-      description: "Una hermosa casa con vista al mar",
-      city: "Cancún",
-      price: [150],
-      bedrooms: [3],
-      bathrooms: 2,
-      isAvailable: true,
-      capacity: 6,
-      photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"],
-      stripeProductId: "stripe_prod_12345",
-      stripePriceId: "stripe_price_12345",
-      reviews: [
-        {
-          id: "review1",
-          userId: "user1",
-          user: {
-            id: "user1",
-            firstname: "Juan",
-            lastname: "Pérez",
-            birthdate: "1990-01-01",
-            phone: "1234567890",
-            email: "juan@email.com",
-            profileImgUrl: "https://example.com/juan.jpg",
-            registeredAt: "2020-01-01",
-            active: true,
-            reservations: () => {}  
-          },
-          property: {
-            id: 1,
-            owner: {
-              id: "user1",
-              firstname: "Juan",
-              lastname: "Pérez",
-              birthdate: "1990-01-01",
-              phone: "1234567890",
-              email: "juan@email.com",
-              profileImgUrl: "https://example.com/juan.jpg",
-              registeredAt: "2020-01-01",
-              active: true,
-              reservations: () => {}  // Método vacío por ahora
-            },
-            active: true,
-            title: "Casa en la playa",
-            description: "Una hermosa casa con vista al mar",
-            city: "Cancún",
-            price: [150],
-            bedrooms: [3],
-            bathrooms: 2,
-            isAvailable: true,
-            capacity: 6,
-            photos: ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"],
-            stripeProductId: "stripe_prod_12345",
-            stripePriceId: "stripe_price_12345",
-            reviews: [],
-            reservationDetail: {
-              userId: "user1",
-              id: "res1",
-              reservation: {
-                id: "res1",
-                property: "1",
-                location: "Cancún",
-                checkIn: "2024-01-01",
-                checkOut: "2024-01-07",
-                guests: 4,
-                state: "confirmed",
-                imageUrl: "https://example.com/reservation.jpg"
-              },
-              checkIn: "2024-01-01",
-              checkOut: "2024-01-07",
-              pax: 4,
-              property: "1"
-            },
-            latitude: 21.1619,
-            longitude: -86.8515
-          },
-          reviewDate: "2024-01-01",
-          rating: 5,
-          comment: "Excelente propiedad"
-        }
-      ],
-      reservationDetail: {
-        userId: "user1",
-        id: "res1",
-        reservation: {
-          id: "res1",
-          property: "1",
-          location: "Cancún",
-          checkIn: "2024-01-01",
-          checkOut: "2024-01-07",
-          guests: 4,
-          state: "confirmed",
-          imageUrl: "https://example.com/reservation.jpg"
-        },
-        checkIn: "2024-01-01",
-        checkOut: "2024-01-07",
-        pax: 4,
-        property: "1"
-      },
-      latitude: 21.1619,
-      longitude: -86.8515
-    }
-  ];
-  
-
-  useEffect(() => {
-    // Simulamos que obtenemos las propiedades desde un API
-          setProperties(propertiesData);
-  }, []);
+const AllProperties: React.FC = () => {
+  const { properties, error, loading } = useFetchProperties();
+  const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(
+    null
+  );
 
   const handlePropertyClick = (property: IPropiedad) => {
     setSelectedProperty(property);
@@ -140,6 +16,14 @@ const AllProperties: React.FC<MyPropertiesProps> = () => {
   const handleBackToList = () => {
     setSelectedProperty(null);
   };
+
+  if (loading) {
+    return <p>Cargando propiedades...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md mb-8">
@@ -156,16 +40,23 @@ const AllProperties: React.FC<MyPropertiesProps> = () => {
           </button>
           <h3 className="text-xl font-semibold">{selectedProperty.title}</h3>
           <p className="text-gray-600">{selectedProperty.city}</p>
-          <p className="text-gray-600">{selectedProperty.owner.firstname} {selectedProperty.owner.lastname}</p>
+          <p className="text-gray-600">
+            {selectedProperty.owner.name} {selectedProperty.owner.lastName}
+          </p>
           <p className="font-medium">
             Precio por noche:{" "}
-            <span className="text-green-500">${selectedProperty?.price?.[0]}</span>
+            <span className="text-green-500">
+              ${selectedProperty?.price?.[0]}
+            </span>
           </p>
           <p className="text-sm text-gray-500">
-            Capacidad: {selectedProperty.capacity} personas, {selectedProperty?.bedrooms?.[0]}{" "}
-            habitaciones, {selectedProperty.bathrooms} baño(s)
+            Capacidad: {selectedProperty.capacity} personas,{" "}
+            {selectedProperty?.bedrooms?.[0]} Habitaciones,{" "}
+            {selectedProperty.bathrooms} baño(s)
           </p>
-          <p className="text-sm text-gray-500">{selectedProperty.description}</p>
+          <p className="text-sm text-gray-500">
+            {selectedProperty.description}
+          </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
             {selectedProperty.photos?.map((photo, index) => (
               <img
@@ -192,8 +83,9 @@ const AllProperties: React.FC<MyPropertiesProps> = () => {
                 <span className="text-green-500">${property?.price?.[0]}</span>
               </p>
               <p className="text-sm text-gray-500">
-                Capacidad: {property.capacity} personas, {property?.bedrooms?.[0]}{" "}
-                habitaciones, {property.bathrooms} baño(s)
+                Capacidad: {property.capacity} personas,{" "}
+                {property?.bedrooms?.[0]} Habitaciones, {property.bathrooms}{" "}
+                Baño(s)
               </p>
             </li>
           ))}

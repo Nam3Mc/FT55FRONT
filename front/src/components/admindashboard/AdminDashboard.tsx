@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import IUser from "@/interfaces/user";
-import UserProfile from '../userdashboard/UserProfile';
-import { IPropiedad } from '@/interfaces/properties';
 import AllReviews from './AdminReviews';
 import AllReservations from './AdminReservations';
 import AllProperties from './AdminProperties';

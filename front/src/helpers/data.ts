@@ -1,5 +1,19 @@
 import { IProduct } from "@/interfaces/IProduct";
-
+export interface user {
+  name: string;
+  lastName: string;
+  birthdate: string;
+  phone: string;
+  email: string;
+  id: string;
+  photo: string;
+  registeredAt: string;
+  active: boolean;
+  nationality: string;
+  dni: string;
+  DOB: string;
+  employmentStatus:string;
+}
 
 export const productsToPreLoad: IProduct[] = [
   {

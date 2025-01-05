@@ -6,7 +6,7 @@ export const useAuthStore = create<IAuthState>((set) => {
   const savedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   if (savedToken) {
-    set({ token: savedToken });
+    set({ token: savedToken});
 
     fetch("http://localhost:3002/users/{id}", {
       method: "GET",

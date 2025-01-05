@@ -16,12 +16,12 @@ export default function HeroHome() {
     <div>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="h-[700px] w-full">
+          <div className="absolute h-[700px] w-full">
             <Image
               src="/banner.jpeg"
               alt="Background"
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
             />
             <div
               className="absolute inset-0 bg-blue-900 bg-opacity-65"
