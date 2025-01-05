@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3002/auth/signin", {
+      const response = await fetch("http://localhost:3000/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -205,4 +205,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Login;
