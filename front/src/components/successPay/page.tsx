@@ -3,6 +3,14 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+=======
+
+interface PaymentDto {
+  url: string;
+  contractId: string;
+}
+>>>>>>> 4997db48f9666c8adfa8335dfe31f16ca5a3af9e
 
 const SuccessPage = () => {
   const searchParams = useSearchParams();
@@ -12,6 +20,7 @@ const SuccessPage = () => {
 
   useEffect(() => {
     const sendPaymentData = async () => {
+<<<<<<< HEAD
       const contractId = localStorage.getItem("contract_id");
       const currentUrl = window.location.href;
       
@@ -24,6 +33,22 @@ const SuccessPage = () => {
           console.log("Datos enviados exitosamente.");
         } catch (error) {
           console.error("Error al enviar los datos: ", error);
+=======
+      const contractId = "local storage id"; // aqui colocas el id desde el local storage para que se envie al back y se genere el cambio de estadod de la reservacion
+      const currentUrl = window.location.href;
+
+      if (contractId) {
+        const paymentData: PaymentDto = {
+          url: currentUrl,
+          contractId: contractId,
+        };
+
+        try {
+          await axios.post("http://localhost:3002/payments/paid", paymentData);
+          console.log("Datos enviados exitosamente.");
+        } catch (err) {
+          console.error("Error al enviar los datos: ", err);
+>>>>>>> 4997db48f9666c8adfa8335dfe31f16ca5a3af9e
         }
       } else {
         console.warn("No se encontró contract_id en localStorage.");

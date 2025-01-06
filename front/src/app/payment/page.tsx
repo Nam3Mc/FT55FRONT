@@ -1,4 +1,5 @@
 "use client";
+<<<<<<< HEAD
 
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -60,3 +61,12 @@ const SuccessPage = () => {
 };
 
 export default SuccessPage;
+=======
+import SuccessPage from "@/components/successPay/page";
+
+const ProfilePage: React.FC = () => {
+  return <SuccessPage />;
+};
+
+export default ProfilePage;
+>>>>>>> 4997db48f9666c8adfa8335dfe31f16ca5a3af9e
