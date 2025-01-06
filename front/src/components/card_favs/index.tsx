@@ -18,7 +18,7 @@ const CardFavs: React.FC<IProperty> = (property) => {
 
         {/* Descripción */}
         <p className="text-gray-500 mt-2">
-          {property.capacity} Huéspedes - {property.bedrooms} Habitaciones
+          {property.capacity} Huéspedes - {property.bedrooms} Habitaciones 
         </p>
 
         {/* Precio */}

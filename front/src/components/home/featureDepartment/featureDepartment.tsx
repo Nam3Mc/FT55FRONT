@@ -27,7 +27,7 @@ export const FeatureDepartments: React.FC<IFeatureDepartmentsProps> = ({properti
         <Carousel className="w-full" plugins={[plugin.current]}>
           <CarouselContent className="-ml-2 md:-ml-4">
             {properties && properties.map((property: IProperty) => (
-              <CardHome {...property} key={property.id}/>
+              <CardHome  {...property} key={property.id}/>
             ))}
           </CarouselContent>
         </Carousel>

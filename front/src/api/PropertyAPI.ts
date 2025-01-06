@@ -56,6 +56,7 @@ export const getPropertyOwner = async(id: string): Promise<IAccountUser> => {
         });
         console.log(res);
         
+        
         if (!res.ok) {
             throw new Error(`Fallo al realizar el fetch a Owner por ID: ${res.status} ${res.statusText}`);
         };

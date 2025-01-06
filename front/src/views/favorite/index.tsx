@@ -8,7 +8,7 @@ export const Favorite: React.FC = () => {
 
   
 return (
-  <ContentFavorite/>
+  <ContentFavorite />
 )
 }
 

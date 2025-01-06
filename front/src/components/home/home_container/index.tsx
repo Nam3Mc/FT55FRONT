@@ -12,7 +12,7 @@ export const HomeContainer: React.FC = () => {
 
     useEffect(() => {
         const fetchProperties = async () => {
-            const propertiesData = await getPropertyDB();
+            const propertiesData = await getPropertyDB(); 
 
             const transformedProperties = propertiesData.map((property) => ({
                 ...property,
@@ -28,7 +28,7 @@ export const HomeContainer: React.FC = () => {
     return (
         <div className="py-16">
             <div className="container mx-auto px-4">
-                <FeatureDepartments properties={properties}/>
+                <FeatureDepartments  properties={properties}/>
                 <FeatureHouses properties={properties}/>
             </div>
         </div>

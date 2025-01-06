@@ -18,7 +18,7 @@ export const EmptyFavorites: React.FC = () => {
         </h2>
         <p className="text-gray-500 mb-6">
           ¡Explora nuestras propiedades y guarda las que más te gusten para
-          verlas aquí!
+          verlas aquí! 
         </p>
         <Link href="/"> 
             <button className="px-6 py-3 bg-silk text-velvet rounded-lg hover:bg-champagne hover:text-velvet transition"

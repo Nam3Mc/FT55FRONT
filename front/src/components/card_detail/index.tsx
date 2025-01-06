@@ -71,7 +71,7 @@ return (
               className="h-10 w-10 rounded-full mr-2"
             />
         
-            <span className="text-gray-800">{owner?.name} {owner?.lastName}</span>
+            <span className="text-gray-800">{owner?.name} {owner?.lastName}.</span>
           </div>
         </div>
     </div>

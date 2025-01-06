@@ -65,7 +65,7 @@ export const CardHome: React.FC<IProperty> = (property: IProperty) => {
                       </p>
                     </div>
                     <span className="text-xl text-[#239b56] font-bold">
-                      ${property.price} Por noche
+                      ${property.price} Por noche 
                     </span>
                 </div>
                 </Link>

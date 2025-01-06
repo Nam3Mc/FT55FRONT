@@ -30,7 +30,7 @@ export const HouseDetail: React.FC<{params:{id:string}}> = async({params}) => {
   }
   console.log(owner?.user_);
   
-  return <ContainerDetail property={property} owner={owner?.user_} />;
+  return <ContainerDetail  property={property} owner={owner?.user_} />;
   
 
 }

@@ -23,7 +23,7 @@ return (
      <h1 className="text-3xl font-bold text-velvet mb-6">Mis Favoritos</h1>
      {isLoading ? (
         // Mostrar mensaje mientras se cargan los favoritos
-        <div className="text-gray-500 text-lg">Cargando favoritos...</div>
+        <div className="text-gray-500 text-lg">Cargando favoritos... </div>
       ) : (
         <div className="flex flex-wrap gap-6">
           {favorites.length > 0 ? (

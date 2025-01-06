@@ -8,8 +8,8 @@ export interface IProperty {
   name: string;
   description: string;
 
-  state: string;
   city: string;
+  state: string;
   price: number;
   bedrooms: number;
   bathrooms: number;

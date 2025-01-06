@@ -1,6 +1,6 @@
 export interface IAmenities {
-    wifi: boolean,
     tv: boolean,
+    wifi: boolean,
     airConditioning: boolean,
     piscina: boolean,
     parqueadero: boolean,

@@ -1,4 +1,4 @@
-import { user } from "@/helpers/data";
+import { user } from "@/helpers/data"
 
 
 export interface IAccount {

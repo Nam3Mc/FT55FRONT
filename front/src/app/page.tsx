@@ -8,7 +8,7 @@ export default function Home() {
       <main>
         <HeroHome/>
         <HomeContainer/>
-        <HeroOwner/>
+        <HeroOwner />
       </main>
     </div>
   );

@@ -323,7 +323,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
         </div>
       ) : (
         <button className="bg-champagne text-pearl py-2 px-4 rounded-lg hover:bg-velvet hover:scale-110">
-          Consulta disponibilidad
+          Consulta Disponibilidad
         </button>
       )}
       
