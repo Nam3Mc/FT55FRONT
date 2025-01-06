@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import FeatureDepartments from "../featureDepartment/featureDepartment";
+// import FeatureDepartments from "../featureDepartment/featureDepartment";
 import { getPropertyDB } from "@/api/PropertyAPI";
 import { IProperty } from "@/interfaces/IProperty";
-import FeatureHouses from "../featureHouse/featureHouse";
+// import FeatureHouses from "../featureHouse/featureHouse";
 
 export const HomeContainer: React.FC = () => {
 
@@ -28,8 +28,8 @@ export const HomeContainer: React.FC = () => {
     return (
         <div className="py-16">
             <div className="container mx-auto px-4">
-                <FeatureDepartments properties={properties}/>
-                <FeatureHouses properties={properties}/>
+                {/* <FeatureDepartments properties={properties}/> */}
+                {/* <FeatureHouses properties={properties}/> */}
             </div>
         </div>
     )

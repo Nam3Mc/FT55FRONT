@@ -4,6 +4,11 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
 
+interface PaymentDto {
+  url: string;
+  contractId: string;
+}
+
 const SuccessPage = () => {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get("payment_id");
@@ -12,15 +17,17 @@ const SuccessPage = () => {
 
   useEffect(() => {
     const sendPaymentData = async () => {
-      const contractId = localStorage.getItem("contract_id");
+      const contractId = "805115c1-39b1-4a37-b3f4-b90dab92ddba"
       const currentUrl = window.location.href;
       
       if (contractId) {
+        const paymentData: PaymentDto = {
+          url: currentUrl,
+          contractId: contractId,
+        };
+
         try {
-          await axios.post("http://localhost:3000/payments/paid", {
-            url: currentUrl,
-            contract_id: contractId,
-          });
+          await axios.post("http://localhost:3000/payments/paid", paymentData);
           console.log("Datos enviados exitosamente.");
         } catch (error) {
           console.error("Error al enviar los datos: ", error);
