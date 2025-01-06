@@ -5,9 +5,9 @@ import HomeContainer from "@/components/home/home_container";
 export const Home: React.FC = () => {
   return (
     <div>
-      {/* <HeroHome /> */}
+      <HeroHome />
       <HomeContainer />
-      {/* <HeroOwner /> */}
+      <HeroOwner />
     </div>
   );
 };
