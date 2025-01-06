@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // next
 import { useRouter } from "next/navigation";
@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import Swal from "sweetalert2";
+import { user } from "@/helpers/data";
 
 interface BookingDetailProps {
   price: number;
@@ -19,6 +21,17 @@ interface BookingDetailProps {
 }
 
 const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor, pets, id}) => {
+
+  const [userData, setUserData] = useState<user | null>(null);
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    
+    if (user) {
+      const data = JSON.parse(user);
+      setUserData(data); 
+      
+    }
+  }, []);
 
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -69,32 +82,60 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
   };
 
   const handleReserv = () => {
-    const reserva = {
-      propertyId: id,
-      dates: {
-        startDate: dateRange.startDate?.toISOString(),
-        endDate: dateRange.endDate?.toISOString(),
-      },
-      travelers: {
-        adults: travelers.adults,
-        children: travelers.children,
-        babies: travelers.babies,
-      },
-      prices: {
-        limpieza,
-        totalPrecioNights,
-        servicio,
-        subtotal,
-        discountPerWeek: nights >= 7 ? discountPerWeek : null,
-        totalPrice: nights >= 7 ? totalPrecioFinal : subtotal,
-      },
-    };
-  
-    // Guardar la reserva en localStorage
-    localStorage.setItem("reserv", JSON.stringify(reserva));
-  
-    // Redirigir al usuario a la página de previsualización del checkout
-    router.push("/CheckoutPreview");
+    if (userData) {
+      const reserva = {
+        propertyId: id,
+        dates: {
+          startDate: dateRange.startDate?.toISOString(),
+          endDate: dateRange.endDate?.toISOString(),
+        },
+        travelers: {
+          adults: travelers.adults,
+          children: travelers.children,
+          babies: travelers.babies,
+        },
+        prices: {
+          limpieza,
+          totalPrecioNights,
+          servicio,
+          subtotal,
+          discountPerWeek: nights >= 7 ? discountPerWeek : null,
+          totalPrice: nights >= 7 ? totalPrecioFinal : subtotal,
+        },
+      };
+    
+      // Guardar la reserva en localStorage
+      localStorage.setItem("reserv", JSON.stringify(reserva));
+    
+      // Redirigir al usuario a la página de previsualización del checkout
+      router.push("/CheckoutPreview");
+    } else {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-cancel"
+        },
+        buttonsStyling: true
+      });
+      swalWithBootstrapButtons.fire({
+        title: "Ups...",
+        text: "Necesitas ingresar para poder continuar con la reserva",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Inicia sesión",
+        cancelButtonText: "Registrate",
+        reverseButtons: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/login")
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          router.push("/register")
+        }
+      });
+    }
+   
   };
   
   const updateTravelers = (key: "adults" | "children", value: number) => {

@@ -22,7 +22,7 @@ export const FeatureHouse: React.FC<IFeatureDepartmentsProps> = ({properties}) =
     <section className="py-16 ">
       <div className="container mx-auto px-4">
         <h2 className="mb-6 text-2xl text-center font-semibold md:text-3xl">
-          Departamentos
+          Casas
         </h2>
         <Carousel className="w-full" plugins={[plugin.current]}>
           <CarouselContent className="-ml-2 md:-ml-4">

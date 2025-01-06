@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <div>
       <main>
-        <HeroHome />
+        <HeroHome/>
         <HomeContainer/>
-        <HeroOwner />
+        <HeroOwner/>
       </main>
     </div>
   );
