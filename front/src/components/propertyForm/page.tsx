@@ -3,6 +3,7 @@ import IUser from '@/interfaces/user';
 import IFormData from '../../interfaces/formData';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { TypeOfProperty } from '@/helpers/typeOfProperty';
 
 
 const PropertyForm: React.FC = () => {
@@ -29,6 +30,7 @@ const PropertyForm: React.FC = () => {
     parqueadero: false,
     cocina: false,
     isActive: false,
+    type: "casa",
   });
 
   const resetForm = () => {
@@ -55,6 +57,7 @@ const PropertyForm: React.FC = () => {
       parqueadero: false,
       cocina: false,
       isActive: false,
+      type: "casa"
     });
   };
   
@@ -112,6 +115,10 @@ const PropertyForm: React.FC = () => {
     if (typeof formData.cocina !== "boolean") {
       newErrors.cocina = "El campo cocina debe ser un valor booleano";
     }
+    if (!Object.values(TypeOfProperty).includes(formData.type)) {
+      newErrors.type = "Selecciona un tipo de propiedad válido";
+    }
+    
   
     setErrors(newErrors);
   
@@ -466,7 +473,7 @@ const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
               onChange={handleChange}
               className="mt-2"
             />
-             {errors.kitchen && <p className="text-red-500 text-sm">{errors.kitchen}</p>}
+             {errors.cocina && <p className="text-red-500 text-sm">{errors.cocina}</p>}
           </div>
     
                <div className="mb-4">
@@ -492,6 +499,29 @@ const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 />
                  {errors.pets && <p className="text-red-500 text-sm">{errors.pets}</p>}
               </div>
+
+              <div className="mb-4">
+            <label className="block text-gray-800 text-lg">Tipo de Propiedad:</label>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={(e) =>
+                setFormData((prevData) => ({
+                  ...prevData,
+                  type: e.target.value,
+                }))
+              }
+              className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            >
+              <option value="">Seleccione un tipo</option>
+              <option value="casa">Casa</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="habitacion">Habitación</option>
+            </select>
+            {errors.type && <p className="text-red-500 text-sm">{errors.type}</p>}
+          </div>
+
         
               <div className="mb-4">
               <label className="block text-gray-800 text-lg">Imágenes:</label>

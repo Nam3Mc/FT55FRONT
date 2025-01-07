@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import IUser from "@/interfaces/user";
 import Swal from "sweetalert2";
 import {CivilStatusOptions,EmploymentStatusOptions,} from "@/helpers/userStatus";
+import { saveUser as saveUserUtil } from "@/helpers/userUtils";
 
 interface OwnerDetailsFormProps {
   onComplete: (ownerDetails: IUser) => void;
@@ -10,6 +11,7 @@ interface OwnerDetailsFormProps {
 interface OwnerDetailsFormProps {
   initialData?: Partial<IUser>;
   onComplete: (ownerDetails: IUser) => void;
+  editableFields: string[];
 }
 
 const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
@@ -24,9 +26,10 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
   const [employmentStatus, setEmploymentStatus] = useState(initialData.employmentStatus || "");
   const [id, setId] = useState(initialData.id || "");
   const [DOB, setDOB] = useState(initialData.DOB || "");
-  const [phone, setPhone] = useState<number | undefined>(initialData.phone ? Number(initialData.phone) : undefined);
-  const [dni, setDni] = useState<number | undefined>(initialData.dni ? Number(initialData.dni) : undefined);
+  const [phone, setPhone] = useState<number | string>(initialData.phone ? Number(initialData.phone) : "");
+  const [dni, setDni] = useState<number | string>(initialData.dni ? Number(initialData.dni) : "");
   const [photo, setPhoto] = useState(initialData.photo || "https://cdn-icons-png.flaticon.com/512/61/61205.png");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null); 
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,23 +38,24 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     if (user) {
       setName(user.name || "");
       setLastName(user.lastName || "");
-      setPhone(user.phone ? Number(user.phone) : undefined);
-      setDni(user.dni ? Number(user.dni) : undefined);
+      setPhone(user.phone ? Number(user.phone) : "");
+      setDni(user.dni ? Number(user.dni) : "");
       setEmail(user.email || "");
       setNationality(user.nationality || "");
       setCivilStatus(user.civilStatus || "");
       setEmploymentStatus(user.employmentStatus || "");
       setDOB(user.DOB ? new Date(user.DOB).toISOString().split("T")[0] : "");
-      setPhoto("");
+      setPhoto(user.photo || "");
       setId(user.id || "");
     }
   }, []);
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!name || !lastName || !email || !nationality || !DOB || !dni || !phone || !civilStatus || !employmentStatus || !photo) 
-    {
+    
+  
+    if (!name || !lastName || !email || !nationality || !DOB || !dni || !phone || !civilStatus || !employmentStatus || !photo) {
       Swal.fire({
         icon: "error",
         title: "Campos incompletos",
@@ -62,15 +66,69 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
 
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    if (!user.id) {
-      alert("No se encontró el usuario. Por favor, inicia sesión.");
-      return;
-    }
-
+  if (!user.id) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "No se encontró el usuario. Por favor, inicia sesión.",
+    });
+    return;
+  }
+  
     const ownerDetails: IUser = {
-      name, lastName, email, phone, nationality, dni, DOB, civilStatus, employmentStatus, isActive: user.isActive, photo, role: user.role};
-    await handleUpdate(ownerDetails);
-     };
+      name,
+      lastName,
+      email,
+      phone,
+      nationality,
+      dni,
+      DOB,
+      civilStatus,
+      employmentStatus,
+      isActive: user.isActive,
+      photo,
+      role: user.role,
+      id: user.id 
+    };
+  
+    try {
+      const response = await fetch(`http://localhost:3002/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ownerDetails),
+      });
+  
+      if (response.ok) {
+        const updatedUser = await response.json();
+  
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+  
+        Swal.fire({
+          icon: "success",
+          title: "¡Actualización exitosa!",
+          text: "Los datos se han actualizado correctamente.",
+        }).then(() => {
+          onComplete(updatedUser); // Llama a onComplete solo después de que se muestre el swal
+        });
+        
+      } else {
+        const errorMessage = await response.text();
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar",
+          text: errorMessage || "No se pudo actualizar el usuario.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de red",
+        text: "No se pudo conectar al servidor. Intenta más tarde.",
+      });
+    }
+  };
 
   const handleUpdate = async (userDetails: IUser) => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -82,24 +140,25 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
       });
       return;
     }
-
+  
     try {
       const response = await fetch(`http://localhost:3002/users/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userDetails),
+        body: JSON.stringify(userDetails), 
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         Swal.fire({
           icon: "success",
           title: "¡Actualización exitosa!",
           text: "Los datos se han actualizado correctamente.",
+        }).then(() => {
+          onComplete(userDetails); // Llama a onComplete solo después de que se muestre el swal
         });
-        onComplete(userDetails);
       } else {
         Swal.fire({
           icon: "error",
@@ -115,6 +174,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
       });
     }
   };
+  
 
   const handleUserImageUpload = async (files: FileList) => {
     if (!id) {
@@ -330,3 +390,4 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
 };
 
 export default OwnerDetailsForm;
+

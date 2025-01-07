@@ -4,12 +4,12 @@ export default interface IUser {
     lastName?: string;
     phone?: number | string;
     email?: string;
-    id?: string;
+    id: string;
     profileImgUrl?: string;
     registeredAt?: string;
     active?: boolean;
     nationality?: string;
-    dni?: number;
+    dni?: number | string;
     DOB?:string,
     civilStatus?: string;
     photo?: string;
