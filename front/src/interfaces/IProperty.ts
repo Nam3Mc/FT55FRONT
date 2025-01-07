@@ -2,7 +2,7 @@ import { IAmenities } from "./IAmenities";
 import { IAccount } from "./IAccount";
 
 export interface IProperty {
-  id: number;
+  id: string;
   account_: IAccount;
   isActive: boolean;
   name: string;
@@ -18,6 +18,7 @@ export interface IProperty {
   photos?: string[];
   image_?: { id: string; url: string }[];
   rating: number;
+  type:string,
   hasMinor: boolean;
   pets: boolean
   amenities_: IAmenities

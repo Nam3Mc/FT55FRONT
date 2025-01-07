@@ -13,14 +13,14 @@ import Swal from "sweetalert2";
 import { user } from "@/helpers/data";
 
 interface BookingDetailProps {
+  id: string;
   price: number;
   capacity: number;
   hasMinor: boolean;
   pets: boolean;
-  id: number
 }
 
-const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor, pets, id}) => {
+const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMinor, pets}) => {
 
   const [userData, setUserData] = useState<user | null>(null);
   useEffect(() => {
@@ -69,13 +69,10 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
 
   const nights = calculateNights();
   // Tarifas y precios
-  const limpieza = 30; // Tarifa fija de limpieza
-  const totalPrecioNights = nights * price; // Costo por noches seleccionadas
-  const servicio = totalPrecioNights * 0.05; // Comisión de servicio (5% del total por noches)
-  const subtotal = totalPrecioNights + limpieza + servicio; // Suma de noches, limpieza y comisión
 
-  const discountPerWeek = nights >= 7 ? totalPrecioNights * 0.05 : 0; // Descuento semanal (5%)
-  const totalPrecioFinal = subtotal - discountPerWeek; // Precio final después del descuento
+  const totalPrecioNights = nights * price; // Costo por noches seleccionadas
+  const servicio = totalPrecioNights * 0.04; // Comisión de servicio (4% del total por noches)
+  const total = totalPrecioNights + servicio; // Suma de noches y comisión
   
   const handleDateChange = (ranges: any) => {
     setDateRange(ranges.selection);
@@ -84,7 +81,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
   const handleReserv = () => {
     if (userData) {
       const reserva = {
-        propertyId: id,
+        propertyId : id,
         dates: {
           startDate: dateRange.startDate?.toISOString(),
           endDate: dateRange.endDate?.toISOString(),
@@ -95,12 +92,10 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
           babies: travelers.babies,
         },
         prices: {
-          limpieza,
+          total,
           totalPrecioNights,
           servicio,
-          subtotal,
-          discountPerWeek: nights >= 7 ? discountPerWeek : null,
-          totalPrice: nights >= 7 ? totalPrecioFinal : subtotal,
+          price
         },
       };
     
@@ -289,29 +284,9 @@ const BookingDetail: React.FC<BookingDetailProps> = ({price, capacity, hasMinor,
               <h3>${totalPrecioNights.toFixed(2)}</h3>
             </div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Tarifa de limpieza</h3>
-              <h3>${limpieza.toFixed(2)}</h3>
-            </div>
-            <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold">Comisión de servicio</h3>
               <h3>${servicio.toFixed(2)}</h3>
             </div>
-          </div>
-
-          {/* Descuento por estadía semanal */}
-          {nights >= 7 && (
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Descuento por estadía semanal</h3>
-              <h3 className="text-green-600">-${discountPerWeek.toFixed(2)}</h3>
-            </div>
-          )}
-
-          <hr className="border-t border-gray-300 my-4" />
-
-          {/* Precio total */}
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold">Total</h2>
-            <h2>${totalPrecioFinal.toFixed(2)}</h2>
           </div>
 
           <button
