@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import useUserProfile from "@/hooks/UserDashboard/useUserProfile";
 import usePhotoUpload from "@/hooks/UserDashboard/usePhotoUpload";
-import UserEditForm from "./UserEditForm";
 import IUser from "@/interfaces/user";
+import EditUserForm from "./EditUserForm";
 
 const UserProfile: React.FC = () => {
   const { user, loading, error, setUser, saveUser } = useUserProfile();
@@ -19,33 +19,43 @@ const UserProfile: React.FC = () => {
   const handleSave = async (updatedUser: IUser) => {
     try {
       const savedUser = await saveUser(updatedUser);
-
       if (selectedPhoto) {
         await uploadPhoto(savedUser.id, selectedPhoto, setUser);
       }
       setIsEditing(false);
+      setUser(savedUser);
     } catch (err) {
       console.error("Error al guardar los cambios:", err);
     }
   };
 
-  if (loading) return <p>Cargando información...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) {
+    console.log("Cargando información del usuario...");
+    return <p>Cargando información...</p>;
+  }
+
+  if (error) {
+    console.error("Error cargando usuario:", error);
+    return <p>{error}</p>;
+  }
+
+  console.log("Usuario cargado:", user);
+
+  const editableFields = ["civilStatus", "employmentStatus", "email", "phone"];
 
   return (
     <div>
-      {isEditing ? (
-        <UserEditForm
-          user={user!}
-          onSave={handleSave}
-          onCancel={() => setIsEditing(false)}
-          onPhotoChange={setSelectedPhoto}
+      {isEditing && user ? (
+        <EditUserForm
+          initialData={user}
+          editableFields={editableFields}
+          onComplete={handleSave}
         />
       ) : (
         <section className="bg-white p-6 rounded-md shadow-md mb-8 flex flex-col sm:flex-row relative">
           <img
             src={
-              user?.profileImgUrl ||
+              user?.photo ||
               "https://cdn-icons-png.flaticon.com/512/61/61205.png"
             }
             alt="Foto de perfil"
@@ -56,10 +66,14 @@ const UserProfile: React.FC = () => {
             }}
           />
           <div className="mt-4 sm:mt-0 sm:ml-5 flex flex-col items-center sm:items-start">
-            {user?.name && user?.lastName && (
+            {user?.name && (
               <p className="text-sm sm:text-base">
-                <span className="font-semibold">Nombre:</span> {user.name}{" "}
-                {user.lastName}
+                <span className="font-semibold">Nombre:</span> {user.name}
+              </p>
+            )}
+            {user?.lastName && (
+              <p className="text-sm sm:text-base">
+                <span className="font-semibold">Apellido:</span> {user.lastName}
               </p>
             )}
             {user?.email && (
@@ -114,4 +128,5 @@ const UserProfile: React.FC = () => {
     </div>
   );
 };
+
 export default UserProfile;

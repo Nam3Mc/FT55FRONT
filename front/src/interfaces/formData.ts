@@ -21,4 +21,5 @@ export default interface IFormData {
   parqueadero: boolean,
   cocina: boolean,
   isActive: boolean,
+  type: string,
 }

@@ -14,7 +14,7 @@ const useUsers = () => {
           throw new Error("Error al cargar los usuarios");
         }
         const data = await response.json();
-        setUsers(data);
+        setUsers(data.users);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -40,7 +40,7 @@ const useUsers = () => {
 
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user.id === userId ? { ...user, active: true } : user
+          user.id === userId ? { ...user, isActive: true } : user
         )
       );
     } catch (err: any) {
@@ -63,7 +63,7 @@ const useUsers = () => {
 
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user.id === userId ? { ...user, active: false } : user
+          user.id === userId ? { ...user, isActive: false } : user
         )
       );
     } catch (err: any) {

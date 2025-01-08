@@ -7,6 +7,7 @@ export interface IProperty {
   isActive: boolean;
   name: string;
   description: string;
+  type: string;
 
   state: string;
   city: string;

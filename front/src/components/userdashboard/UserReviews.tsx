@@ -23,7 +23,7 @@ const MyReviews: React.FC<{ propertyId: string }> = ({ propertyId }) => {
         civilStatus: '',
         photo: '',
         employmentStatus: '',
-        isActive: ''
+        isActive: true
       },
       property: {
         id: 1,
@@ -41,7 +41,7 @@ const MyReviews: React.FC<{ propertyId: string }> = ({ propertyId }) => {
           civilStatus: '',
           photo: '',
           employmentStatus: '',
-          isActive: ''
+          isActive: true
         },
         active: true,
         title: "Casa en la playa",
@@ -90,7 +90,7 @@ const MyReviews: React.FC<{ propertyId: string }> = ({ propertyId }) => {
         civilStatus: '',
         photo: '',
         employmentStatus: '',
-        isActive: ''
+        isActive: true
       },
       property: {
         id: 2,
@@ -108,7 +108,7 @@ const MyReviews: React.FC<{ propertyId: string }> = ({ propertyId }) => {
           civilStatus: '',
           photo: '',
           employmentStatus: '',
-          isActive: ''
+          isActive: true
         },
         active: true,
         title: "Apartamento en la ciudad",

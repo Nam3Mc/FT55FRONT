@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IProperty } from '@/interfaces/IProperty';
 import { IAccountUser } from '@/interfaces/IAccount'
 
