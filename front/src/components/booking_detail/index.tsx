@@ -17,10 +17,10 @@ interface BookingDetailProps {
   price: number;
   capacity: number;
   hasMinor: boolean;
-  pets: boolean;
+  hasPets: boolean;
 }
 
-const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMinor, pets}) => {
+const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMinor, hasPets}) => {
 
   const [userData, setUserData] = useState<user | null>(null);
   useEffect(() => {
@@ -67,6 +67,9 @@ const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMi
     return 0;
   };
 
+  const guests = travelers.adults + travelers.children
+  const pets = travelers.pets
+
   const nights = calculateNights();
   // Tarifas y precios
 
@@ -87,6 +90,8 @@ const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMi
           endDate: dateRange.endDate?.toISOString(),
         },
         travelers: {
+          guests,
+          pets,
           adults: travelers.adults,
           children: travelers.children,
           babies: travelers.babies,
@@ -251,7 +256,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMi
               </>
             )}
 
-            {pets && (
+            {hasPets && (
               <div className="mb-2 flex items-center">
                 <label className="block text-gray-600 font-medium mr-4">¿Viajas con mascotas?</label>
                 <button
@@ -269,7 +274,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMi
               Este alojamiento permite hasta {capacity} huéspedes.
             </p>
               {!hasMinor && <p className="text-gray-600 text-sm"> No permite menores.</p>}
-              {!pets && <p className="text-gray-600 text-sm"> No permite mascotas.</p>}
+              {!hasPets && <p className="text-gray-600 text-sm"> No permite mascotas.</p>}
 
             </div>
           </div>
@@ -297,8 +302,8 @@ const BookingDetail: React.FC<BookingDetailProps> = ({id, price, capacity, hasMi
           </button>
         </div>
       ) : (
-        <button className="bg-champagne text-pearl py-2 px-4 rounded-lg hover:bg-velvet hover:scale-110">
-          Consulta Disponibilidad
+        <button className="bg-champagne text-pearl py-2 px-4 rounded-lg bg-opacity-50 cursor-not-allowed disabled">
+          Reserva
         </button>
       )}
       

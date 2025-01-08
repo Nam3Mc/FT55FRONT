@@ -37,7 +37,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({property, owner}) => {
       
       {/* Calendario y cantidad de viajeros */}
       <div className='lg:w-1/2'>
-        <BookingDetail id={property.id} price={property.price} capacity={property.capacity} hasMinor={property.hasMinor} pets={property.pets}/>
+        <BookingDetail id={property.id} price={property.price} capacity={property.capacity} hasMinor={property.hasMinor} hasPets={property.pets}/>
       </div>
       </div>
 
