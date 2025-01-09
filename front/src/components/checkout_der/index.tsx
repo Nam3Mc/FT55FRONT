@@ -31,7 +31,7 @@ export const CheckoutDer: React.FC = () => {
   console.log(reservData);
 
   const { dates, prices } = reservData;
-  const { name, type, rating, photos } = propertyData;
+  const { name, type, rating, photos, state, city } = propertyData;
   const photo = photos ? photos[0] : houseDef;
 
   const nights = Math.ceil(
@@ -54,6 +54,9 @@ export const CheckoutDer: React.FC = () => {
 
       {/* Título y tipo */}
       <h3 className="text-lg font-bold mb-2">{name}</h3>
+      <h4>
+        {state} • {city}
+      </h4>
       <p className="text-sm mb-4">
         {type} • ⭐ {rating.toFixed(2)}
       </p>
@@ -63,22 +66,12 @@ export const CheckoutDer: React.FC = () => {
       {/* Detalles del precio */}
       <div className="flex justify-between mb-2">
         <span>
-          ${prices?.totalPrecioNights?.toFixed(2) ?? "N/A"} USD por {nights}{" "}
-          noches
+          ${prices?.price?.toFixed(2) ?? "N/A"} USD por {nights} noches
         </span>
         <span className="font-semibold">
           ${prices?.totalPrecioNights?.toFixed(2) ?? "N/A"} USD
         </span>
       </div>
-
-      {/* Servicio de Limpieza */}
-      <div className="flex justify-between mb-2">
-        <span>Servicio de Limpieza</span>
-        <span className="font-semibold">
-          ${prices?.limpieza?.toFixed(2) ?? "N/A"} USD
-        </span>
-      </div>
-
       {/* Servicio de RentaFacil */}
       <div className="flex justify-between mb-2">
         <span>Servicio de RentaFacil</span>
@@ -91,9 +84,9 @@ export const CheckoutDer: React.FC = () => {
 
       {/* Total */}
       <div className="flex justify-between items-center text-lg font-bold mb-4">
-        <span>Total (USD)</span>
+        <span>Total </span>
         <span className="font-semibold">
-          ${prices?.totalPrice?.toFixed(2) ?? "N/A"} USD
+          ${prices?.total?.toFixed(2) ?? "N/A"} USD
         </span>
       </div>
     </div>

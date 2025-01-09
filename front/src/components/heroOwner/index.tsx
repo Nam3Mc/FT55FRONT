@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-
 export default function HeroOwner() {
   return (
     <div>
@@ -33,7 +33,7 @@ export default function HeroOwner() {
                 type="submit"
                 className="w-full h-10 font-bold text-lg hover:bg-white hover:text-black"
               >
-                Registrate
+                <Link href={"/register"}>Registrate</Link>
               </Button>
             </div>
           </div>

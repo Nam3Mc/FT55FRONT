@@ -4,6 +4,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+//import { NavigationMenu } from "@radix-ui/react-navigation-menu";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "../ui/navigation-menu";
+//import { MobilePropertiesMenu } from "./mobileProperties";
+import MenuProperties from "../menuProperties";
 
 export const Navbar: React.FC = () => {
   const { user, resetForm } = useAuthStore();
@@ -72,63 +83,89 @@ export const Navbar: React.FC = () => {
             )}
           </button>
         </div>
-
-        <div className="hidden md:flex space-x-4">
-          <Link href="/">
-            <div className="text-silk hover:border-b-2 hover:border-champagne p-2">
-              Inicio
-            </div>
-          </Link>
-
-          <Link href="/about">
-            <div className="text-silk hover:border-b-2 hover:border-champagne p-2">
-              Sobre nosotros
-            </div>
-          </Link>
-        </div>
-
+        <NavigationMenu className="flex items-center space-x-4">
+          <NavigationMenuList className="hidden md:flex space-x-4">
+            <NavigationMenuItem className="">
+              <Link href="/">
+                <NavigationMenuLink className="text-silk hover:border-b-2 hover:border-champagne p-2">
+                  Inicio
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/about">
+                <NavigationMenuLink className="text-silk hover:border-b-2 hover:border-champagne p-2">
+                  Sobre nosotros
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
         <div className="flex justify-center flex-1 lg:mr-32">
           <Link href="/">
             <Image src="/logofinal.png" alt="logo" width={200} height={70} />
           </Link>
         </div>
+        <NavigationMenu className="flex items-center space-x-4">
+          <NavigationMenuList className="hidden md:flex items-center space-x-4">
+            <NavigationMenuItem className="hidden lg:block px-4 py-2">
+              <NavigationMenuTrigger className="text-silk hover:border-b-2 hover:border-champagne p-2 hover:text-white text-base">
+                Ver propiedades
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <MenuProperties />
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
-        <div className="hidden md:flex items-center space-x-4">
-          {userData ? (
-            <>
-              <Link href="/favs">
-                <i className="text-silk hover:border-b-2 hover:border-champagne p-2">
-                  Favoritos
-                </i>
-              </Link>
-              <Link href="/profile">
-                <i className="text-silk hover:border-b-2 hover:border-champagne p-2">
-                  Perfil
-                </i>
-              </Link>
-
-              <button
-                onClick={handleLogOut}
-                className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-white mt-4"
-              >
-                Cerrar Sesion
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login">
-                <button className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk mt-4">
-                  Inicia sesión
-                </button>
-              </Link>
-              <Link href="/register">
-                <button className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk mt-4">
-                  Registrate
-                </button>
-              </Link>
-            </>
-          )}
-        </div>
+        <NavigationMenu className="flex items-center space-x-4">
+          <NavigationMenuList className="hidden md:flex items-center space-x-4">
+            {userData ? (
+              <>
+                <NavigationMenuItem>
+                  <Link href="/favs">
+                    <NavigationMenuLink className="text-silk hover:border-b-2 hover:border-champagne p-2">
+                      Favoritos
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link href="/profile">
+                    <NavigationMenuLink className="text-silk hover:border-b-2 hover:border-champagne p-2">
+                      Perfil
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <button
+                    onClick={handleLogOut}
+                    className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-white mt-4"
+                  >
+                    Cerrar Sesion
+                  </button>
+                </NavigationMenuItem>
+              </>
+            ) : (
+              <>
+                <NavigationMenuItem>
+                  <Link href="/login">
+                    <button className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk mt-4">
+                      Inicia sesión
+                    </button>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link href="/register">
+                    <button className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk mt-4">
+                      Registrate
+                    </button>
+                  </Link>
+                </NavigationMenuItem>
+              </>
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
 
       {isClick && (
@@ -143,6 +180,19 @@ export const Navbar: React.FC = () => {
               Sobre nosotros
             </div>
           </Link>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem className="lg:block">
+                <NavigationMenuTrigger className="text-silk hover:border-b-2 hover:border-champagne p-2 hover:text-white text-base mb-4">
+                  Ver propiedades
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <MenuProperties />
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
           {!userData ? (
             <>
               <Link href="/login">

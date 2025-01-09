@@ -26,7 +26,7 @@ const AllProperties: React.FC = () => {
     try {
       const propertyToUpdate = {
         id: selectedProperty.id,
-        name: selectedProperty.name,
+        name: selectedProperty.title,
         price: selectedProperty.price,
         description: selectedProperty.description,
         state: selectedProperty.state,
@@ -36,7 +36,7 @@ const AllProperties: React.FC = () => {
         bathrooms: selectedProperty.bathrooms,
         hasMinor: selectedProperty.hasMinor,
         pets: selectedProperty.pets,
-        isActive: true,  // Aseguramos que estamos activando la propiedad
+        isActive: true,
         wifi: selectedProperty.amenities_?.wifi,
         piscina: selectedProperty.amenities_?.piscina,
         parqueadero: selectedProperty.amenities_?.parqueadero,
@@ -61,12 +61,10 @@ const AllProperties: React.FC = () => {
         Swal.fire("Error", errorResponse.message || "Hubo un problema con la activación de la propiedad", "error");
         return;
       }
-  
-      // Asegúrate de verificar el campo success en la respuesta
+
       const result = await response.json();
       if (result.success) {
         Swal.fire("Éxito", "Propiedad activada correctamente", "success");
-        // Solo actualizamos el estado si la propiedad se activa con éxito
         setSelectedProperty((prev) => ({
           ...prev!,
           isActive: true,
@@ -80,6 +78,124 @@ const AllProperties: React.FC = () => {
     }
   };
   
+
+  if (loading) {
+    return <p>Cargando propiedades...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  return (
+    <div className="bg-white p-6 rounded-md shadow-md mb-8">
+      <h2 className="text-2xl font-bold mb-4">Propiedades</h2>
+
+      {selectedProperty ? (
+        <div className="property-detail relative">
+    
+          <button
+            onClick={handleBackToList}
+            className="flex items-center text-black-500 hover:text-gray-700 mb-4 absolute top-4 left-4 z-20"
+          >
+            <FiArrowLeftCircle className="h-5 w-5 mr-2" />
+            Volver a la lista de propiedades
+          </button>
+          <div className="absolute top-4 right-4 flex items-center space-x-4">
+            <p className={selectedProperty.isActive ? "text-green-500" : "text-red-500"}>
+              {selectedProperty.isActive ? "Activa" : "Pendiente"}
+            </p>
+
+            {!selectedProperty.isActive && (
+              <button
+                onClick={() => handleActivateProperty(selectedProperty.id)}
+                className="bg-velvet text-white px-4 py-2 rounded-md"
+              >
+                Activar propiedad
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-16">
+            <div className="col-span-1">
+              <h4 className="text-lg font-semibold mb-2">Fotos:</h4>
+              {selectedProperty.image_ && selectedProperty.image_.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {selectedProperty.image_.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.url}
+                      alt={`Propiedad ${selectedProperty.title} Foto ${index + 1}`}
+                      className="w-full h-64 object-cover rounded-lg shadow-md"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p>No hay imágenes disponibles para esta propiedad.</p>
+              )}
+            </div>
+            <div className="col-span-1">
+              <p className="text-sm text-gray-500">{selectedProperty.description}</p>
+
+              <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                <p><strong>Precio:</strong> ${selectedProperty.price}</p>
+                <p><strong>Estado:</strong> {selectedProperty.state}</p>
+                <p><strong>Ciudad:</strong> {selectedProperty.city}</p>
+                {/* <p><strong>Dirección:</strong> {selectedProperty.address}</p> */}
+                <p><strong>Habitaciones:</strong> {selectedProperty.bedrooms}</p>
+                <p><strong>Baños:</strong> {selectedProperty.bathrooms}</p>
+                <p><strong>Capacidad:</strong> {selectedProperty.capacity} personas</p>
+                <p><strong>Latitud:</strong> {selectedProperty.latitude}</p>
+                <p><strong>Longitud:</strong> {selectedProperty.longitude}</p>
+                <p><strong>Acepta menores:</strong> {selectedProperty.hasMinor ? "Sí" : "No"}</p>
+                <p><strong>Acepta mascotas:</strong> {selectedProperty.pets ? "Sí" : "No"}</p>
+                <p><strong>Tipo:</strong> {selectedProperty.type}</p>
+                <p><strong>Activo:</strong> {selectedProperty.isActive ? "Sí" : "No"}</p>
+                <p><strong>Wifi:</strong> {selectedProperty.amenities_?.wifi ? "Sí" : "No"}</p>
+                <p><strong>TV:</strong> {selectedProperty.amenities_?.tv ? "Sí" : "No"}</p>
+                <p><strong>Aire acondicionado:</strong> {selectedProperty.amenities_?.airConditioning ? "Sí" : "No"}</p>
+                <p><strong>Piscina:</strong> {selectedProperty.amenities_?.piscina ? "Sí" : "No"}</p>
+                <p><strong>Parqueadero:</strong> {selectedProperty.amenities_?.parqueadero ? "Sí" : "No"}</p>
+                <p><strong>Cocina:</strong> {selectedProperty.amenities_?.cocina ? "Sí" : "No"}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <ul className="space-y-4">
+          {properties.map((property) => (
+            <li
+              key={property.id}
+              className="p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200"
+              onClick={() => handlePropertyClick(property)}
+            >
+              <h3 className="text-xl font-semibold">{property.title}</h3>
+              <p className="text-gray-600">{property.city}</p>
+              {property.image_ && property.image_.length > 0 && (
+                <img
+                  src={property.image_[0].url}
+                  alt={`Propiedad ${property.title} Foto 1`}
+                  className="w-full h-48 object-cover rounded-lg shadow-md mb-4"
+                />
+              )}
+              <p className="font-medium">
+                Precio por noche:{" "}
+                <span className="text-green-500">${property.price}</span>
+              </p>
+              <p className="text-sm text-gray-500">
+                Capacidad: {property.capacity} personas,{" "}
+                {property.bedrooms} Habitaciones, {property.bathrooms} Baño(s)
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default AllProperties;
+
 
   // const handleActivateProperty = async (propertyId: string) => {
   //   if (!selectedProperty) {
@@ -143,120 +259,3 @@ const AllProperties: React.FC = () => {
   //     Swal.fire("Error", "Hubo un problema al activar la propiedad", "error");
   //   }
   // };
-
-  if (loading) {
-    return <p>Cargando propiedades...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  return (
-    <div className="bg-white p-6 rounded-md shadow-md mb-8">
-      <h2 className="text-2xl font-bold mb-4">Propiedades</h2>
-
-      {selectedProperty ? (
-        <div className="property-detail relative">
-    
-          <button
-            onClick={handleBackToList}
-            className="flex items-center text-black-500 hover:text-gray-700 mb-4 absolute top-4 left-4 z-20"
-          >
-            <FiArrowLeftCircle className="h-5 w-5 mr-2" />
-            Volver a la lista de propiedades
-          </button>
-          <div className="absolute top-4 right-4 flex items-center space-x-4">
-            <p className={selectedProperty.isActive ? "text-green-500" : "text-red-500"}>
-              {selectedProperty.isActive ? "Activa" : "Pendiente"}
-            </p>
-
-            {!selectedProperty.isActive && (
-              <button
-                onClick={() => handleActivateProperty(selectedProperty.id)}
-                className="bg-velvet text-white px-4 py-2 rounded-md"
-              >
-                Activar propiedad
-              </button>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-16">
-            <div className="col-span-1">
-              <h4 className="text-lg font-semibold mb-2">Fotos:</h4>
-              {selectedProperty.image_ && selectedProperty.image_.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {selectedProperty.image_.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image.url}
-                      alt={`Propiedad ${selectedProperty.name} Foto ${index + 1}`}
-                      className="w-full h-64 object-cover rounded-lg shadow-md"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p>No hay imágenes disponibles para esta propiedad.</p>
-              )}
-            </div>
-            <div className="col-span-1">
-              <p className="text-sm text-gray-500">{selectedProperty.description}</p>
-
-              <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                <p><strong>Precio:</strong> ${selectedProperty.price}</p>
-                <p><strong>Estado:</strong> {selectedProperty.state}</p>
-                <p><strong>Ciudad:</strong> {selectedProperty.city}</p>
-                {/* <p><strong>Dirección:</strong> {selectedProperty.address}</p> */}
-                <p><strong>Habitaciones:</strong> {selectedProperty.bedrooms}</p>
-                <p><strong>Baños:</strong> {selectedProperty.bathrooms}</p>
-                <p><strong>Capacidad:</strong> {selectedProperty.capacity} personas</p>
-                <p><strong>Latitud:</strong> {selectedProperty.latitude}</p>
-                <p><strong>Longitud:</strong> {selectedProperty.longitude}</p>
-                <p><strong>Acepta menores:</strong> {selectedProperty.hasMinor ? "Sí" : "No"}</p>
-                <p><strong>Acepta mascotas:</strong> {selectedProperty.pets ? "Sí" : "No"}</p>
-                <p><strong>Tipo:</strong> {selectedProperty.type}</p>
-                <p><strong>Activo:</strong> {selectedProperty.isActive ? "Sí" : "No"}</p>
-                <p><strong>Wifi:</strong> {selectedProperty.amenities_?.wifi ? "Sí" : "No"}</p>
-                <p><strong>TV:</strong> {selectedProperty.amenities_?.tv ? "Sí" : "No"}</p>
-                <p><strong>Aire acondicionado:</strong> {selectedProperty.amenities_?.airConditioning ? "Sí" : "No"}</p>
-                <p><strong>Piscina:</strong> {selectedProperty.amenities_?.piscina ? "Sí" : "No"}</p>
-                <p><strong>Parqueadero:</strong> {selectedProperty.amenities_?.parqueadero ? "Sí" : "No"}</p>
-                <p><strong>Cocina:</strong> {selectedProperty.amenities_?.cocina ? "Sí" : "No"}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <ul className="space-y-4">
-          {properties.map((property) => (
-            <li
-              key={property.id}
-              className="p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200"
-              onClick={() => handlePropertyClick(property)}
-            >
-              <h3 className="text-xl font-semibold">{property.name}</h3>
-              <p className="text-gray-600">{property.city}</p>
-              {property.image_ && property.image_.length > 0 && (
-                <img
-                  src={property.image_[0].url}
-                  alt={`Propiedad ${property.name} Foto 1`}
-                  className="w-full h-48 object-cover rounded-lg shadow-md mb-4"
-                />
-              )}
-              <p className="font-medium">
-                Precio por noche:{" "}
-                <span className="text-green-500">${property.price}</span>
-              </p>
-              <p className="text-sm text-gray-500">
-                Capacidad: {property.capacity} personas,{" "}
-                {property.bedrooms} Habitaciones, {property.bathrooms} Baño(s)
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-
-export default AllProperties;

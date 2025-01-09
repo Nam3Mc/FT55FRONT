@@ -2,17 +2,17 @@ export default interface IFormData {
   title: string;
   description: string;
   price: number;
-  state: string;
+  state?: string;
   city: string;
-  address: string;
+  address?: string;
   bedrooms: number;
   bathrooms: number;
   capacity: number;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   hasMinor: boolean;
   pets: boolean;
-  accountId: string;
+  accountId?: string;
   images: string[]; 
   wifi: boolean,
   tv: boolean,

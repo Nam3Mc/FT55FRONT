@@ -5,7 +5,9 @@ const useProperties = () => {
   const [properties, setProperties] = useState<IPropiedad[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<any | null>(null);  
+  const [user, setUser] = useState<any | null>(null); 
+
+
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -50,6 +52,7 @@ const useProperties = () => {
 
     fetchProperties();
   }, []);
+  
 
   return { properties, loading, error, setProperties, user };
 };

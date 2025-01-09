@@ -1,18 +1,17 @@
 "use client";
-
+import { getPropertyDB } from "@/api/PropertyAPI";
+import CardList from "@/components/cardList";
+import { IProperty } from "@/interfaces/IProperty";
 import React, { useEffect, useState } from "react";
 
-import { getPropertyDB } from "@/api/PropertyAPI";
-import { IProperty } from "@/interfaces/IProperty";
-import FeatureHouses from "../../../components/featureHouse/index";
-export const HomeContainer: React.FC = () => {
+const PropertyContainer: React.FC = () => {
   const [properties, setProperties] = useState<IProperty[]>([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const propertiesData = await getPropertyDB();
+      const products = await getPropertyDB();
 
-      const transformedProperties = propertiesData.map((property) => ({
+      const transformedProperties = products.map((property) => ({
         ...property,
         photos: property.image_?.map((img) => img.url) || [],
       }));
@@ -22,14 +21,13 @@ export const HomeContainer: React.FC = () => {
 
     fetchProperties();
   }, []);
-
   return (
-    <div className="py-16">
+    <div className="py-4">
       <div className="container mx-auto px-4">
-        <FeatureHouses properties={properties} />
+        <CardList properties={properties} />
       </div>
     </div>
   );
 };
 
-export default HomeContainer;
+export default PropertyContainer;

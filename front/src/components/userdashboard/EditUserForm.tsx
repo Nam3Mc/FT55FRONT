@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import IUser from "@/interfaces/user";
 import {CivilStatusOptions,EmploymentStatusOptions,} from "@/helpers/userStatus";
+import Swal from "sweetalert2";
 
 interface OwnerDetailsFormProps {
     initialData: IUser; 
@@ -8,10 +9,7 @@ interface OwnerDetailsFormProps {
     onComplete: (updatedUser: IUser) => Promise<void>;
   }
 
-const EditUserForm: React.FC<OwnerDetailsFormProps> = ({
-  editableFields,
-  onComplete,
-}) => {
+const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplete,}) => {
   const [name, setName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -24,43 +22,155 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({
   const [dni, setDni] = useState<number | string>("");
   const [photo, setPhoto] = useState<string>("https://cdn-icons-png.flaticon.com/512/61/61205.png");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const loadUser = () => {
+      try {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          if (parsedUser.DOB) {
+            parsedUser.DOB = new Date(parsedUser.DOB).toISOString().split("T")[0];
+          }
+          setName(parsedUser.name || "");
+          setLastName(parsedUser.lastName || "");
+          setEmail(parsedUser.email || "");
+          setPhone(parsedUser.phone || "");
+          setDni(parsedUser.dni || "");
+          setNationality(parsedUser.nationality || "");
+          setCivilStatus(parsedUser.civilStatus || "");
+          setEmploymentStatus(parsedUser.employmentStatus || "");
+          setDOB(parsedUser.DOB || "");
+          setPhoto(parsedUser.photo || "https://cdn-icons-png.flaticon.com/512/61/61205.png");
+          setId(parsedUser.id || "");
+        } else {
+          setError("No se encontró información del usuario en el almacenamiento local.");
+        }
+      } catch (err) {
+        console.error("Error al cargar el usuario desde localStorage:", err);
+        setError("Hubo un error al cargar la información del usuario.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (user) {
-      setName(user.name || "");
-      setLastName(user.lastName || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
-      setDni(user.dni || "");
-      setNationality(user.nationality || "");
-      setCivilStatus(user.civilStatus || "");
-      setEmploymentStatus(user.employmentStatus || "");
-      setDOB(user.DOB || "");
-      setPhoto(user.photo || "https://cdn-icons-png.flaticon.com/512/61/61205.png");
-      setId(user.id || "");
-    }
+    loadUser();
   }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
       setSelectedImage(file);
-      setPhoto(URL.createObjectURL(file)); 
+      setPhoto(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const saveChanges = async (updatedUser: IUser) => {
+    try {
+      Swal.fire({
+        title: 'Aguarde un momento',
+        text: 'Se están actualizando los datos...',
+        icon: 'info',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+  
+      let uploadedPhotoUrl = photo; 
+      if (selectedImage) {
+        try {
+          uploadedPhotoUrl = await uploadImage(selectedImage); 
+        } catch (uploadError) {
+          setError("Error al subir la imagen.");
+          setLoading(false);
+          return;
+        }
+      }
+  
+      updatedUser.photo = uploadedPhotoUrl; 
+
+      const response = await fetch(`http://localhost:3002/users/${updatedUser.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error del servidor:", errorText);
+        throw new Error("Error al guardar los cambios del usuario.");
+      }
+  
+      const savedUser = await response.json();
+      localStorage.setItem("user", JSON.stringify(savedUser));
+      onComplete(savedUser); 
+  
+      Swal.close(); 
+      Swal.fire({
+        title: '¡Éxito!',
+        text: 'Los cambios se han guardado correctamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+      });
+    } catch (error) {
+      Swal.close(); 
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al guardar los cambios.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+      });
+    } finally {
+      setLoading(false); 
+    }
+  };
+  
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!user?.id) {
+      throw new Error("No se encontró el ID del usuario.");
+    }
+    formData.append("file", file);
+    formData.append("id", user.id); 
+  
+    try {
+      const response = await fetch("http://localhost:3002/image/user-photo", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || "Error al subir la imagen.");
+      }
+  
+      const data = await response.json();
+      return data.photoUrl; 
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setLoading(true); 
 
     const updatedUser: IUser = {
       id,
       name,
       lastName,
       email,
-      phone,
-      dni,
+      phone: parseInt(phone as string),
+      dni: parseInt(dni as string),
       photo,
       nationality,
       civilStatus,
@@ -68,8 +178,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({
       DOB,
     };
 
-    onComplete(updatedUser);
+    await saveChanges(updatedUser);
   };
+  
+
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
@@ -183,9 +297,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({
           <img src={photo} alt="Foto de perfil" className="w-32 h-32 rounded-full object-cover" />
         </div>
       </div>
-      <button type="submit" className="w-full px-4 py-2 mt-6 bg-blue-600 text-white rounded-md">
-        Guardar Cambios
-      </button>
+      <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+          >
+             {loading ? "Cargando..." : "Crear Propiedad"}
+          </button>
     </form>
   );
 };

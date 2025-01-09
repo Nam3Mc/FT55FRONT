@@ -45,6 +45,8 @@ const UserDashboard: React.FC = () => {
     }
   };
 
+  const editableFields = ['name', 'lastName', 'email', 'nationality', 'DOB', 'phone', 'dni', 'civilStatus', 'employmentStatus'];
+
   return (
 <div className="flex flex-col md:flex-row min-h-screen bg-[#f9f9f9] text-[#0a0a0a]">
   <aside className="w-full md:w-1/4 md:h-screen sticky top-0 bg-[#f9f9f9] shadow-md p-4 flex flex-row md:flex-col items-center md:items-start space-x-2 md:space-x-0 md:space-y-4">
@@ -79,7 +81,10 @@ const UserDashboard: React.FC = () => {
       isOwnerDetailsComplete ? (
         <MyProperties />
       ) : (
-        <OwnerDetailsForm onComplete={handleOwnerDetailsComplete} />
+        <OwnerDetailsForm 
+        onComplete={handleOwnerDetailsComplete}
+        editableFields={editableFields}
+         />
       )
     )}
     {activeSection === 'reservations' && <MyReservations />}

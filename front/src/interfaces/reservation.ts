@@ -18,9 +18,8 @@ export interface Reserv {
   prices: {
     totalPrecioNights: number;
     servicio: number;
-    totalPrice: number;
+    total: number;
     price: number;
-    limpieza: number; // Agregamos la propiedad para el servicio de limpieza
   };
   travelers: {
     adults: number;

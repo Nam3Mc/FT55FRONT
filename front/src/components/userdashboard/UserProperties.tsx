@@ -19,7 +19,7 @@
 //   const [isFormVisible, setIsFormVisible] = useState(false);
 
 //   const handlePropertyClick = (property: IPropiedad) => {
-//     setSelectedProperty(property); 
+//     setSelectedProperty(property);
 //   };
 
 //   const toggleFormVisibility = () => {
@@ -150,323 +150,327 @@
 
 // export default MyProperties;
 
-import React, { useState } from "react";
-import useProperties from "@/hooks/UserDashboard/useProperties";
-import useEditProperty from "@/hooks/UserDashboard/useEditProperty";
-import RentPropertyForm from "@/components/propertyForm/page";
-import PropertyDetail from "@/components/propertyDetail/page";
-import { FiEdit } from "react-icons/fi";
+/////////////////
+
+// import React, { useEffect, useState } from "react";
+// import { IPropiedad } from "@/interfaces/properties";
+// import PropertyForm from "@/components/propertyForm/page";
+// import PropertyEditForm from "@/components/propertyEditForm/page";
+// import { FiEdit } from "react-icons/fi";
+// import IFormData from "@/interfaces/formData";
+
+// interface MyPropertiesProps {}
+
+// const MyProperties: React.FC<MyPropertiesProps> = () => {
+//   const [properties, setProperties] = useState<IPropiedad[]>([]);
+//   const [isFormVisible, setIsFormVisible] = useState(false);
+//   const [editingProperty, setEditingProperty] = useState<IPropiedad | null>(null);
+//   const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(null);
+
+//   useEffect(() => {
+//     const user = localStorage.getItem("user");
+//     if (user) {
+//       const parsedUser = JSON.parse(user);
+//       const userId = parsedUser.account_.id;
+
+//       fetch(`http://localhost:3002/property/owner/${userId}`)
+//         .then((response) => {
+//           if (!response.ok) {
+//             throw new Error("Error al obtener propiedades");
+//           }
+//           return response.json();
+//         })
+//         .then((data) => {
+//           const userProperties = data.filter(
+//             (property: IPropiedad) => property.account_.id === userId
+//           );
+//           setProperties(userProperties);
+//         })
+//         .catch((error) => console.error("Error al obtener propiedades:", error));
+//     }
+//   }, []);
+
+//   const toggleFormVisibility = () => {
+//     setIsFormVisible(!isFormVisible);
+//     setEditingProperty(null);
+//   };
+
+//   const handleEditClick = (property: IPropiedad) => {
+//     try {
+//       if (!property) throw new Error("La propiedad es nula o indefinida.");
+//       setEditingProperty(property);
+//     } catch (error) {
+//       console.error("Error al obtener la propiedad:", error);
+//     }
+//   };
+
+//   const handlePropertyClick = (property: IPropiedad) => {
+//     setSelectedProperty(property);
+//   };
+
+//   const closeDetails = () => {
+//     setSelectedProperty(null);
+//   };
+
+//   return (
+//     <div className="bg-white p-6 rounded-md shadow-md mb-8">
+//       <h2 className="text-2xl font-bold mb-4">Mis Propiedades</h2>
+
+//       {selectedProperty ? (
+//         <div className="p-4 border border-gray-200 rounded-md shadow-md">
+//           <button
+//             onClick={closeDetails}
+//             className="mb-4 p-2 text-black rounded-lg hover:underline"
+//           >
+//             Volver a la lista
+//           </button>
+//           <img
+//             src={
+//               selectedProperty.image_ && selectedProperty.image_.length > 0
+//                 ? selectedProperty.image_[0].url
+//                 : "/placeholder-image.png"
+//             }
+//             alt={`Imagen de ${selectedProperty.name}`}
+//             className="w-full h-48 object-cover rounded-md mb-4"
+//           />
+//           <h3 className="text-xl font-bold">{selectedProperty.name}</h3>
+//           <p>{selectedProperty.description}</p>
+//           <p className="text-gray-600">
+//             Ubicación: {selectedProperty.city}, {selectedProperty.state}
+//           </p>
+//           <p className="font-medium">
+//             Precio por noche:{" "}
+//             <span className="text-green-500">${selectedProperty.price}</span>
+//           </p>
+//           <p className="text-sm text-gray-500">
+//             Capacidad: {selectedProperty.capacity} personas,{" "}
+//             {selectedProperty.bedrooms} habitaciones,{" "}
+//             {selectedProperty.bathrooms} baño(s)
+//           </p>
+//         </div>
+//       ) : (
+//         <>
+//           <ul className="space-y-4">
+//             {properties.map((property) => {
+//               const imageUrl =
+//                 property.image_ && property.image_.length > 0
+//                   ? property.image_[0].url
+//                   : "/placeholder-image.png";
+
+//               return (
+//                 <li
+//                   key={property.id}
+//                   className="relative p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200 cursor-pointer"
+//                   onClick={() => handlePropertyClick(property)}
+//                 >
+//                   <button
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       handleEditClick(property);
+//                     }}
+//                     className="absolute top-2 right-2 p-2 bg-champagne text-black rounded-full hover:bg-yellow-600 flex items-center"
+//                   >
+//                     <FiEdit className="w-5 h-5" />
+//                   </button>
+//                   <img
+//                     src={imageUrl}
+//                     alt={`Imagen de ${property.name}`}
+//                     className="w-full h-48 object-cover rounded-md mb-4"
+//                   />
+//                   <h3 className="text-xl font-semibold">{property.name}</h3>
+//                   <p className="text-gray-600">{property.city}</p>
+//                   <p className="font-medium">
+//                     Precio por noche:{" "}
+//                     <span className="text-green-500">${property.price}</span>
+//                   </p>
+//                 </li>
+//               );
+//             })}
+//           </ul>
+//           <div className="flex justify-end mt-4">
+//             <button
+//               onClick={toggleFormVisibility}
+//               className="w-60 py-2 px-4 bg-velvet text-white font-semibold rounded-lg shadow-md hover:bg-[#273a6e] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75"
+//             >
+//               {isFormVisible ? "Cancelar" : "Añadir Nueva Propiedad"}
+//             </button>
+//           </div>
+//           {isFormVisible && !editingProperty && <PropertyForm />}
+//           {editingProperty && <PropertyEditForm property={editingProperty} />}
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+// export default MyProperties;
+
+import React, { useEffect, useState } from "react";
 import { IPropiedad } from "@/interfaces/properties";
-import { TypeOfProperty } from '@/helpers/typeOfProperty';
+import PropertyForm from "@/components/propertyForm/page";
+import PropertyEditForm from "@/components/propertyEditForm/page";
+import { FiEdit } from "react-icons/fi";
+import IFormData from "@/interfaces/formData";
 
+interface MyPropertiesProps {}
 
-const MyProperties: React.FC = () => {
-  const { properties, loading, error, setProperties } = useProperties();
-  const {
-    editingProperty,
-    handleEditClick,
-    handleInputChange,
-    handleSaveClick,
-    handleCancelClick,
-  } = useEditProperty();
-  const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(null);
+const MyProperties: React.FC<MyPropertiesProps> = () => {
+  const [properties, setProperties] = useState<IPropiedad[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<IPropiedad | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(null);
 
-  const handlePropertyClick = (property: IPropiedad) => {
-    setSelectedProperty(property); 
-  };
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        const userId = parsedUser.id;
+        if (!userId) {
+          throw new Error("El usuario en localStorage no tiene un 'id'.");
+        }
+ 
+        fetch(`http://localhost:3002/users/${userId}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al obtener información del usuario");
+            }
+            return response.json();
+          })
+          .then((userData) => {
+            const accountId = userData.account_?.id;
+            if (!accountId) {
+              throw new Error("El usuario no tiene una cuenta asociada (account_).");
+            }
 
+            return fetch(`http://localhost:3002/property/owner/${accountId}`);
+          })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al obtener propiedades");
+            }
+            return response.json();
+          })
+          .then((properties) => {
+            setProperties(properties);
+          })
+          .catch((error) => console.error("Error en el flujo de datos:", error));
+      } catch (error:any) {
+        console.error("Error al procesar el usuario:", error.message);
+      }
+    }
+  }, []);
+  
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
+    setEditingProperty(null);
   };
-  
+
+  const handleEditClick = (property: IPropiedad) => {
+    setEditingProperty(property);
+  };
+
+  const handlePropertyClick = (property: IPropiedad) => {
+    setSelectedProperty(property);
+  };
+
+  const closeDetails = () => {
+    setSelectedProperty(null);
+  };
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md mb-8">
       <h2 className="text-2xl font-bold mb-4">Mis Propiedades</h2>
 
-      {loading && <p>Cargando propiedades...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {properties.length === 0 && !loading && !error && (
-        <p className="text-gray-500">
-          Aún no tienes propiedades. Crea una nueva propiedad para comenzar.
-        </p>
-      )}
-
-      {selectedProperty ? (
-        <PropertyDetail
-          property={selectedProperty}
-          onClose={() => setSelectedProperty(null)}
-        />
+      {editingProperty ? (
+        <PropertyEditForm property={editingProperty} />
       ) : (
-        <ul className="space-y-4">
-          {properties.map((property) =>
-            editingProperty && editingProperty.id === property.id ? (
-              <li key={property.id} className="relative p-4 border border-gray-200 rounded-md shadow-sm">
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSaveClick(setProperties);
-                  }} 
-                  className="space-y-4"
-                >
-                  <div className="mb-4">
-                    <label className="block font-semibold">Título de la propiedad:</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={editingProperty.name}
-                      onChange={handleInputChange}
-                      className="border border-gray-300 rounded-md p-2 w-full"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block font-semibold">Descripción:</label>
-                    <textarea
-                      name="description"
-                      value={editingProperty.description}
-                      onChange={handleInputChange}
-                      className="border border-gray-300 rounded-md p-2 w-full"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block font-semibold">Precio:</label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={editingProperty.price || 0}
-                      onChange={handleInputChange}
-                      className="border border-gray-300 rounded-md p-2 w-full"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                <label className="block text-gray-800 text-lg">Pais:</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={editingProperty.state}
-                  onChange={handleInputChange}
-                  required
-                  className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                />
-              </div>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-800 text-lg">Ciudad:</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={editingProperty.city}
-                      onChange={handleInputChange}
-                      className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-800 text-lg">Dirección:</label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={editingProperty.address}
-                      onChange={handleInputChange}
-                      className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md"
-                    />
-                  </div>
-                  <div className="mb-4">
-                 <label className="block text-gray-800 text-lg">Habitaciones:</label>
-                <input
-                  type="number"
-                  name="bedrooms"
-                  min="0" step="any"
-                  value={editingProperty.bedrooms}
-                  onChange={handleInputChange}
-                  required
-                  className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                />
-              </div>
-        
-              <div className="mb-4">
-                <label className="block text-gray-800 text-lg">Baños:</label>
-                <input
-                  type="number"
-                  name="bathrooms"
-                  min="0" step="any"
-                  value={editingProperty.bathrooms}
-                  onChange={handleInputChange}
-                  required
-                  className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                />
-
-              </div>
-        
-              <div className="mb-4">
-                <label className="block text-gray-800 text-lg">Capacidad:</label>
-                <input
-                  type="number"
-                  name="capacity"
-                  min="0" step="any"
-                  value={editingProperty.capacity}
-                  onChange={handleInputChange}
-                  required
-                  className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-                />
-              </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene wifi?</label>
-            <input
-              type="checkbox"
-              name="wifi"
-              checked={editingProperty.amenities_?.wifi || false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-
-          </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene TV?</label>
-            <input
-              type="checkbox"
-              name="tv"
-              checked={editingProperty.amenities_?.tv|| false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-          </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene aire acondicionado?</label>
-            <input
-              type="checkbox"
-              name="airConditioning"
-              checked={editingProperty.amenities_?.airConditioning|| false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-          </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene piscina?</label>
-            <input
-              type="checkbox"
-              name="piscina"
-              checked={editingProperty.amenities_?.piscina|| false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-          </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene parqueadero?</label>
-            <input
-              type="checkbox"
-              name="parqueadero"
-              checked={editingProperty.amenities_?.parqueadero|| false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-          </div>
-    
-          <div className="mb-4">
-            <label className="block text-gray-800 text-lg">¿Tiene cocina?</label>
-            <input
-              type="checkbox"
-              name="cocina"
-              checked={editingProperty.amenities_?.cocina|| false}
-              onChange={handleInputChange}
-              className="mt-2"
-            />
-          </div>
-    
-               <div className="mb-4">
-                <label className="block text-gray-800 text-lg">¿Se permiten menores?</label>
-                 <input
-                  type="checkbox"
-                  name="hasMinor"
-                  checked={editingProperty.hasMinor|| false}
-                  onChange={handleInputChange}
-                  className="mt-2"
-                />
-              </div>
-        
-              <div className="mb-4">
-                <label className="block text-gray-800 text-lg">¿Se permiten mascotas?</label>
-                <input
-                  type="checkbox"
-                  name="pets"
-                  checked={editingProperty.pets|| false}
-                  onChange={handleInputChange}
-                  className="mt-2"
-                />
-              </div>
-                  <button
-                    type="submit"
-                    className="py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600"
-                  >
-                    Guardar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCancelClick}
-                    className="py-2 px-4 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 ml-2"
-                  >
-                    Cancelar
-                  </button>
-                </form>
-              </li>
-            ) : (
-              <li
-                key={property.id}
-                className="relative p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200"
-                onClick={() => handlePropertyClick(property)}
+        <>
+          {selectedProperty ? (
+            <div className="p-4 border border-gray-200 rounded-md shadow-md">
+              <button
+                onClick={closeDetails}
+                className="mb-4 p-2 text-black rounded-lg hover:underline"
               >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditClick(property);
-                  }}
-                  className="absolute top-2 right-2 text-xl text-gray-600 hover:text-gray-900"
-                >
-                  <FiEdit />
-                </button>
-                <div className="flex items-center">
-                  <img
-                    src={property.image_?.[0]?.url || "/path/to/default-image.jpg"}
-                    alt={property.name}
-                    className="w-48 h-48 object-cover rounded-md mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">{property.name}</h3>
+                Volver a la lista
+              </button>
+              <img
+                src={
+                  selectedProperty.image_ && selectedProperty.image_.length > 0
+                    ? selectedProperty.image_[0].url
+                    : "/placeholder-image.png"
+                }
+                alt={`Imagen de ${selectedProperty.title}`}
+                className="w-full h-48 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-xl font-bold">{selectedProperty.title}</h3>
+              <p>{selectedProperty.description}</p>
+              <p className="text-gray-600">
+                Ubicación: {selectedProperty.city}, {selectedProperty.state}
+              </p>
+              <p className="font-medium">
+                Precio por noche:{" "}
+                <span className="text-green-500">
+                  ${selectedProperty.price}
+                </span>
+              </p>
+              <p className="text-sm text-gray-500">
+                Capacidad: {selectedProperty.capacity} personas,{" "}
+                {selectedProperty.bedrooms} habitaciones,{" "}
+                {selectedProperty.bathrooms} baño(s)
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-4">
+              {properties.map((property) => {
+                const imageUrl =
+                  property.image_ && property.image_.length > 0
+                    ? property.image_[0].url
+                    : "/placeholder-image.png";
+
+                return (
+                  <li
+                    key={property.id}
+                    className="relative p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200 cursor-pointer"
+                    onClick={() => handlePropertyClick(property)}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditClick(property);
+                      }}
+                      className="absolute top-2 right-2 p-2 bg-champagne text-black rounded-full hover:bg-yellow-600 flex items-center"
+                    >
+                      <FiEdit className="w-5 h-5" />
+                    </button>
+                    <img
+                      src={imageUrl}
+                      alt={`Imagen de ${property.title}`}
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                    <h3 className="text-xl font-semibold">{property.title}</h3>
                     <p className="text-gray-600">{property.city}</p>
                     <p className="font-medium">
                       Precio por noche:{" "}
-                      <span className="text-green-500">
-                        ${property.price}
-                      </span>
+                      <span className="text-green-500">${property.price}</span>
                     </p>
-                  </div>
-                </div>
-              </li>
-            )
+                  </li>
+                );
+              })}
+            </ul>
           )}
-        </ul>
+
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={toggleFormVisibility}
+              className="w-60 py-2 px-4 bg-velvet text-white font-semibold rounded-lg shadow-md hover:bg-[#273a6e] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75"
+            >
+              {isFormVisible ? "Cancelar" : "Añadir Nueva Propiedad"}
+            </button>
+          </div>
+          {isFormVisible && !editingProperty && <PropertyForm />}
+        </>
       )}
-
-      <div className="flex justify-end mt-4">
-        <button
-          onClick={toggleFormVisibility}
-          className="w-60 py-2 px-4 bg-velvet text-white font-semibold rounded-lg shadow-md hover:bg-[#273a6e] focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          {isFormVisible ? "Ocultar Formulario" : "Agregar Propiedad"}
-        </button>
-      </div>
-
-      {isFormVisible && <RentPropertyForm />}
     </div>
   );
 };
-
 export default MyProperties;
-
-

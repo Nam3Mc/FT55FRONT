@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/nav";
 import Footer from "@/components/footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
@@ -36,11 +36,15 @@ export default function RootLayout({
           clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
         >
           <AuthProvider>
-            <header>
-              <Navbar />
-            </header>
-            <main>{children}</main>
-            <Footer />
+            <div className="flex flex-col min-h-screen">
+              <header>
+                <Navbar />
+              </header>
+
+              <main>{children}</main>
+
+              <Footer />
+            </div>
           </AuthProvider>
         </GoogleOAuthProvider>
       </body>

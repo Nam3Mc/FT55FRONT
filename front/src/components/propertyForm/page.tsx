@@ -1,10 +1,9 @@
 "use client";
-import IUser from '@/interfaces/user';
-import IFormData from '../../interfaces/formData';
-import React, { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
-import { TypeOfProperty } from '@/helpers/typeOfProperty';
-
+import IUser from "@/interfaces/user";
+import IFormData from "../../interfaces/formData";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import { TypeOfProperty } from "@/helpers/typeOfProperty";
 
 const PropertyForm: React.FC = () => {
   const [formData, setFormData] = useState<IFormData>({
@@ -57,26 +56,26 @@ const PropertyForm: React.FC = () => {
       parqueadero: false,
       cocina: false,
       isActive: false,
-      type: "casa"
+      type: "casa",
     });
   };
-  
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState<IUser | null>(null);
-    const [error, setError] = useState<string | null>(null);
 
-    const validateForm = () => {
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<IUser | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-  
+
     if (!formData.title) {
-      newErrors.title= "El título no debe estar vacío";
+      newErrors.title = "El título no debe estar vacío";
     } else if (formData.title.length < 8) {
-      newErrors.title= "El título debe tener al menos 8 caracteres";
+      newErrors.title = "El título debe tener al menos 8 caracteres";
     } else if (formData.title.length > 50) {
       newErrors.title = "El título debe tener un máximo de 50 caracteres";
     }
-  
+
     if (typeof formData.price !== "number" || formData.price <= 0) {
       newErrors.price = "El precio debe ser un número positivo";
     }
@@ -96,7 +95,7 @@ const PropertyForm: React.FC = () => {
     if (typeof formData.capacity !== "number" || formData.capacity < 0) {
       newErrors.capacity = "La capacidad debe ser positiva";
     }
-  
+
     if (typeof formData.wifi !== "boolean") {
       newErrors.wifi = "El campo wifi debe ser un valor booleano";
     }
@@ -104,7 +103,8 @@ const PropertyForm: React.FC = () => {
       newErrors.tv = "El campo tv debe ser un valor booleano";
     }
     if (typeof formData.airConditioning !== "boolean") {
-      newErrors.airConditioning = "El campo aire acondicionado debe ser un valor booleano";
+      newErrors.airConditioning =
+        "El campo aire acondicionado debe ser un valor booleano";
     }
     if (typeof formData.piscina !== "boolean") {
       newErrors.piscina = "El campo piscina debe ser un valor booleano";
@@ -118,10 +118,9 @@ const PropertyForm: React.FC = () => {
     if (!Object.values(TypeOfProperty).includes(formData.type)) {
       newErrors.type = "Selecciona un tipo de propiedad válido";
     }
-    
-  
+
     setErrors(newErrors);
-  
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -137,7 +136,7 @@ const PropertyForm: React.FC = () => {
             throw new Error("Error en la solicitud");
           }
           const user = await response.json();
-          setUser(user); 
+          setUser(user);
           setFormData((prevData) => ({
             ...prevData,
             accountId: user.account_.id,
@@ -155,40 +154,39 @@ const PropertyForm: React.FC = () => {
     fetchUserById();
   }, []);
 
-
   const handleImageUpload = async (images: FileList) => {
     const imageUrls: string[] = [];
-  
+
     for (const file of Array.from(images)) {
       const formData = new FormData();
       formData.append("file", file);
-  
+
       try {
         const response = await fetch("http://localhost:3002/image", {
           method: "POST",
           body: formData,
         });
-  
+
         if (!response.ok) {
           throw new Error("Error al subir la imagen");
         }
- 
+
         const imageUrl = await response.text();
         imageUrls.push(imageUrl);
       } catch (error) {
         console.error("Error al subir una imagen:", error);
       }
     }
-  
+
     return imageUrls;
   };
-  
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-  
+
     if (files && files.length > 0) {
-      setIsLoading(true); 
-  
+      setIsLoading(true);
+
       try {
         const uploadedImageUrls = await handleImageUpload(files);
         setFormData((prevData) => ({
@@ -196,19 +194,21 @@ const PropertyForm: React.FC = () => {
           images: [...prevData.images, ...uploadedImageUrls],
         }));
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   };
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value, type } = e.target;
     const inputValue =
-    type === "checkbox"
-      ? (e.target as HTMLInputElement).checked
-      : type === "number"
-      ? parseFloat(value) || 0 
-      : value;
+      type === "checkbox"
+        ? (e.target as HTMLInputElement).checked
+        : type === "number"
+        ? parseFloat(value) || 0
+        : value;
     setFormData((prevData) => ({
       ...prevData,
       [name]: inputValue,
@@ -217,13 +217,13 @@ const PropertyForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!validateForm()) {
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     try {
       const response = await fetch("http://localhost:3002/property", {
         method: "POST",
@@ -231,22 +231,19 @@ const PropertyForm: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        
       });
       console.log(JSON.stringify(formData));
 
-  
       if (!response.ok) {
         throw new Error("Error al crear la propiedad");
       }
-  
+
       const data = await response.json();
       console.log("Propiedad creada:", data);
-  
+
       Swal.fire("Éxito", "Propiedad creada con éxito", "success").then(() => {
         resetForm();
       });
-
     } catch (error) {
       console.error("Error al crear la propiedad:", error);
       Swal.fire("Error", "No se pudo crear la propiedad", "error");
@@ -257,30 +254,34 @@ const PropertyForm: React.FC = () => {
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const address = e.target.value;
-  setFormData({ ...formData, address });
+  const handleAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const address = e.target.value;
+    setFormData({ ...formData, address });
 
-  if (address) {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
-      );
-      const data = await response.json();
-      const location = data.results[0]?.geometry.location;
-      if (location) {
-        setFormData((prevData) => ({
-          ...prevData,
-          latitude: location.lat,
-          longitude: location.lng,
-        }));
+    if (address) {
+      try {
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+            address
+          )}&key=${apiKey}`
+        );
+        const data = await response.json();
+        const location = data.results[0]?.geometry.location;
+        if (location) {
+          setFormData((prevData) => ({
+            ...prevData,
+            latitude: location.lat,
+            longitude: location.lng,
+          }));
+        }
+      } catch (error) {
+        console.error("Error al obtener las coordenadas:", error);
       }
-    } catch (error) {
-      console.error("Error al obtener las coordenadas:", error);
     }
-  }
-};
-  
+  };
+
   return (
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-white rounded-md shadow-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Crear Propiedad</h2>
@@ -311,7 +312,7 @@ const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
         
               <div className="mb-4">
-                <label className="block text-gray-800 text-lg">Precio:</label>
+                <label className="block text-gray-800 text-lg">Precio en dolares por noche:</label>
                 <input
                   type="number"
                   name="price"
@@ -500,61 +501,66 @@ const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
                  {errors.pets && <p className="text-red-500 text-sm">{errors.pets}</p>}
               </div>
 
-              <div className="mb-4">
-            <label className="block text-gray-800 text-lg">Tipo de Propiedad:</label>
-            <select
-              name="type"
-              value={formData.type}
-              onChange={(e) =>
-                setFormData((prevData) => ({
-                  ...prevData,
-                  type: e.target.value,
-                }))
-              }
-              className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-              required
-            >
-              <option value="">Seleccione un tipo</option>
-              <option value="casa">Casa</option>
-              <option value="apartamento">Apartamento</option>
-              <option value="habitacion">Habitación</option>
-            </select>
-            {errors.type && <p className="text-red-500 text-sm">{errors.type}</p>}
-          </div>
+      <div className="mb-4">
+        <label className="block text-gray-800 text-lg">
+          Tipo de Propiedad:
+        </label>
+        <select
+          name="type"
+          value={formData.type}
+          onChange={(e) =>
+            setFormData((prevData) => ({
+              ...prevData,
+              type: e.target.value,
+            }))
+          }
+          className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+          required
+        >
+          <option value="">Seleccione un tipo</option>
+          <option value="casa">Casa</option>
+          <option value="apartamento">Apartamento</option>
+          <option value="habitacion">Habitación</option>
+        </select>
+        {errors.type && <p className="text-red-500 text-sm">{errors.type}</p>}
+      </div>
 
-        
-              <div className="mb-4">
-              <label className="block text-gray-800 text-lg">Imágenes:</label>
-                <input
-                 type="file"
-                 multiple
-                 name="image"
-                 accept="image/*"
-                 onChange={handleFileChange}
-                 className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-      />
+      <div className="mb-4">
+        <label className="block text-gray-800 text-lg">Imágenes:</label>
+        <input
+          type="file"
+          multiple
+          name="image"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+        />
         {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
-      {formData.images.length > 0 && (
-        <div className="mt-2">
-          <p className="text-gray-600">Imágenes seleccionadas:</p>
-          <ul>
-            {formData.images.map((image, index) => (
-              <li key={index}>
-                <img src={image} alt={`Preview ${index}`} className="w-16 h-16 object-cover" />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-          >
-             {isLoading ? "Cargando..." : "Crear Propiedad"}
-          </button>
-        </form>
-      );
+        {formData.images.length > 0 && (
+          <div className="mt-2">
+            <p className="text-gray-600">Imágenes seleccionadas:</p>
+            <ul>
+              {formData.images.map((image, index) => (
+                <li key={index}>
+                  <img
+                    src={image}
+                    alt={`Preview ${index}`}
+                    className="w-16 h-16 object-cover"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      <button
+        type="submit"
+        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        {isLoading ? "Cargando..." : "Crear Propiedad"}
+      </button>
+    </form>
+  );
 };
 
 export default PropertyForm;

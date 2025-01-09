@@ -1,3 +1,12 @@
+export enum ProductType {
+  casa = "casa",
+  departamento = "departamento",
+}
+
+// enum PropertyStatus {
+//   Active = "active",
+//   Inactive = "inactive",
+// }
 export interface IProduct {
   id: number;
   title: string;

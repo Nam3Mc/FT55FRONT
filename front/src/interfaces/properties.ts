@@ -38,7 +38,7 @@
 export interface IPropiedad {
   address?: string;
   id: string;
-  name: string;
+  title: string;
   price: number;
   bedrooms: number;
   bathrooms: number;
@@ -49,12 +49,25 @@ export interface IPropiedad {
   rating: number;
   hasMinor: boolean;
   pets: boolean;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   isActive: boolean;
   type: string;
+  accountId?: string; 
+  images: string[]; 
+  wifi: boolean; 
+  tv: boolean; 
+  airConditioning: boolean; 
+  piscina: boolean; 
+  parqueadero: boolean; 
+  cocina: boolean; 
 
-  // Agregar amenities_
+  account_: {
+    role: string;
+    id: string;
+    password: string; 
+  };
+
   amenities_?: {
     wifi: boolean;
     tv: boolean;
@@ -64,7 +77,6 @@ export interface IPropiedad {
     cocina: boolean;
   };
 
-  // Asegúrate de que la propiedad 'image_' también esté definida si no lo está
   image_?: {
     id: string;
     url: string;

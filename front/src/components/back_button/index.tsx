@@ -1,20 +1,19 @@
 // react
-import React from 'react';
+import React from "react";
 
 // next
-import Link from 'next/link';
-
+import Link from "next/link";
 
 export const BackButton: React.FC = () => {
-return (
+  return (
     <div className="mb-4">
-        <Link href="/">
-            <button className="text-velvet flex items-center">
-                <i className="fi fi-rr-arrow-small-left"> Volver al Inicio</i>
-            </button>
-        </Link>
+      <Link href="/properties">
+        <button className="text-velvet flex items-center">
+          <i className="fi fi-rr-arrow-small-left"> Volver atrás</i>
+        </button>
+      </Link>
     </div>
-)
-}
+  );
+};
 
-export default BackButton
+export default BackButton;

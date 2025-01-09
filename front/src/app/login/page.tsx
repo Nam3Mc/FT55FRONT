@@ -155,14 +155,14 @@ const Login: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-10 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="absolute right-1 top-8 text-gray-500 hover:text-gray-700 focus:outline-none"
             >
-              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
             </button>
           </div>
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full bg-velvet text-white py-2 rounded-lg hover:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             Ingresar
           </button>
@@ -188,14 +188,6 @@ const Login: React.FC = () => {
             <Link href="/register">
               <span className="text-blue-600 hover:underline">
                 Regístrate aquí
-              </span>
-            </Link>
-          </p>
-          <p className="text-sm text-black mt-2">
-            ¿Olvidaste tu contraseña?{" "}
-            <Link href="/forgotPassword">
-              <span className="text-blue-600 hover:underline">
-                Recuperala aquí
               </span>
             </Link>
           </p>
