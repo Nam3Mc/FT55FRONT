@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ImageCarousel from "../carousel_prop";
+import ImageCarousel from "../image_carousel";
 import { IProperty } from "@/interfaces/IProperty";
 import { Card, CardContent } from "../ui/card";
 import { CarouselItem } from "../ui/carousel";

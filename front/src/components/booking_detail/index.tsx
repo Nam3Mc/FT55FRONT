@@ -1,11 +1,18 @@
 "use client";
 
+// react
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { DateRange as ReactDateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+
+// next
+import { useRouter } from "next/navigation";
+
+// sweet alert
 import Swal from "sweetalert2";
+
+// interface
 import { user } from "@/helpers/data";
 
 interface BookingDetailProps {

@@ -1,96 +1,72 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import casadef from "@/assets/casadef.png";
-import { getPropertyById } from "@/api/PropertyAPI";
-import { IProperty } from "@/interfaces/IProperty";
-import { Reserv } from "@/interfaces/reservation";
+import React from 'react';
+import Image, { StaticImageData } from 'next/image';
 
-export const CheckoutDer: React.FC = () => {
-  const houseDef = casadef;
-  const [reservData, setReservData] = useState<Reserv | null>(null);
-  const [propertyData, setPropertyData] = useState<IProperty | null>(null);
+interface DerProps {
+  prices: {
+    totalPrecioNights: number;
+    servicio: number;
+    total: number;
+    price: number
+  };
+  photo: string | StaticImageData;
+  name: string;
+  type: string;
+  rating: number;
+  nights: number;
+  state: string;
+  city: string
+}
 
-  useEffect(() => {
-    const reservLocal = localStorage.getItem("reserv");
-    if (reservLocal) {
-      const reserv: Reserv = JSON.parse(reservLocal);
-      setReservData(reserv);
 
-      getPropertyById(reserv.propertyId)
-        .then((property) => {
-          setPropertyData(property);
-        })
-        .catch((error) => console.error("Error fetching property:", error));
-    }
-  }, []);
 
-  if (!reservData || !propertyData) {
-    return <p>Cargando información del viaje...</p>;
-  }
+export const CheckoutDer: React.FC<DerProps> = (DerProps) => {
 
-  console.log(reservData);
+    const {prices, photo, name, type, rating, nights, state, city } = DerProps
 
-  const { dates, prices } = reservData;
-  const { name, type, rating, photos, state, city } = propertyData;
-  const photo = photos ? photos[0] : houseDef;
+    return (
+        <div className="flex flex-col h-full w-full">
+            
+            {/* Imagen */}
+            <div className="mb-4">
+                <Image
+                src={photo}
+                alt={name}
+                width={300}
+                height={200}
+                className="rounded-lg"
+                />
+            </div>
 
-  const nights = Math.ceil(
-    (new Date(dates.endDate).getTime() - new Date(dates.startDate).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
+            {/* Título y tipo */}
+            <h3 className="text-lg font-bold mb-2">{name}</h3>
+            <h3 className="text-sm font-semibold mb-2">{state} • {city}</h3>
+            <p className="text-sm mb-4">
+                {type} • ⭐ {rating.toFixed(2)}
+            </p>
+                
+            <hr className="border-marble mb-4" />
 
-  return (
-    <div className="flex flex-col h-full w-full">
-      {/* Imagen */}
-      <div className="mb-4">
-        <Image
-          src={photo}
-          alt={name}
-          width={300}
-          height={200}
-          className="rounded-lg"
-        />
-      </div>
+            {/* Detalles del precio */}
+            <div className="flex justify-between mb-2">
+                <span>${prices.price.toFixed(2)} USD por {nights} noches</span>
+                <span className="font-semibold">
+                    ${prices.totalPrecioNights.toFixed(2)} USD
+                </span>
+            </div>
+            <div className="flex justify-between mb-2">
+                <span>Servicio de RentaFacil</span>
+                <span className="font-semibold">${prices.servicio.toFixed(2)} USD</span>
+            </div>
 
-      {/* Título y tipo */}
-      <h3 className="text-lg font-bold mb-2">{name}</h3>
-      <h4>
-        {state} • {city}
-      </h4>
-      <p className="text-sm mb-4">
-        {type} • ⭐ {rating.toFixed(2)}
-      </p>
+            <hr className="border-marble my-4" />
 
-      <hr className="border-marble mb-4" />
-
-      {/* Detalles del precio */}
-      <div className="flex justify-between mb-2">
-        <span>
-          ${prices?.price?.toFixed(2) ?? "N/A"} USD por {nights} noches
-        </span>
-        <span className="font-semibold">
-          ${prices?.totalPrecioNights?.toFixed(2) ?? "N/A"} USD
-        </span>
-      </div>
-      {/* Servicio de RentaFacil */}
-      <div className="flex justify-between mb-2">
-        <span>Servicio de RentaFacil</span>
-        <span className="font-semibold">
-          ${prices?.servicio?.toFixed(2) ?? "N/A"} USD
-        </span>
-      </div>
-
-      <hr className="border-marble my-4" />
-
-      {/* Total */}
-      <div className="flex justify-between items-center text-lg font-bold mb-4">
-        <span>Total </span>
-        <span className="font-semibold">
-          ${prices?.total?.toFixed(2) ?? "N/A"} USD
-        </span>
-      </div>
-    </div>
-  );
-};
+            {/* Total */}
+            <div className="flex justify-between items-center text-lg font-bold mb-4">
+                <span>Total (USD)</span>
+                <span className="font-semibold">${prices.total.toFixed(2)} USD</span>
+            </div>
+        </div>
+    )
+}
 
 export default CheckoutDer;

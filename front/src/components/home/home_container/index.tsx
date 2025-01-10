@@ -1,11 +1,19 @@
 "use client";
 
+// react
 import React, { useEffect, useState } from "react";
 
+// Api
 import { getPropertyDB } from "@/api/PropertyAPI";
+
+// interfaces
 import { IProperty } from "@/interfaces/IProperty";
-import FeatureHouses from "../../../components/featureHouse/index";
+
+// components
+import FeatureHouses from "@/components/home/featureHouse";
+
 export const HomeContainer: React.FC = () => {
+
   const [properties, setProperties] = useState<IProperty[]>([]);
 
   useEffect(() => {

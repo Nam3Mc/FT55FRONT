@@ -1,40 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-interface Reserv {
-    propertyId: string;
+interface IzqProps {
     dates: {
       startDate: string;
       endDate: string;
-    };
-    prices: {
-      totalPrecioNights: number;
-      servicio: number;
-      total: number;
-      price: number
     };
     travelers: {
       adults: number;
       children: number;
       babies: number;
+      pets: boolean
     };
   }
 
-export const CheckoutIzq: React.FC = () => {
-  const [reservData, setReservData] = useState<Reserv | null>(null);
+export const CheckoutIzq: React.FC<IzqProps> = (IzqProps) => {
 
-  useEffect(() => {
-    // Recuperar datos de localStorage
-    const reservString = localStorage.getItem('reserv');
-    if (reservString) {
-      const reserv: Reserv = JSON.parse(reservString);
-      setReservData(reserv);
-    }
-  }, []);
-
-  if (!reservData) {
-    return <p></p>;
-  }
-
+    const {dates, travelers} = IzqProps
   // Formatear las fechas
   const formatDate = (date: string): string => {
     return new Intl.DateTimeFormat('es-ES', {
@@ -44,7 +25,6 @@ export const CheckoutIzq: React.FC = () => {
     }).format(new Date(date));
   };
 
-  const { dates, travelers } = reservData;
   const formattedStartDate = formatDate(dates.startDate);
   const formattedEndDate = formatDate(dates.endDate);
 
@@ -70,6 +50,9 @@ export const CheckoutIzq: React.FC = () => {
           {travelers.adults} adulto
           {travelers.children > 0 && `, ${travelers.children} niño`}
           {travelers.babies > 0 && `, ${travelers.babies} bebé`}
+        </p>
+        <p>
+          {travelers.pets && `Viajas con mascotas`}
         </p>
       </div>
     </div>

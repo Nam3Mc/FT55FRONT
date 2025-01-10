@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import CardProperties from "../card";
 import { Carousel, CarouselContent } from "../ui/carousel";
-import { IFeatureDepartmentsProps } from "../featureHouse";
+import { IFeatureDepartmentsProps } from "../home/featureHouse";
 import { IProperty } from "@/interfaces/IProperty";
 
 export const CardList: React.FC<IFeatureDepartmentsProps> = ({

@@ -5,9 +5,12 @@ import React, { useState } from "react";
 // next
 import Image from "next/image";
 
+// interfaces
 import { IProperty } from "@/interfaces/IProperty";
-import ImageCarousel from "../carousel_prop";
 import { user } from "@/helpers/data";
+
+// component
+import ImageCarousel from "../image_carousel";
 
 interface IPropsDetail {
   property: IProperty;
@@ -43,7 +46,7 @@ export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
     <div className="flex flex-col md:flex-row border-2 border-marble p-4 rounded-lg shadow-md mb-6 lg:mx-40">
       {/* Imagen con boton corazón */}
       <div className="relative md:w-1/2">
-        <button
+        {/* <button
           className="absolute hover:scale-110 top-3 right-3 z-10"
           onClick={toggleFavorite}
         >
@@ -56,7 +59,7 @@ export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
               className={`fi fi-sr-heart bg-white rounded-lg p-2 shadow-md text-red-500`}
             ></i>
           )}
-        </button>
+        </button> */}
 
         <ImageCarousel {...property} />
       </div>

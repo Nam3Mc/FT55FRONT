@@ -1,6 +1,6 @@
 import { IProperty } from "@/interfaces/IProperty";
 import React from "react";
-import ImageCarousel from "../carousel_prop";
+import ImageCarousel from "../image_carousel";
 
 const CardFavs: React.FC<IProperty> = (property) => {
   return (

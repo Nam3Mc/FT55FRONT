@@ -8,7 +8,7 @@ import BackButton from "../back_button";
 import CardDetail from "../card_detail";
 import DescriptionDetail from "../description_detail";
 import BookingDetail from "../booking_detail";
-import ReviewsContainer from "../reviews_container";
+// import ReviewsContainer from "../reviews_container";
 import OwnerInfo from "../owner_info";
 
 import { GoogleMaps } from "../map";
@@ -45,7 +45,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({
             price={property.price}
             capacity={property.capacity}
             hasMinor={property.hasMinor}
-            pets={property.pets}
+            hasPets={property.pets}
           />
         </div>
       </div>
@@ -55,7 +55,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({
 
       <hr className="border-t border-gray-300 my-4" />
 
-      <ReviewsContainer />
+      {/* <ReviewsContainer /> */}
 
       <hr className="border-t border-gray-300 my-4" />
 

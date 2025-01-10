@@ -2,7 +2,7 @@ import { IAmenities } from "./IAmenities";
 import { IAccount } from "./IAccount";
 
 export interface IProperty {
-  id: number;
+  id: string;
   account_: IAccount;
   isActive: boolean;
   name: string;
