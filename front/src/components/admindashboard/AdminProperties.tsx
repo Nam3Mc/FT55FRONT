@@ -46,7 +46,7 @@ const AllProperties: React.FC = () => {
       };
       console.log("ID de propiedad a actualizar:", selectedProperty.id);
   
-      const response = await fetch(`http://localhost:3002/property/update`, {
+      const response = await fetch(`https://rentafacil.onrender.com/property/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

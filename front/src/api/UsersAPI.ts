@@ -4,7 +4,7 @@ import { IAccount } from "@/interfaces/IAccount";
 
 export const getUserAccount = async(id: string): Promise<IAccount> => {
     try {
-        const res = await fetch(`${API_URL}/users/${id}`, {
+        const res = await fetch(`https://rentafacil.onrender.com/users/${id}`, {
             next: { revalidate: 1200}
         });
 

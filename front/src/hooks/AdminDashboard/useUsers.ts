@@ -9,7 +9,7 @@ const useUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3002/users");
+        const response = await fetch("https://rentafacil.onrender.com/users");
         if (!response.ok) {
           throw new Error("Error al cargar los usuarios");
         }
@@ -27,7 +27,7 @@ const useUsers = () => {
 
   const handleActivate = async (userId: string) => {
     try {
-      const response = await fetch(`http://localhost:3002/users/${userId}`, {
+      const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const useUsers = () => {
 
   const handleDesactivate = async (userId: string) => {
     try {
-      const response = await fetch(`http://localhost:3002/users/${userId}`, {
+      const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

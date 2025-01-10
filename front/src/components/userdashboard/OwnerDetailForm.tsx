@@ -92,7 +92,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     };
   
     try {
-      const response = await fetch(`http://localhost:3002/users/${id}`, {
+      const response = await fetch(`https://rentafacil.onrender.com/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     }
   
     try {
-      const response = await fetch(`http://localhost:3002/users/${user.id}`, {
+      const response = await fetch(`https://rentafacil.onrender.com/users/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -191,7 +191,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     formData.append("file", files[0]);
 
     try {
-      const response = await fetch("http://localhost:3002/image/user-photo", {
+      const response = await fetch("https://rentafacil.onrender.com/image/user-photo", {
         method: "POST",
         body: formData,
       });

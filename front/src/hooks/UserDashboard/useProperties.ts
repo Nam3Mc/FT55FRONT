@@ -23,7 +23,7 @@ const useProperties = () => {
         const user = JSON.parse(storedUser);  
         const userId = user?.id;  
 
-        const response = await fetch(`http://localhost:3002/users/${userId}`);
+        const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener el usuario.");
         }
@@ -34,7 +34,7 @@ const useProperties = () => {
         const accountId = userData.account_?.id;
         console.log("Account ID:", accountId);
 
-        const propertiesResponse = await fetch(`http://localhost:3002/property/owner/${accountId}`);
+        const propertiesResponse = await fetch(`https://rentafacil.onrender.com/property/owner/${accountId}`);
         if (!propertiesResponse.ok) {
           throw new Error("Error al obtener las propiedades.");
         }

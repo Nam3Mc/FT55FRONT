@@ -131,7 +131,7 @@ const PropertyForm: React.FC = () => {
         const userData = JSON.parse(storedUser);
         const userId = userData.id;
         try {
-          const response = await fetch(`http://localhost:3002/users/${userId}`);
+          const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`);
           if (!response.ok) {
             throw new Error("Error en la solicitud");
           }
@@ -162,7 +162,7 @@ const PropertyForm: React.FC = () => {
       formData.append("file", file);
 
       try {
-        const response = await fetch("http://localhost:3002/image", {
+        const response = await fetch("https://rentafacil.onrender.com/image", {
           method: "POST",
           body: formData,
         });
@@ -225,7 +225,7 @@ const PropertyForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3002/property", {
+      const response = await fetch("https://rentafacil.onrender.com/property", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

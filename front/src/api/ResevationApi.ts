@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 export const createReservation = async (reservation: IReservation) => {
    
     try {
-        const res = await fetch(`${API_URL}/payments`, {
+        const res = await fetch(`https://rentafacil.onrender.com/payments`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -39,7 +39,7 @@ export const createReservation = async (reservation: IReservation) => {
 
 export const getEmailOwner = async(propertyId:string): Promise<string> => {
     try {
-        const res = await fetch(`${API_URL}/property/email/${propertyId}`, {
+        const res = await fetch(`https://rentafacil.onrender.com/property/email/${propertyId}`, {
             next: { revalidate: 1200}
         });
         console.log(res);

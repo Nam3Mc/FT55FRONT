@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const getPropertyDB = async (): Promise<IProperty[]> => {
     try {
-        const res = await fetch(`${API_URL}/property`, {
+        const res = await fetch(`https://rentafacil.onrender.com/property`, {
             next: { revalidate: 1200 }
         });
         console.log(res);
@@ -27,7 +27,7 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
 
 export const getPropertyById = async (id: string): Promise<IProperty> => {
     try {
-        const res = await fetch(`${API_URL}/property/unique/${id}`, {
+        const res = await fetch(`https://rentafacil.onrender.com/property/unique/${id}`, {
             next: { revalidate: 1200 }
         });
 
@@ -52,7 +52,7 @@ export const getPropertyById = async (id: string): Promise<IProperty> => {
 
 export const getPropertyOwner = async (id: string): Promise<IAccountUser> => {
     try {
-        const res = await fetch(`${API_URL}/account/user/${id}`, {
+        const res = await fetch(`https://rentafacil.onrender.com/account/user/${id}`, {
             next: { revalidate: 1200 }
         });
         console.log(res);

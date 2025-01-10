@@ -17,7 +17,7 @@ const SuccessPage = () => {
       
       if (contractId) {
         try {
-          await axios.post("http://localhost:3000/payments/paid", {
+          await axios.post("https://rentafacil.onrender.com/payments/paid", {
             url: currentUrl,
             contract_id: contractId,
           });

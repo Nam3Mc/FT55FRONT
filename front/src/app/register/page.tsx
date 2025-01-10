@@ -80,7 +80,7 @@ const RegisterForm = () => {
     console.log(formDataWithNumbers);
 
     try {
-      const response = await fetch("http://localhost:3000/users", {
+      const response = await fetch("https://rentafacil.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ export const useAuthStore = create<IAuthState>((set) => {
   if (savedToken) {
     set({ token: savedToken});
 
-    fetch("http://localhost:3002/users/{id}", {
+    fetch("https://rentafacil.onrender.com/users/{id}", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${savedToken}`,
@@ -39,7 +39,7 @@ export const useAuthStore = create<IAuthState>((set) => {
     loginUser: async (email: string, password: string) => {
       try {
 
-        const response = await fetch("http://localhost:3002/auth/login", {
+        const response = await fetch("https://rentafacil.onrender.com/auth/login", {
 
           method: "POST",
           headers: {

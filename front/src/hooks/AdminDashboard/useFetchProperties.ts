@@ -9,7 +9,7 @@ const useFetchProperties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch("http://localhost:3002/property", {
+        const response = await fetch("https://rentafacil.onrender.com/property", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

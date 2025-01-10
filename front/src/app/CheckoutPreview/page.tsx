@@ -106,7 +106,8 @@ const CheckoutPreview = () => {
       const response = await createReservation(reserva);
   
       if (response && response.link) {
-        // Redirigir al usuario al enlace proporcionado por el backend
+        // Redirigir al usuario al enlace proporcionado por el backends
+        localStorage.setItem("contract_id", JSON.stringify(response.id));
         window.location.href = response.link;
       } else {
         console.error("No se recibió un enlace válido en la respuesta:", response);

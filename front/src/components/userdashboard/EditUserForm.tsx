@@ -93,7 +93,7 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
   
       updatedUser.photo = uploadedPhotoUrl; 
 
-      const response = await fetch(`http://localhost:3002/users/${updatedUser.id}`, {
+      const response = await fetch(`https://rentafacil.onrender.com/users/${updatedUser.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
     formData.append("id", user.id); 
   
     try {
-      const response = await fetch("http://localhost:3002/image/user-photo", {
+      const response = await fetch("https://rentafacil.onrender.com/image/user-photo", {
         method: "POST",
         body: formData,
       });

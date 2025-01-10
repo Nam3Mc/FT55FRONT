@@ -9,7 +9,7 @@ const useReservations = () => {
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const response = await fetch("http://localhost:3002/reservations/");
+        const response = await fetch("https://rentafacil.onrender.com/reservations");
         if (!response.ok) {
           throw new Error("Error al obtener reservas");
         }

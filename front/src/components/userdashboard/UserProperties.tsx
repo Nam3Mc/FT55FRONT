@@ -329,7 +329,7 @@ const MyProperties: React.FC<MyPropertiesProps> = () => {
           throw new Error("El usuario en localStorage no tiene un 'id'.");
         }
  
-        fetch(`http://localhost:3002/users/${userId}`)
+        fetch(`https://rentafacil.onrender.com/users/${userId}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error("Error al obtener información del usuario");
@@ -342,7 +342,7 @@ const MyProperties: React.FC<MyPropertiesProps> = () => {
               throw new Error("El usuario no tiene una cuenta asociada (account_).");
             }
 
-            return fetch(`http://localhost:3002/property/owner/${accountId}`);
+            return fetch(`https://rentafacil.onrender.com/property/owner/${accountId}`);
           })
           .then((response) => {
             if (!response.ok) {

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 export const saveUser = async (updatedUser: IUser): Promise<IUser> => {
   try {
-    const response = await fetch(`http://localhost:3002/users/${updatedUser.id}`, {
+    const response = await fetch(`https://rentafacil.onrender.com/users/${updatedUser.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

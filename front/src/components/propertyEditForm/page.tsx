@@ -142,7 +142,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3002/property/unique/${propertyId}`
+          `https://rentafacil.onrender.com/property/unique/${propertyId}`
         );
         if (!response.ok) {
           throw new Error("Error al obtener la propiedad");
@@ -170,7 +170,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
         const userData = JSON.parse(storedUser);
         const userId = userData.id;
         try {
-          const response = await fetch(`http://localhost:3002/users/${userId}`);
+          const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`);
           if (!response.ok) {
             throw new Error("Error en la solicitud");
           }
@@ -201,7 +201,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
       formData.append("file", file);
 
       try {
-        const response = await fetch("http://localhost:3002/image", {
+        const response = await fetch("https://rentafacil.onrender.com/image", {
           method: "POST",
           body: formData,
         });
@@ -264,7 +264,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3002/property/update", {
+      const response = await fetch("https://rentafacil.onrender.com/property/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

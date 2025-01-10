@@ -152,7 +152,7 @@ const useEditProperty = () => {
       formData.append("file", file);
   
       try {
-        const response = await fetch("http://localhost:3002/image", {
+        const response = await fetch("https://rentafacil.onrender.com/image", {
           method: "POST",
           body: formData,
         });
