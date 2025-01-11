@@ -8,6 +8,7 @@ export interface IProperty {
   name: string;
   description: string;
   type: string;
+  country:string;
   state: string;
   city: string;
   price: number;

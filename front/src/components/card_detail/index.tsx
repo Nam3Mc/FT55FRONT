@@ -1,6 +1,4 @@
 "use client";
-// react
-import React, { useState } from "react";
 
 // next
 import Image from "next/image";
@@ -18,25 +16,25 @@ interface IPropsDetail {
 }
 
 export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  // const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  // const toggleFavorite = () => {
+  //   setIsFavorite(!isFavorite);
 
-    const storedFavorites = JSON.parse(
-      localStorage.getItem("favorites") || "[]"
-    );
+  // const storedFavorites = JSON.parse(
+  //   localStorage.getItem("favorites") || "[]"
+  // );
 
-    if (isFavorite) {
-      const updatedFavorites = storedFavorites.filter(
-        (fav: IProperty) => fav.id !== property.id
-      );
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    } else {
-      storedFavorites.push(property);
-      localStorage.setItem("favorites", JSON.stringify(storedFavorites));
-    }
-  };
+  //   if (isFavorite) {
+  //     const updatedFavorites = storedFavorites.filter(
+  //       (fav: IProperty) => fav.id !== property.id
+  //     );
+  //     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  //   } else {
+  //     storedFavorites.push(property);
+  //     localStorage.setItem("favorites", JSON.stringify(storedFavorites));
+  //   }
+  // };
 
   const defaultPhoto = "https://cdn-icons-png.flaticon.com/512/61/61205.png"; // URL de imagen predeterminada
   const imageSrc =
@@ -70,6 +68,7 @@ export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
         <h3 className="text-lg font-medium mb-2">
           {property.city} / {property.state}
         </h3>
+        <h4>{property.country}</h4>
         <p className="text-gray-600 mb-2">
           {property.capacity} Huéspedes | {property.bedrooms} Dormitorios |{" "}
           {property.bathrooms} Baños

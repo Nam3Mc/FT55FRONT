@@ -23,7 +23,7 @@ export const CardProperties: React.FC<IProperty> = (property: IProperty) => {
           <CardContent className="p-0">
             <div className="relative">
               <ImageCarousel {...property} />
-              <button
+              {/* <button
                 className="absolute hover:scale-110 top-3 right-3 z-10"
                 onClick={toggleFavorite}
               >
@@ -36,7 +36,7 @@ export const CardProperties: React.FC<IProperty> = (property: IProperty) => {
                     className={`fi fi-sr-heart bg-white rounded-lg p-2 shadow-md text-red-500`}
                   ></i>
                 )}
-              </button>
+              </button> */}
             </div>
             <Link href={`/house/${property.id}`} key={property.id} passHref>
               <div className="flex h-[250px] flex-col justify-between rounded-b-lg bg-pearl p-4">
@@ -46,6 +46,7 @@ export const CardProperties: React.FC<IProperty> = (property: IProperty) => {
                 <p className="mt-2 mb-2 text-lg font-bold hover:text-[#29b6f6]">
                   {property.city} - {property.state}
                 </p>
+                <h4>{property.country}</h4>
                 <p className="text-gray-600 mb-2">{property.description}</p>
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                   <span className="text-sm font-bold">Habitaciones</span>

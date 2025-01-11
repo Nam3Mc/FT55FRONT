@@ -1,17 +1,23 @@
 //"use client";
-import { getProperties } from "@/services/propertiesService";
+import { SearchParams } from "@/api/propertyFilter";
+import Loading from "@/components/loading/loading";
 import PropertyContainer from "@/views/propertyContainer";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-import { z } from "zod";
+import React, { Suspense } from "react";
+//import Loading from '@/components/Loading';
 //import { useInfiniteQuery } from "@tanstack/react-query";
 //import MenuProperties from "@/components/menuProperties";
 
-const params = z.object({
-  type: z.enum(["casa", "departamento"]).optional(),
-});
+// const params = z.object({
+//   type: z.enum(["casa", "departamento"]).optional(),
+// });
 
-export default function PropertiesList() {
+export default async function PropertiesList({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const resolvedSearchparams = await searchParams;
+  console.log("searchparams esperados:", resolvedSearchparams);
   // const searchParams = useSearchParams();
   // const typeParam = searchParams.get("type") ?? undefined;
   // const { type } = params.parse({ type: typeParam });
@@ -26,7 +32,9 @@ export default function PropertiesList() {
 
   return (
     <div>
-      <PropertyContainer />
+      <Suspense fallback={<Loading />}>
+        <PropertyContainer searchParams={resolvedSearchparams} />
+      </Suspense>
     </div>
   );
 }

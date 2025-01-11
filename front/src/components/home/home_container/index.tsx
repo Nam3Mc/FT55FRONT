@@ -2,18 +2,13 @@
 
 // react
 import React, { useEffect, useState } from "react";
-
-// Api
 import { getPropertyDB } from "@/api/PropertyAPI";
 
 // interfaces
 import { IProperty } from "@/interfaces/IProperty";
-
-// components
-import FeatureHouses from "@/components/home/featureHouse";
+import FeatureHouse from "../featureHouse";
 
 export const HomeContainer: React.FC = () => {
-
   const [properties, setProperties] = useState<IProperty[]>([]);
 
   useEffect(() => {
@@ -32,9 +27,9 @@ export const HomeContainer: React.FC = () => {
   }, []);
 
   return (
-    <div className="py-16">
+    <div className="py-4">
       <div className="container mx-auto px-4">
-        <FeatureHouses properties={properties} />
+        <FeatureHouse properties={properties} />
       </div>
     </div>
   );

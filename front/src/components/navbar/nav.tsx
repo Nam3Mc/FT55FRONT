@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
-//import { NavigationMenu } from "@radix-ui/react-navigation-menu";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -109,12 +109,17 @@ export const Navbar: React.FC = () => {
         <NavigationMenu className="flex items-center space-x-4">
           <NavigationMenuList className="hidden md:flex items-center space-x-4">
             <NavigationMenuItem className="hidden lg:block px-4 py-2">
-              <NavigationMenuTrigger className="text-silk hover:border-b-2 hover:border-champagne p-2 hover:text-white text-base">
+              <Link href="/properties">
+                <NavigationMenuLink className="text-silk hover:border-b-2 hover:border-champagne p-2">
+                  Propiedades
+                </NavigationMenuLink>
+              </Link>
+              {/* <NavigationMenuTrigger className="text-silk hover:border-b-2 hover:border-champagne p-2 hover:text-white text-base">
                 Ver propiedades
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <MenuProperties />
-              </NavigationMenuContent>
+              </NavigationMenuContent> */}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -180,18 +185,11 @@ export const Navbar: React.FC = () => {
               Sobre nosotros
             </div>
           </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem className="lg:block">
-                <NavigationMenuTrigger className="text-silk hover:border-b-2 hover:border-champagne p-2 hover:text-white text-base mb-4">
-                  Ver propiedades
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <MenuProperties />
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+          <Link href="/properties">
+            <div className="text-silk hover:bg-champagne hover:text-velvet rounded-lg p-2">
+              Propiedades
+            </div>
+          </Link>
 
           {!userData ? (
             <>
@@ -231,45 +229,6 @@ export const Navbar: React.FC = () => {
           )}
         </div>
       )}
-      {/* {isClick && (
-        <div className="md:hidden px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link href="/userProfile">
-            <i className="fi fi-rr-user text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
-              {" "}
-              Perfil
-            </i>
-          </Link>
-          <Link href="/reservations">
-            <i className="fi fi-rr-key text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
-              {" "}
-              Reservas
-            </i>
-          </Link>
-          <Link href="/favs">
-            <i className="fi fi-rr-heart text-silk rounded-lg p-2 hover:bg-champagne hover:text-velvet">
-              {" "}
-              Favoritos
-            </i>
-          </Link>
-
-          <Link href="/">
-            <div className="text-silk hover:bg-champagne hover:text-velvet rounded-lg p-2">
-              Inicio
-            </div>
-          </Link>
-          <Link href="/about">
-            <div className="text-silk hover:bg-champagne hover:text-velvet rounded-lg p-2">
-              Sobre nosotros
-            </div>
-          </Link>
-          <button
-            onClick={handleLogOut}
-            className="bg-silk text-velvet w-full py-2 px-4 rounded mb-4 hover:bg-champagne hover:text-silk"
-          >
-            Log Out
-          </button>
-        </div>
-      )} */}
     </nav>
   );
 };

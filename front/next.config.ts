@@ -13,8 +13,8 @@ const nextConfig: NextConfig = {
       'images.homify.com',
       'www.casasparaconstruir.com',
       'www.construyehogar.com',
-      'default.photo.url'
-
+      'default.photo.url',
+      "hips.hearstapps.com"
     ],
   },
   /* config options here */

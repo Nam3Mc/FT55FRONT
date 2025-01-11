@@ -46,6 +46,7 @@ export const CardHome: React.FC<IProperty> = (property: IProperty) => {
                     <p className="mt-2 mb-2 text-lg font-bold">
                       {property.city} - {property.state}
                     </p>
+                    <h4>{property.country}</h4>
                     <p className="text-gray-600 mb-2">
                       {property.description}
                     </p>
