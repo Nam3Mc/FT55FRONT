@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
       "example.com",
       "cdn-icons-png.flaticon.com",
       "res.cloudinary.com",
+      'hips.hearstapps.com',
+      'images.homify.com',
+      'www.casasparaconstruir.com',
+      'www.construyehogar.com',
+      'default.photo.url'
+
     ],
   },
   /* config options here */
