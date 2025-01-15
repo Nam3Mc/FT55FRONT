@@ -1,16 +1,18 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import UserProfile from './UserProfile';
 import MyProperties from './UserProperties';
-import MyReservations from './UserReservations';
+// import MyReservations from './UserReservations';
 import OwnerDetailsForm from './forms/OwnerDetailForm';
 import IUser from '@/interfaces/user';
 import Swal from 'sweetalert2';
-import { PaidReservation } from '@/api/ResevationApi';
-
+import { useRouter } from 'next/navigation';
 
 const UserDashboard: React.FC = () => {
   const [activeSection, setActiveSection] = useState<'profile' | 'properties' | 'reservations' | 'reviews'>('profile');
   const [isOwnerDetailsComplete, setIsOwnerDetailsComplete] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -21,19 +23,18 @@ const UserDashboard: React.FC = () => {
     ) {
       setIsOwnerDetailsComplete(true);
     }
-    const compraId = localStorage.getItem("compraId");
-    if (compraId) {
-      Swal.fire({
-        icon: "success",
-        title: "Reserva realizada",
-        text: "¡Tu reserva se realizó correctamente! Gracias por confiar en nosotros.",
-      }).then(() => {
-        localStorage.removeItem("compraId");
-      });
-    }
+    // const compraId = localStorage.getItem("compraId");
+    // if (compraId) {
+    //   Swal.fire({
+    //     icon: "success",
+    //     title: "Reserva realizada",
+    //     text: "¡Tu reserva se realizó correctamente! Gracias por confiar en nosotros.",
+    //   }).then(() => {
+    //     localStorage.removeItem("compraId");
+    //   });
+    // }
   }, []);
 
-  
   const handleOwnerDetailsComplete = (ownerDetails: IUser) => {
     setIsOwnerDetailsComplete(true);
   };
@@ -56,8 +57,11 @@ const UserDashboard: React.FC = () => {
       setActiveSection('properties'); 
     }
   };
-
   const editableFields = ['name', 'lastName', 'email', 'nationality', 'DOB', 'phone', 'dni', 'civilStatus', 'employmentStatus'];
+
+  const handleReservationsClick = () => {
+    router.push("/profile/reservations");
+  };
 
   return (
 <div className="flex flex-col md:flex-row min-h-screen bg-[#f9f9f9] text-[#0a0a0a]">
@@ -75,7 +79,7 @@ const UserDashboard: React.FC = () => {
       Mis Propiedades
     </button>
     <button
-      onClick={() => setActiveSection('reservations')}
+      onClick={handleReservationsClick}
       className="w-full p-3 lg:py-5 lg:px-8 text-center md:text-left rounded-md lg:rounded-lg bg-white shadow hover:bg-gray-100 hover:shadow-lg transition duration-200"
     >
       Mis Reservas
@@ -93,7 +97,6 @@ const UserDashboard: React.FC = () => {
          />
       )
     )}
-    {activeSection === 'reservations' && <MyReservations />}
   </main>
 </div>
   );

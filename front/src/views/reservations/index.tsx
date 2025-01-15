@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -53,8 +53,11 @@ export const Reservations: React.FC = () => {
 
           // Obtener reservas del usuario
           const data = await getUserReservation(parsedUser.id);
-          setReservations(data);
-          console.log(data)
+
+          // Asegurarse de que la respuesta esté en formato JSON
+          const reservationsData = await data.json(); // Convertir la respuesta a JSON
+          setReservations(reservationsData); // Asignar los datos al estado
+          console.log(reservationsData);
         } else {
           Swal.fire({
             icon: "error",
