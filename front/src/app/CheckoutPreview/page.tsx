@@ -106,16 +106,10 @@ const CheckoutPreview = () => {
       const response = await createReservation(reserva);
   
       if (response && response.link) {
-<<<<<<< HEAD
-        // Redirigir al usuario al enlace proporcionado por el backends
-        localStorage.setItem("contract_id", JSON.stringify(response.id));
-        window.location.href = response.link;
-=======
       // guardar el id en local
       localStorage.setItem("compraId", JSON.stringify(response.id));
       // Redirigir al usuario al enlace proporcionado por el backend
      router.push(response.link)
->>>>>>> 949b99b87aea735380626dd426bd12ca74ffd109
       } else {
         console.error("No se recibió un enlace válido en la respuesta:", response);
         Swal.fire({

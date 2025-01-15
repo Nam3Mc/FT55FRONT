@@ -35,7 +35,6 @@ const RegisterForm = () => {
 
   const validatePassword = (password: string) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&])(?=.*[a-zA-Z]).{8,}$/;
-
     return passwordRegex.test(password);
   };
 
@@ -70,14 +69,11 @@ const RegisterForm = () => {
       alert("Las contraseñas no coinciden");
       return;
     }
-    console.log(formData);
 
     const formDataWithNumbers = {
       ...formData,
       DOB: DOB.toString(),
     };
-
-    console.log(formDataWithNumbers);
 
     try {
       const response = await fetch("https://rentafacil.onrender.com/users", {
@@ -110,7 +106,7 @@ const RegisterForm = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      className="min-h-screen-71 flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage:
           "url('https://i.postimg.cc/3RnqJCmr/pexels-chris-schippers-139261-421927.jpg')",
@@ -151,7 +147,7 @@ const RegisterForm = () => {
             id="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full px- py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             required
           />
         </div>

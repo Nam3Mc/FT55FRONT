@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
@@ -118,7 +117,7 @@ const Login: React.FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
+      className="flex items-center justify-center min-h-screen-71 bg-cover bg-center"
       style={{
         backgroundImage:
           "url('https://i.postimg.cc/j5YLMPFX/pexels-pixabay-417289.jpg')",
@@ -167,7 +166,6 @@ const Login: React.FC = () => {
             Ingresar
           </button>
         </form>
-
         <div className="mt-4">
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
@@ -181,20 +179,16 @@ const Login: React.FC = () => {
             }}
           />
         </div>
-
-        <div className="text-center mt-4">
-          <p className="text-sm text-black">
-            ¿No tienes cuenta?{" "}
-            <Link href="/register">
-              <span className="text-blue-600 hover:underline">
-                Regístrate aquí
-              </span>
-            </Link>
-          </p>
-        </div>
-      </div>
+        <div className="text-sm text-center mt-4 text-gray-600">
+          {" "}
+          ¿No tienes una cuenta?{" "}
+          <Link href="/signup" className="text-blue-500 hover:underline">
+            {" "}
+            Regístrate{" "}
+          </Link>{" "}
+        </div>{" "}
+      </div>{" "}
     </div>
   );
 };
-
-export default Login;
+export default Login;

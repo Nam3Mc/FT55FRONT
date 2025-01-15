@@ -5,19 +5,11 @@ import { IAccountUser } from "@/interfaces/IAccount";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getPropertyDB = async (): Promise<IProperty[]> => {
-<<<<<<< HEAD
-    try {
-        const res = await fetch(`https://rentafacil.onrender.com/property`, {
-            next: { revalidate: 1200 }
-        });
-        console.log(res);
-=======
   try {
-    const res = await fetch(`${API_URL}/property`, {
+    const res = await fetch(`https://rentafacil.onrender.com/property`, {
       next: { revalidate: 1200 },
     });
     console.log(res);
->>>>>>> 949b99b87aea735380626dd426bd12ca74ffd109
 
     if (!res.ok) {
       throw new Error(
@@ -39,7 +31,7 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
 //   searchParams?: SearchParams
 // ): Promise<IProperty[]> => {
 //   try {
-//     let url = `${API_URL}/property`;
+//     let url = `https://rentafacil.onrender.com/property`;
 //     if (searchParams) {
 //       const queryString = new URLSearchParams(
 //         Object.entries(searchParams).filter(([_, v]) => v != null) as [
@@ -114,17 +106,10 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
 // };
 
 export const getPropertyById = async (id: string): Promise<IProperty> => {
-<<<<<<< HEAD
-    try {
-        const res = await fetch(`https://rentafacil.onrender.com/property/unique/${id}`, {
-            next: { revalidate: 1200 }
-        });
-=======
   try {
-    const res = await fetch(`${API_URL}/property/unique/${id}`, {
+    const res = await fetch(`https://rentafacil.onrender.com/property/unique/${id}`, {
       next: { revalidate: 1200 },
     });
->>>>>>> 949b99b87aea735380626dd426bd12ca74ffd109
 
     if (!res.ok) {
       throw new Error(
@@ -146,19 +131,11 @@ export const getPropertyById = async (id: string): Promise<IProperty> => {
 };
 
 export const getPropertyOwner = async (id: string): Promise<IAccountUser> => {
-<<<<<<< HEAD
-    try {
-        const res = await fetch(`https://rentafacil.onrender.com/account/user/${id}`, {
-            next: { revalidate: 1200 }
-        });
-        console.log(res);
-=======
   try {
-    const res = await fetch(`${API_URL}/account/user/${id}`, {
+    const res = await fetch(`https://rentafacil.onrender.com/account/user/${id}`, {
       next: { revalidate: 1200 },
     });
     console.log(res);
->>>>>>> 949b99b87aea735380626dd426bd12ca74ffd109
 
     if (!res.ok) {
       throw new Error(
