@@ -4,6 +4,8 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -76,7 +78,11 @@ const RegisterForm = () => {
     };
 
     try {
+<<<<<<< HEAD
       const response = await fetch("https://rentafacil.onrender.com/users", {
+=======
+      const response = await fetch(`${API_URL}/users`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +112,7 @@ const RegisterForm = () => {
 
   return (
     <div
-      className="min-h-screen-71 flex items-center justify-center bg-cover bg-center"
+      className="min-h-screen-83 flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage:
           "url('https://i.postimg.cc/3RnqJCmr/pexels-chris-schippers-139261-421927.jpg')",

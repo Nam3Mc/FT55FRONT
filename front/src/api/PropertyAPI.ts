@@ -26,6 +26,7 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
   }
 };
 
+<<<<<<< HEAD
 //prueba 1
 // export const getPropertyDB = async (
 //   searchParams?: SearchParams
@@ -105,6 +106,8 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
 //   }
 // };
 
+=======
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
 export const getPropertyById = async (id: string): Promise<IProperty> => {
   try {
     const res = await fetch(`https://rentafacil.onrender.com/property/unique/${id}`, {

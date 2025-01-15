@@ -22,6 +22,8 @@ export interface IProperty {
   hasMinor: boolean;
   pets: boolean;
   amenities_: IAmenities;
+  latitude: string;
+  longitude: string
 }
 
 export interface IPropertyList {

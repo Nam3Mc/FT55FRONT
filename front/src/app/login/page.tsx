@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState({
@@ -27,7 +28,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://rentafacil.onrender.com/auth/signin", {
+      const response = await fetch(`${API_URL}/auth/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,7 @@ const Login: React.FC = () => {
     }
 
     try {
-      const res = await fetch("https://rentafacil.onrender.com/auth/google-login", {
+      const res = await fetch(`${API_URL}/auth/google-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,7 +118,7 @@ const Login: React.FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen-71 bg-cover bg-center"
+      className="flex items-center justify-center min-h-screen-83 bg-cover bg-center"
       style={{
         backgroundImage:
           "url('https://i.postimg.cc/j5YLMPFX/pexels-pixabay-417289.jpg')",

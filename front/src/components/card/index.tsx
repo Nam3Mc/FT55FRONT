@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import ImageCarousel from "../image_carousel";
 import { IProperty } from "@/interfaces/IProperty";
 import { Card, CardContent } from "../ui/card";
@@ -8,11 +6,6 @@ import { CarouselItem } from "../ui/carousel";
 import Link from "next/link";
 
 export const CardProperties: React.FC<IProperty> = (property: IProperty) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
   return (
     <CarouselItem
       key={property.id}
@@ -23,20 +16,6 @@ export const CardProperties: React.FC<IProperty> = (property: IProperty) => {
           <CardContent className="p-0">
             <div className="relative">
               <ImageCarousel {...property} />
-              {/* <button
-                className="absolute hover:scale-110 top-3 right-3 z-10"
-                onClick={toggleFavorite}
-              >
-                {!isFavorite ? (
-                  <i
-                    className={`fi fi-rr-heart bg-white rounded-lg p-2 shadow-md`}
-                  ></i>
-                ) : (
-                  <i
-                    className={`fi fi-sr-heart bg-white rounded-lg p-2 shadow-md text-red-500`}
-                  ></i>
-                )}
-              </button> */}
             </div>
             <Link href={`/house/${property.id}`} key={property.id} passHref>
               <div className="flex h-[250px] flex-col justify-between rounded-b-lg bg-pearl p-4">

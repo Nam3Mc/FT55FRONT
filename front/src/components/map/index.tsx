@@ -3,7 +3,12 @@
 import React, { useEffect } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 
-export const GoogleMaps: React.FC = () => {
+interface MapProp {
+  latitude: string
+  longitude: string
+}
+
+export const GoogleMaps: React.FC<MapProp> = ({ latitude, longitude }) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,8 +20,8 @@ export const GoogleMaps: React.FC = () => {
       const { Map } = await loader.importLibrary("maps");
 
       const locationInMap = {
-        lat: 4.623651,
-        lng: -74.0941912,
+        lat: Number(latitude),
+        lng: Number(longitude),
       };
       //Marker
       const { AdvancedMarkerElement } = (await loader.importLibrary(

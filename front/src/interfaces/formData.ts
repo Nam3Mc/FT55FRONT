@@ -1,9 +1,11 @@
 export default interface IFormData {
-  title: string;
+  id?: string,
+  name: string;
   description: string;
   price: number;
   state?: string;
   city: string;
+  country: string;
   address?: string;
   bedrooms: number;
   bathrooms: number;
@@ -20,6 +22,6 @@ export default interface IFormData {
   piscina: boolean,
   parqueadero: boolean,
   cocina: boolean,
-  isActive: boolean,
+  isActive: string,
   type: string,
 }

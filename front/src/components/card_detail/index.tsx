@@ -16,25 +16,6 @@ interface IPropsDetail {
 }
 
 export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
-  // const [isFavorite, setIsFavorite] = useState(false);
-
-  // const toggleFavorite = () => {
-  //   setIsFavorite(!isFavorite);
-
-  // const storedFavorites = JSON.parse(
-  //   localStorage.getItem("favorites") || "[]"
-  // );
-
-  //   if (isFavorite) {
-  //     const updatedFavorites = storedFavorites.filter(
-  //       (fav: IProperty) => fav.id !== property.id
-  //     );
-  //     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  //   } else {
-  //     storedFavorites.push(property);
-  //     localStorage.setItem("favorites", JSON.stringify(storedFavorites));
-  //   }
-  // };
 
   const defaultPhoto = "https://cdn-icons-png.flaticon.com/512/61/61205.png"; // URL de imagen predeterminada
   const imageSrc =
@@ -44,21 +25,6 @@ export const CardDetail: React.FC<IPropsDetail> = ({ property, owner }) => {
     <div className="flex flex-col md:flex-row border-2 border-marble p-4 rounded-lg shadow-md mb-6 lg:mx-40">
       {/* Imagen con boton corazón */}
       <div className="relative md:w-1/2">
-        {/* <button
-          className="absolute hover:scale-110 top-3 right-3 z-10"
-          onClick={toggleFavorite}
-        >
-          {!isFavorite ? (
-            <i
-              className={`fi fi-rr-heart bg-white rounded-lg p-2 shadow-md`}
-            ></i>
-          ) : (
-            <i
-              className={`fi fi-sr-heart bg-white rounded-lg p-2 shadow-md text-red-500`}
-            ></i>
-          )}
-        </button> */}
-
         <ImageCarousel {...property} />
       </div>
 

@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useFetchProperties from "../../hooks/AdminDashboard/useFetchProperties";
 import { IPropiedad } from "../../interfaces/properties";
 import { FiArrowLeftCircle } from "react-icons/fi";
 import Swal from "sweetalert2";
+import { PropertyStatus } from "@/helpers/statusProperty";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const AllProperties: React.FC = () => {
-  const { properties, error, loading } = useFetchProperties();
+  const { properties: fetchedProperties,  error, loading } = useFetchProperties();
+  const [properties, setProperties] = useState<IPropiedad[]>([]);
   const [selectedProperty, setSelectedProperty] = useState<IPropiedad | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (fetchedProperties) {
+      setProperties(fetchedProperties);
+    }
+  }, [fetchedProperties]);
 
   const handlePropertyClick = (property: IPropiedad) => {
     setSelectedProperty(property);
@@ -15,15 +26,36 @@ const AllProperties: React.FC = () => {
   const handleBackToList = () => {
     setSelectedProperty(null);
   };
-  const handleActivateProperty = async (propertyId: string) => {
-    if (!selectedProperty) {
-      Swal.fire("Error", "No se ha seleccionado ninguna propiedad", "error");
-      return;
+    
+  const handleFilterChange = (status: string | null) => {
+    setFilterStatus(status);
+  };
+
+  type PropertyStatus = keyof typeof PropertyStatus;  
+
+  const handleChangePropertyStatus = async (
+    propertyId: string,
+    currentStatus: typeof PropertyStatus[keyof typeof PropertyStatus],
+    action: string
+  ) => {
+    let newStatus: typeof PropertyStatus[keyof typeof PropertyStatus];
+    let statusMessage = "";
+  
+    if (currentStatus === PropertyStatus.ACTIVATED) {
+      newStatus = PropertyStatus.INACTIVE;
+      statusMessage = "inactiva";
+    } else if (currentStatus === PropertyStatus.INACTIVE) {
+      newStatus = PropertyStatus.ACTIVATED;
+      statusMessage = "activada";
+    } else if (currentStatus === PropertyStatus.PENDING) {
+      newStatus = PropertyStatus.ACTIVATED;
+      statusMessage = "aprobada";
+    } else {
+      throw new Error("Estado de propiedad desconocido");
     }
   
-    console.log("Propiedad antes de actualizar:", selectedProperty);
-  
     try {
+<<<<<<< HEAD
       const propertyToUpdate = {
         id: selectedProperty.id,
         name: selectedProperty.title,
@@ -48,36 +80,56 @@ const AllProperties: React.FC = () => {
   
       const response = await fetch(`https://rentafacil.onrender.com/property/update`, {
         method: 'PUT',
+=======
+      const response = await fetch(`${API_URL}/property/status`, {
+        method: "PUT",
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(propertyToUpdate),
+        body: JSON.stringify({ id: propertyId }),
       });
   
-      console.log("Enviando datos al backend:", propertyToUpdate);
+      const data = await response.json();
   
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        Swal.fire("Error", errorResponse.message || "Hubo un problema con la activación de la propiedad", "error");
-        return;
-      }
+      if (response.ok) {
+        Swal.fire("Éxito", `La propiedad se pudo ${action} correctamente.`, "success");
 
-      const result = await response.json();
-      if (result.success) {
-        Swal.fire("Éxito", "Propiedad activada correctamente", "success");
-        setSelectedProperty((prev) => ({
-          ...prev!,
-          isActive: true,
-        }));
+        setSelectedProperty((prev) =>
+          prev?.id === propertyId ? { ...prev, isActive: newStatus } : prev
+        );
+  
+        const updatedProperties = properties.map((prop) =>
+          prop.id === propertyId ? { ...prop, isActive: newStatus } : prop
+        );
+        setProperties(updatedProperties); 
       } else {
-        Swal.fire("Error", "No se pudo activar la propiedad", "error");
+        Swal.fire("Error", data.message || "Hubo un error al cambiar el estado de la propiedad", "error");
       }
     } catch (error) {
-      console.error("Error al activar la propiedad:", error);
-      Swal.fire("Error", "Hubo un problema al activar la propiedad", "error");
+      console.error("Error al cambiar el estado de la propiedad", error);
+      Swal.fire("Error", "Hubo un error de comunicación con el servidor", "error");
     }
   };
   
+  
+
+  const filteredProperties = filterStatus
+  ? properties.filter((property) => property.isActive === filterStatus)
+  : properties;
+
+  const getNoPropertiesMessage = () => {
+    switch (filterStatus) {
+      case PropertyStatus.ACTIVATED:
+        return "No hay propiedades activas para mostrar en este momento.";
+      case PropertyStatus.INACTIVE:
+        return "No hay propiedades inactivas para mostrar en este momento.";
+      case PropertyStatus.PENDING:
+        return "No hay propiedades pendientes para mostrar en este momento.";
+      default:
+        return "No hay propiedades para mostrar en este momento.";
+    }
+  };
 
   if (loading) {
     return <p>Cargando propiedades...</p>;
@@ -86,14 +138,27 @@ const AllProperties: React.FC = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
-
   return (
     <div className="bg-white p-6 rounded-md shadow-md mb-8">
-      <h2 className="text-2xl font-bold mb-4">Propiedades</h2>
-
+     <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-bold">Propiedades</h2>
+      <select
+        value={filterStatus || ""}
+        onChange={(e) => handleFilterChange(e.target.value || null)}
+        disabled={!!selectedProperty}
+        className={`border border-gray-300 rounded-md px-4 py-2 ${
+          selectedProperty ? "cursor-not-allowed bg-gray-200 text-gray-500" : ""
+        }`}
+        title={selectedProperty ? "El filtro está deshabilitado en el detalle de la propiedad" : ""}
+      >
+        <option value="">Todos</option>
+        <option value={PropertyStatus.ACTIVATED}>Activa</option>
+        <option value={PropertyStatus.INACTIVE}>Inactiva</option>
+        <option value={PropertyStatus.PENDING}>Pendiente</option>
+      </select>
+    </div>  
       {selectedProperty ? (
         <div className="property-detail relative">
-    
           <button
             onClick={handleBackToList}
             className="flex items-center text-black-500 hover:text-gray-700 mb-4 absolute top-4 left-4 z-20"
@@ -102,20 +167,38 @@ const AllProperties: React.FC = () => {
             Volver a la lista de propiedades
           </button>
           <div className="absolute top-4 right-4 flex items-center space-x-4">
-            <p className={selectedProperty.isActive ? "text-green-500" : "text-red-500"}>
-              {selectedProperty.isActive ? "Activa" : "Pendiente"}
+            <p className={selectedProperty.isActive === PropertyStatus.ACTIVATED ? "text-green-500" : "text-red-500"}>
+              {selectedProperty.isActive === PropertyStatus.ACTIVATED
+                ? "Activa"
+                : selectedProperty.isActive === PropertyStatus.INACTIVE
+                ? "Inactiva"
+                : "Pendiente"}
             </p>
-
-            {!selectedProperty.isActive && (
-              <button
-                onClick={() => handleActivateProperty(selectedProperty.id)}
-                className="bg-velvet text-white px-4 py-2 rounded-md"
-              >
-                Activar propiedad
-              </button>
-            )}
+            <div>
+              {selectedProperty.isActive === PropertyStatus.ACTIVATED ? (
+                <button
+                  onClick={() => handleChangePropertyStatus(selectedProperty.id, PropertyStatus.ACTIVATED, "Desactivar")}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                >
+                  Desactivar
+                </button>
+              ) : selectedProperty.isActive === PropertyStatus.INACTIVE ? (
+                <button
+                  onClick={() => handleChangePropertyStatus(selectedProperty.id, PropertyStatus.INACTIVE, "Activar")}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md"
+                >
+                  Activar
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleChangePropertyStatus(selectedProperty.id, PropertyStatus.PENDING, "Aprobar")}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                >
+                  Aprobar
+                </button>
+              )}
+            </div>
           </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-16">
             <div className="col-span-1">
               <h4 className="text-lg font-semibold mb-2">Fotos:</h4>
@@ -125,7 +208,7 @@ const AllProperties: React.FC = () => {
                     <img
                       key={index}
                       src={image.url}
-                      alt={`Propiedad ${selectedProperty.title} Foto ${index + 1}`}
+                      alt={`Propiedad ${selectedProperty.name} Foto ${index + 1}`}
                       className="w-full h-64 object-cover rounded-lg shadow-md"
                     />
                   ))}
@@ -136,12 +219,10 @@ const AllProperties: React.FC = () => {
             </div>
             <div className="col-span-1">
               <p className="text-sm text-gray-500">{selectedProperty.description}</p>
-
               <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <p><strong>Precio:</strong> ${selectedProperty.price}</p>
                 <p><strong>Estado:</strong> {selectedProperty.state}</p>
                 <p><strong>Ciudad:</strong> {selectedProperty.city}</p>
-                {/* <p><strong>Dirección:</strong> {selectedProperty.address}</p> */}
                 <p><strong>Habitaciones:</strong> {selectedProperty.bedrooms}</p>
                 <p><strong>Baños:</strong> {selectedProperty.bathrooms}</p>
                 <p><strong>Capacidad:</strong> {selectedProperty.capacity} personas</p>
@@ -161,20 +242,20 @@ const AllProperties: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : filteredProperties.length > 0 ? (
         <ul className="space-y-4">
-          {properties.map((property) => (
+          {filteredProperties.map((property) => (
             <li
               key={property.id}
               className="p-4 border border-gray-200 rounded-md shadow-sm hover:shadow-lg transition duration-200"
               onClick={() => handlePropertyClick(property)}
             >
-              <h3 className="text-xl font-semibold">{property.title}</h3>
+              <h3 className="text-xl font-semibold">{property.name}</h3>
               <p className="text-gray-600">{property.city}</p>
               {property.image_ && property.image_.length > 0 && (
                 <img
                   src={property.image_[0].url}
-                  alt={`Propiedad ${property.title} Foto 1`}
+                  alt={`Propiedad ${property.name} Foto 1`}
                   className="w-full h-48 object-cover rounded-lg shadow-md mb-4"
                 />
               )}
@@ -189,73 +270,11 @@ const AllProperties: React.FC = () => {
             </li>
           ))}
         </ul>
+      ) : (
+        <p className="text-gray-500 text-center">{getNoPropertiesMessage()}</p>
       )}
     </div>
   );
 };
-
+  
 export default AllProperties;
-
-
-  // const handleActivateProperty = async (propertyId: string) => {
-  //   if (!selectedProperty) {
-  //     Swal.fire("Error", "No se ha seleccionado ninguna propiedad", "error");
-  //     return;
-  //   }
-  
-  //   // Aquí puedes hacer un console.log de la propiedad que estás obteniendo antes de enviarla al backend
-  //   console.log("Propiedad antes de actualizar:", selectedProperty);
-  
-  //   try {
-  //     const propertyToUpdate = {
-  //       id: selectedProperty.id,
-  //       title: selectedProperty.title,
-  //       price: selectedProperty.price,
-  //       description: selectedProperty.description,
-  //       state: selectedProperty.state,
-  //       city: selectedProperty.city,
-  //       capacity: selectedProperty.capacity,
-  //       bedrooms: selectedProperty.bedrooms,
-  //       bathrooms: selectedProperty.bathrooms,
-  //       hasMinor: selectedProperty.hasMinor,
-  //       pets: selectedProperty.pets,
-  //       isActive: true,  // Aseguramos que estamos activando la propiedad
-  //       wifi: selectedProperty.wifi,
-  //       piscina: selectedProperty.piscina,
-  //       parqueadero: selectedProperty.parqueadero,
-  //       cocina: selectedProperty.cocina,
-  //       tv: selectedProperty.tv,
-  //       airConditioning: selectedProperty.airConditioning,
-  //     };
-  //     console.log("ID de propiedad a actualizar:", selectedProperty.id);
-  
-  //     const response = await fetch(`http://localhost:3002/property/update`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(propertyToUpdate), // Mandamos el objeto completo
-  //     });
-  //     console.log("Enviando datos al backend:", propertyToUpdate);
-  
-  //     if (!response.ok) {
-  //       const errorResponse = await response.json();
-  //       Swal.fire("Error", errorResponse.message || "Hubo un problema con la activación de la propiedad", "error");
-  //       return;
-  //     }
-  
-  //     const result = await response.json();
-  //     if (result.success) {
-  //       Swal.fire("Éxito", "Propiedad activada correctamente", "success");
-  //       setSelectedProperty((prev) => ({
-  //         ...prev!,
-  //         isActive: true,
-  //       }));
-  //     } else {
-  //       Swal.fire("Error", "No se pudo activar la propiedad", "error");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al activar la propiedad:", error);
-  //     Swal.fire("Error", "Hubo un problema al activar la propiedad", "error");
-  //   }
-  // };

@@ -28,3 +28,13 @@ export interface ILocalReservation {
        pets:boolean
      };
 }
+
+export interface IContractReservation {
+  status: string;
+  id: string;
+  startDate: string;
+  endDate: string;
+  guests: number;
+  pet: boolean;
+  minor: boolean
+}

@@ -51,7 +51,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({
       </div>
 
       {/* Mapa */}
-      <GoogleMaps />
+      <GoogleMaps latitude={property.latitude} longitude={property.longitude}/>
 
       <hr className="border-t border-gray-300 my-4" />
 

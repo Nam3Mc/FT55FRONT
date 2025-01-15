@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AllReviews from './AdminReviews';
 import AllReservations from './AdminReservations';
 import AllProperties from './AdminProperties';
 import AllUsers from './AdminAllUsers';
@@ -27,18 +26,11 @@ const UserDashboard: React.FC = () => {
     >
       Reservas
     </button>
-    <button
-      onClick={() => setActiveSection('reviews')}
-      className="w-full p-3 lg:py-5 lg:px-8 text-center md:text-left rounded-md lg:rounded-lg bg-white shadow hover:bg-gray-100 hover:shadow-lg transition duration-200"
-    >
-      Reseñas
-    </button>
   </aside>
   <main className="flex-1 p-4 md:p-8">
     {activeSection === 'users' && <AllUsers />}
     {activeSection === 'properties' && <AllProperties />}
     {activeSection === 'reservations' && <AllReservations />}
-    {activeSection === 'reviews' && <AllReviews />}
   </main>
 </div>
   );

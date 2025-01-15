@@ -1,11 +1,11 @@
-import { IReserva } from "./reservation";
 export interface IReservationDetail {
-    userId: any;
-    id: string;
-    reservation: IReserva;
-    checkIn: string;
-    checkOut: string;
-    pax: number;
-    property: string; 
-  }
+  id: string;
+  status: string;
+  startDate: string; 
+  endDate: string;   
+  guests: number;    
+  pet: boolean;      
+  minor: boolean;  
+}
+
   

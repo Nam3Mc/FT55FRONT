@@ -86,6 +86,8 @@ export default {
 			},
 			minHeight: {
 				"screen-71": "71.3vh",
+				"screen-80": "80.3vh",
+				"screen-83": "81.1vh",
 			},
 		},
 	},

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import IUser from "@/interfaces/user";
 import Swal from "sweetalert2";
 import {CivilStatusOptions,EmploymentStatusOptions,} from "@/helpers/userStatus";
-import { saveUser as saveUserUtil } from "@/helpers/userUtils";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface OwnerDetailsFormProps {
   onComplete: (ownerDetails: IUser) => void;
@@ -92,7 +93,11 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     };
   
     try {
+<<<<<<< HEAD:front/src/components/userdashboard/OwnerDetailForm.tsx
       const response = await fetch(`https://rentafacil.onrender.com/users/${id}`, {
+=======
+      const response = await fetch(`${API_URL}/users/${id}`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04:front/src/components/userdashboard/forms/OwnerDetailForm.tsx
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +115,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
           title: "¡Actualización exitosa!",
           text: "Los datos se han actualizado correctamente.",
         }).then(() => {
-          onComplete(updatedUser); // Llama a onComplete solo después de que se muestre el swal
+          onComplete(updatedUser); 
         });
         
       } else {
@@ -142,7 +147,11 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     }
   
     try {
+<<<<<<< HEAD:front/src/components/userdashboard/OwnerDetailForm.tsx
       const response = await fetch(`https://rentafacil.onrender.com/users/${user.id}`, {
+=======
+      const response = await fetch(`${API_URL}/users/${user.id}`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04:front/src/components/userdashboard/forms/OwnerDetailForm.tsx
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +166,7 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
           title: "¡Actualización exitosa!",
           text: "Los datos se han actualizado correctamente.",
         }).then(() => {
-          onComplete(userDetails); // Llama a onComplete solo después de que se muestre el swal
+          onComplete(userDetails); 
         });
       } else {
         Swal.fire({
@@ -191,7 +200,11 @@ const OwnerDetailsForm: React.FC<OwnerDetailsFormProps> = ({
     formData.append("file", files[0]);
 
     try {
+<<<<<<< HEAD:front/src/components/userdashboard/OwnerDetailForm.tsx
       const response = await fetch("https://rentafacil.onrender.com/image/user-photo", {
+=======
+      const response = await fetch(`${API_URL}/image/user-photo`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04:front/src/components/userdashboard/forms/OwnerDetailForm.tsx
         method: "POST",
         body: formData,
       });

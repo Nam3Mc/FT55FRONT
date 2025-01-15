@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import IUser from "@/interfaces/user";
-import {CivilStatusOptions,EmploymentStatusOptions,} from "@/helpers/userStatus";
+import {
+  CivilStatusOptions,
+  EmploymentStatusOptions,
+} from "@/helpers/userStatus";
 import Swal from "sweetalert2";
 
-interface OwnerDetailsFormProps {
-    initialData: IUser; 
-    editableFields: string[];
-    onComplete: (updatedUser: IUser) => Promise<void>;
-  }
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplete,}) => {
+interface OwnerDetailsFormProps {
+  initialData: IUser;
+  editableFields: string[];
+  onComplete: (updatedUser: IUser) => Promise<void>;
+}
+
+const EditUserForm: React.FC<OwnerDetailsFormProps> = ({
+  editableFields,
+  onComplete,
+}) => {
   const [name, setName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -20,7 +28,9 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
   const [DOB, setDOB] = useState<string>("");
   const [phone, setPhone] = useState<number | string>("");
   const [dni, setDni] = useState<number | string>("");
-  const [photo, setPhoto] = useState<string>("https://cdn-icons-png.flaticon.com/512/61/61205.png");
+  const [photo, setPhoto] = useState<string>(
+    "https://cdn-icons-png.flaticon.com/512/61/61205.png"
+  );
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +42,9 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         if (userData) {
           const parsedUser = JSON.parse(userData);
           if (parsedUser.DOB) {
-            parsedUser.DOB = new Date(parsedUser.DOB).toISOString().split("T")[0];
+            parsedUser.DOB = new Date(parsedUser.DOB)
+              .toISOString()
+              .split("T")[0];
           }
           setName(parsedUser.name || "");
           setLastName(parsedUser.lastName || "");
@@ -43,10 +55,15 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
           setCivilStatus(parsedUser.civilStatus || "");
           setEmploymentStatus(parsedUser.employmentStatus || "");
           setDOB(parsedUser.DOB || "");
-          setPhoto(parsedUser.photo || "https://cdn-icons-png.flaticon.com/512/61/61205.png");
+          setPhoto(
+            parsedUser.photo ||
+              "https://cdn-icons-png.flaticon.com/512/61/61205.png"
+          );
           setId(parsedUser.id || "");
         } else {
-          setError("No se encontró información del usuario en el almacenamiento local.");
+          setError(
+            "No se encontró información del usuario en el almacenamiento local."
+          );
         }
       } catch (err) {
         console.error("Error al cargar el usuario desde localStorage:", err);
@@ -70,67 +87,71 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
   const saveChanges = async (updatedUser: IUser) => {
     try {
       Swal.fire({
-        title: 'Aguarde un momento',
-        text: 'Se están actualizando los datos...',
-        icon: 'info',
+        title: "Aguarde un momento",
+        text: "Se están actualizando los datos...",
+        icon: "info",
         allowOutsideClick: false,
         showConfirmButton: false,
         didOpen: () => {
           Swal.showLoading();
         },
       });
-  
-      let uploadedPhotoUrl = photo; 
+
+      let uploadedPhotoUrl = photo;
       if (selectedImage) {
         try {
-          uploadedPhotoUrl = await uploadImage(selectedImage); 
+          uploadedPhotoUrl = await uploadImage(selectedImage);
         } catch (uploadError) {
           setError("Error al subir la imagen.");
           setLoading(false);
           return;
         }
       }
-  
-      updatedUser.photo = uploadedPhotoUrl; 
 
+<<<<<<< HEAD:front/src/components/userdashboard/EditUserForm.tsx
       const response = await fetch(`https://rentafacil.onrender.com/users/${updatedUser.id}`, {
+=======
+      updatedUser.photo = uploadedPhotoUrl;
+
+      const response = await fetch(`${API_URL}/users/${updatedUser.id}`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04:front/src/components/userdashboard/forms/EditUserForm.tsx
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedUser),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Error del servidor:", errorText);
         throw new Error("Error al guardar los cambios del usuario.");
       }
-  
+
       const savedUser = await response.json();
       localStorage.setItem("user", JSON.stringify(savedUser));
-      onComplete(savedUser); 
-  
-      Swal.close(); 
+      onComplete(savedUser);
+
+      Swal.close();
       Swal.fire({
-        title: '¡Éxito!',
-        text: 'Los cambios se han guardado correctamente.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
+        title: "¡Éxito!",
+        text: "Los cambios se han guardado correctamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
       });
     } catch (error) {
-      Swal.close(); 
+      Swal.close();
       Swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema al guardar los cambios.',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
+        title: "Error",
+        text: "Hubo un problema al guardar los cambios.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
       });
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-  
+
   const uploadImage = async (file: File) => {
     const formData = new FormData();
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -138,21 +159,25 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
       throw new Error("No se encontró el ID del usuario.");
     }
     formData.append("file", file);
-    formData.append("id", user.id); 
-  
+    formData.append("id", user.id);
+
     try {
+<<<<<<< HEAD:front/src/components/userdashboard/EditUserForm.tsx
       const response = await fetch("https://rentafacil.onrender.com/image/user-photo", {
+=======
+      const response = await fetch(`${API_URL}/image/user-photo`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04:front/src/components/userdashboard/forms/EditUserForm.tsx
         method: "POST",
         body: formData,
       });
-  
+
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(errorMessage || "Error al subir la imagen.");
       }
-  
+
       const data = await response.json();
-      return data.photoUrl; 
+      return data.photoUrl;
     } catch (error) {
       console.error("Error al subir la imagen:", error);
       throw error;
@@ -162,7 +187,7 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setLoading(true); 
+    setLoading(true);
 
     const updatedUser: IUser = {
       id,
@@ -180,16 +205,23 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
 
     await saveChanges(updatedUser);
   };
-  
 
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md"
+    >
       <h2 className="text-2xl font-semibold text-center mb-6">Editar Perfil</h2>
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Nombre
+        </label>
         <input
           type="text"
           id="name"
@@ -200,7 +232,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         />
       </div>
       <div>
-        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Apellido</label>
+        <label
+          htmlFor="lastName"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Apellido
+        </label>
         <input
           type="text"
           id="lastName"
@@ -211,7 +248,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         />
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Correo Electrónico
+        </label>
         <input
           type="email"
           id="email"
@@ -222,7 +264,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         />
       </div>
       <div>
-        <label htmlFor="DOB" className="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+        <label
+          htmlFor="DOB"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Fecha de Nacimiento
+        </label>
         <input
           type="date"
           id="DOB"
@@ -233,7 +280,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         />
       </div>
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Teléfono</label>
+        <label
+          htmlFor="phone"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Teléfono
+        </label>
         <input
           type="text"
           id="phone"
@@ -244,7 +296,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         />
       </div>
       <div>
-        <label htmlFor="dni" className="block text-sm font-medium text-gray-700">DNI</label>
+        <label
+          htmlFor="dni"
+          className="block text-sm font-medium text-gray-700"
+        >
+          DNI
+        </label>
         <input
           type="text"
           id="dni"
@@ -285,7 +342,12 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
         </select>
       </div>
       <div>
-        <label htmlFor="photo" className="block text-sm font-medium text-gray-700">Foto de Perfil</label>
+        <label
+          htmlFor="photo"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Foto de Perfil
+        </label>
         <input
           type="file"
           id="photo"
@@ -294,15 +356,19 @@ const EditUserForm: React.FC<OwnerDetailsFormProps> = ({editableFields,onComplet
           className="mt-1 block w-full text-sm"
         />
         <div className="mt-4">
-          <img src={photo} alt="Foto de perfil" className="w-32 h-32 rounded-full object-cover" />
+          <img
+            src={photo}
+            alt="Foto de perfil"
+            className="w-32 h-32 rounded-full object-cover"
+          />
         </div>
       </div>
       <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-          >
-             {loading ? "Cargando..." : "Crear Propiedad"}
-          </button>
+        type="submit"
+        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        {loading ? "Cargando..." : "Actualizar Datos"}
+      </button>
     </form>
   );
 };

@@ -16,10 +16,10 @@ import {
 export default function HeroHome() {
   const router = useRouter();
   const [searchParams, setSearchParams] = useState({
-    // checkIn: " ",
-    // checkOut: " ",
+    checkIn: " ",
+    checkOut: " ",
     capacity: "",
-    state: "",
+    country: "",
     type: "",
   });
 
@@ -30,8 +30,14 @@ export default function HeroHome() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const queryString = new URLSearchParams(searchParams).toString();
-    router.push(`/properties?${queryString}`);
+    const queryString = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(searchParams).filter(
+          ([_, value]) => value !== undefined && value.trim() !== ""
+        )
+      )
+    ).toString();
+    router.push(`/property/filter?${queryString}`);
   };
 
   return (
@@ -77,8 +83,8 @@ export default function HeroHome() {
                     type="date"
                     className="w-full"
                     name="checkIn"
-                    // value={searchParams.checkIn}
-                    // onChange={handleInputChange}
+                    value={searchParams.checkIn}
+                    onChange={handleInputChange}
                   />
                 </label>
                 <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
@@ -87,8 +93,8 @@ export default function HeroHome() {
                     type="date"
                     className="w-full"
                     name="checkOut"
-                    // value={searchParams.checkOut}
-                    // onChange={handleInputChange}
+                    value={searchParams.checkOut}
+                    onChange={handleInputChange}
                   />
                 </label>
                 <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
@@ -100,13 +106,15 @@ export default function HeroHome() {
                     }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Casas" />
+                      <SelectValue placeholder="¿Qué buscas?" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="1">Casas</SelectItem>
-                        <SelectItem value="2">Departamentos</SelectItem>
-                        <SelectItem value="3">Habitaciones</SelectItem>
+                        <SelectItem value="casa">Casas</SelectItem>
+                        <SelectItem value="apartamento">
+                          Apartamentos
+                        </SelectItem>
+                        <SelectItem value="habitacion">Habitaciones</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -114,10 +122,10 @@ export default function HeroHome() {
                 <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
                   <span className="text-gray-500 text-sm">Huéspedes</span>
                   <Input
-                    placeholder="0"
+                    placeholder="¿Cuántos?"
                     type="number"
                     className="w-full"
-                    min={0}
+                    min={1}
                     name="capacity"
                     value={searchParams.capacity}
                     onChange={handleInputChange}
@@ -126,11 +134,11 @@ export default function HeroHome() {
                 <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
                   <span className="text-gray-500 text-sm">País</span>
                   <Input
-                    placeholder="Colombia"
+                    placeholder="¿Dónde?"
                     type="text"
                     className="w-full"
-                    name="state"
-                    value={searchParams.state}
+                    name="country"
+                    value={searchParams.country}
                     onChange={handleInputChange}
                   />
                 </label>

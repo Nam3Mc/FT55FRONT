@@ -2,6 +2,8 @@ import { useState } from "react";
 import { IPropiedad } from "@/interfaces/properties";
 import Swal from "sweetalert2";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const useEditProperty = () => {
   const [editingProperty, setEditingProperty] = useState<IPropiedad | null>(null);
 
@@ -47,7 +49,7 @@ const useEditProperty = () => {
   const handleSaveClick = async (setProperties: React.Dispatch<React.SetStateAction<IPropiedad[]>>) => {
     if (editingProperty) {
       try {
-        const response = await fetch('/property/update', {
+        const response = await fetch(`${API_URL}/property/update`, {
           method: 'PUT', 
           headers: {
             'Content-Type': 'application/json',
@@ -59,7 +61,7 @@ const useEditProperty = () => {
           throw new Error('Error al actualizar la propiedad');
         }
   
-        const updatedProperty = await response.json(); // Suponiendo que el backend devuelve la propiedad actualizada
+        const updatedProperty = await response.json(); 
   
         setProperties((prev) =>
           prev.map((property) =>
@@ -95,20 +97,16 @@ const useEditProperty = () => {
     setProperties: React.Dispatch<React.SetStateAction<IPropiedad[]>>
   ) => {
     try {
-      // Verificamos que los valores estén definidos
       if (!propertyId || !imageId) {
         throw new Error("Faltan parámetros para eliminar la imagen.");
       }
-  
-      console.log("Eliminando imagen con ID:", imageId); // Verifica que el ID sea correcto
-  
-      // Enviar solo el ID de la imagen al backend
+      console.log("Eliminando imagen con ID:", imageId); 
       const response = await fetch(`/image`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(imageId), // Pasamos solo el ID de la imagen
+        body: JSON.stringify(imageId), 
       });
   
       if (!response.ok) {
@@ -152,7 +150,11 @@ const useEditProperty = () => {
       formData.append("file", file);
   
       try {
+<<<<<<< HEAD
         const response = await fetch("https://rentafacil.onrender.com/image", {
+=======
+        const response = await fetch(`${API_URL}/image`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
           method: "POST",
           body: formData,
         });

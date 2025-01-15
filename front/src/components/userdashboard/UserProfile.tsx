@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import IUser from "@/interfaces/user";
-import EditUserForm from "./EditUserForm";
+import EditUserForm from "./forms/EditUserForm";
 import Swal from "sweetalert2";
 
 const UserProfile: React.FC = () => {
@@ -16,8 +16,14 @@ const UserProfile: React.FC = () => {
         if (userData) {
           const parsedUser = JSON.parse(userData);
           if (parsedUser.DOB) {
-            parsedUser.DOB = new Date(parsedUser.DOB).toISOString().split("T")[0];
+            const date = new Date(parsedUser.DOB);
+            const day = String(date.getUTCDate()).padStart(2, '0'); 
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const year = date.getUTCFullYear(); 
+
+            parsedUser.DOB = `${day}/${month}/${year}`;
           }
+                       
           setUser(parsedUser);
         } else {
           setError("No se encontró información del usuario en el almacenamiento local.");
@@ -79,7 +85,7 @@ const UserProfile: React.FC = () => {
             {user?.lastName && <p className="text-sm sm:text-base"><span className="font-semibold">Apellido:</span> {user.lastName}</p>}
             {user?.email && <p className="text-sm sm:text-base"><span className="font-semibold">Correo electrónico:</span> {user.email}</p>}
             {user?.nationality && <p className="text-sm sm:text-base"><span className="font-semibold">Nacionalidad:</span> {user.nationality}</p>}
-            {user?.DOB && <p className="text-sm sm:text-base"><span className="font-semibold">Fecha de Nacimiento:</span> {new Date(user.DOB).toLocaleDateString("es-ES")}</p>}
+            {user?.DOB && (<p className="text-sm sm:text-base"> <span className="font-semibold">Fecha de Nacimiento:</span> {user.DOB}</p>)}
             {user?.dni && <p className="text-sm sm:text-base"><span className="font-semibold">DNI:</span> {user.dni}</p>}
             {user?.civilStatus && <p className="text-sm sm:text-base"><span className="font-semibold">Estado Civil:</span> {user.civilStatus}</p>}
             {user?.employmentStatus && <p className="text-sm sm:text-base"><span className="font-semibold">Estado laboral:</span> {user.employmentStatus}</p>}

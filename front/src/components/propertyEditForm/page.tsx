@@ -6,18 +6,26 @@ import IUser from "@/interfaces/user";
 import { TypeOfProperty } from "@/helpers/typeOfProperty";
 import { IPropiedad } from "@/interfaces/properties";
 import { useParams } from "next/navigation";
+import { PropertyStatus } from "@/helpers/statusProperty";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface PropertyEditFormProps {
   property: IPropiedad;
 }
+interface Image {
+  id: string;
+  url: string;
+}
 
 const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
   const [formData, setFormData] = useState<IFormData>({
-    title: property.title || "",
+    name: property.name || "",
     description: property.description || "",
     price: property.price || 1,
     state: property.state || "",
     city: property.city || "",
+    country: property.country || "",
     bedrooms: property.bedrooms || 1,
     bathrooms: property.bathrooms || 1,
     capacity: property.capacity || 1,
@@ -36,17 +44,18 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     piscina: property.amenities_?.piscina || false,
     parqueadero: property.amenities_?.parqueadero || false,
     cocina: property.amenities_?.cocina || false,
-    isActive: property.isActive || false,
+    isActive: property.isActive || PropertyStatus.PENDING,
     type: property.type || "casa",
   });
 
   const resetForm = () => {
     setFormData({
-      title: "",
+      name: "",
       description: "",
-      price: 10,
+      price: 1,
       state: "",
       city: "",
+      country: "",
       bedrooms: 1,
       bathrooms: 1,
       capacity: 1,
@@ -63,7 +72,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
       piscina: false,
       parqueadero: false,
       cocina: false,
-      isActive: false,
+      isActive: PropertyStatus.PENDING,
       type: "casa",
     });
   };
@@ -76,11 +85,11 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.title) {
+    if (!formData.name) {
       newErrors.title = "El título no debe estar vacío";
-    } else if (formData.title.length < 8) {
+    } else if (formData.name.length < 8) {
       newErrors.title = "El título debe tener al menos 8 caracteres";
-    } else if (formData.title.length > 50) {
+    } else if (formData.name.length > 50) {
       newErrors.title = "El título debe tener un máximo de 50 caracteres";
     }
 
@@ -94,13 +103,13 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     if (!formData.city) {
       newErrors.city = "La ciudad no debe estar vacía";
     }
-    if (typeof formData.bedrooms !== "number" || formData.bedrooms < 0) {
+    if (typeof formData.bedrooms !== "number" || formData.bedrooms < 1) {
       newErrors.bedrooms = "El número de habitaciones debe ser positivo";
     }
-    if (typeof formData.bathrooms !== "number" || formData.bathrooms < 0) {
+    if (typeof formData.bathrooms !== "number" || formData.bathrooms < 1) {
       newErrors.bathrooms = "El número de baños debe ser positivo";
     }
-    if (typeof formData.capacity !== "number" || formData.capacity < 0) {
+    if (typeof formData.capacity !== "number" || formData.capacity < 1) {
       newErrors.capacity = "La capacidad debe ser positiva";
     }
 
@@ -142,7 +151,11 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
       setIsLoading(true);
       try {
         const response = await fetch(
+<<<<<<< HEAD
           `https://rentafacil.onrender.com/property/unique/${propertyId}`
+=======
+          `${API_URL}/property/unique/${propertyId}`
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
         );
         if (!response.ok) {
           throw new Error("Error al obtener la propiedad");
@@ -170,7 +183,11 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
         const userData = JSON.parse(storedUser);
         const userId = userData.id;
         try {
+<<<<<<< HEAD
           const response = await fetch(`https://rentafacil.onrender.com/users/${userId}`);
+=======
+          const response = await fetch(`${API_URL}/users/${userId}`);
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
           if (!response.ok) {
             throw new Error("Error en la solicitud");
           }
@@ -201,7 +218,11 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
       formData.append("file", file);
 
       try {
+<<<<<<< HEAD
         const response = await fetch("https://rentafacil.onrender.com/image", {
+=======
+        const response = await fetch(`${API_URL}/image`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
           method: "POST",
           body: formData,
         });
@@ -218,24 +239,6 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     }
 
     return imageUrls;
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-
-    if (files && files.length > 0) {
-      setIsLoading(true);
-
-      try {
-        const uploadedImageUrls = await handleImageUpload(files);
-        setFormData((prevData) => ({
-          ...prevData,
-          images: [...prevData.images, ...uploadedImageUrls],
-        }));
-      } finally {
-        setIsLoading(false);
-      }
-    }
   };
 
   const handleChange = (
@@ -264,28 +267,57 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     setIsLoading(true);
 
     try {
+<<<<<<< HEAD
       const response = await fetch("https://rentafacil.onrender.com/property/update", {
+=======
+      const payload = {
+        ...formData,
+        id: property.id,
+        address: formData.address || "Dirección no especificada",
+        images: formData.images.map((image) =>
+          typeof image === "string" ? image : image
+        ),
+      };
+
+      console.log("Payload enviado:", JSON.stringify(payload));
+
+      const response = await fetch(`${API_URL}/property`, {
+>>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
-      console.log(JSON.stringify(formData));
 
       if (!response.ok) {
-        throw new Error("Error al actualizar la propiedad");
+        const errorDetail = await response.json();
+        console.error("Error del servidor:", errorDetail);
+        throw new Error(
+          `Error ${response.status}: ${response.statusText} - ${
+            errorDetail.message || "Detalles no disponibles"
+          }`
+        );
       }
 
       const data = await response.json();
-      console.log("Propiedad actualizada:", data);
+      console.log("Respuesta del backend:", data);
 
-      Swal.fire("Éxito", "Propiedad actualizada con éxito", "success").then(() => {
-        resetForm();
-      });
-    } catch (error) {
-      console.error("Error al actualizar la propiedad:", error);
-      Swal.fire("Error", "No se pudo actualizar la propiedad", "error");
+      Swal.fire("Éxito", "Propiedad actualizada con éxito", "success").then(
+        () => {
+          resetForm();
+        }
+      );
+    } catch (error: any) {
+      console.error(
+        "Error al actualizar la propiedad:",
+        error.message || error
+      );
+      Swal.fire(
+        "Error",
+        `No se pudo actualizar la propiedad. ${error.message || ""}`,
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -321,6 +353,22 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    const imageURLs = files.map((file) => {
+      if (file instanceof Blob) {
+        return URL.createObjectURL(file);
+      } else {
+        throw new Error("Archivo no válido");
+      }
+    });
+
+    setFormData((prevState) => ({
+      ...prevState,
+      images: [...prevState.images, ...imageURLs],
+    }));
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -337,7 +385,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
         <input
           type="text"
           name="name"
-          value={formData.title}
+          value={formData.name}
           onChange={handleChange}
           required
           className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
@@ -376,6 +424,19 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
 
       <div className="mb-4">
         <label className="block text-gray-800 text-lg">Pais:</label>
+        <input
+          type="text"
+          name="country"
+          value={formData.country}
+          onChange={handleChange}
+          required
+          className="mt-2 w-full p-3 bg-white text-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+        />
+        {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-800 text-lg">Provincia:</label>
         <input
           type="text"
           name="state"
@@ -619,7 +680,7 @@ const PropertyEditForm: React.FC<PropertyEditFormProps> = ({ property }) => {
             <p className="text-gray-600">Imágenes seleccionadas:</p>
             <ul className="flex space-x-4">
               {formData.images.map((image, index) => (
-                <li key={index} className="flex-shrink-0">
+                <li key={index} className="flex-shrink-0 relative">
                   <img
                     src={image}
                     alt={`Preview ${index}`}
