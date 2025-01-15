@@ -33,8 +33,9 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
   hasMinor,
   hasPets,
 }) => {
-  const [ disabledDates, setDisabledDates] = useState<Date[]>([])
+  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
   const [userData, setUserData] = useState<user | null>(null);
+
   useEffect(() => {
     const fetchDisabledDates = async () => {
       try {
@@ -56,7 +57,6 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
   }, [id]);
 
   const [showCalendar, setShowCalendar] = useState(false);
-
   const [showTravelers, setShowTravelers] = useState(false);
 
   const [dateRange, setDateRange] = useState<{
@@ -92,16 +92,12 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
   const pets = travelers.pets;
 
   const nights = calculateNights();
-  // Tarifas y precios
 
   const totalPrecioNights = nights * price; // Costo por noches seleccionadas
   const servicio = totalPrecioNights * 0.04; // Comisión de servicio (4% del total por noches)
   const total = totalPrecioNights + servicio; // Suma de noches y comisión
 
-  // Updated handleDateChange to match the expected signature from react-date-range
-  const handleDateChange = (rangesByKey: {
-    selection: { startDate: Date; endDate: Date; key: string };
-  }) => {
+  const handleDateChange = (rangesByKey: any) => {
     setDateRange(rangesByKey.selection);
   };
 
@@ -128,10 +124,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
         },
       };
 
-      // Guardar la reserva en localStorage
       localStorage.setItem("reserv", JSON.stringify(reserva));
-
-      // Redirigir al usuario a la página de previsualización del checkout
       router.push("/CheckoutPreview");
     } else {
       const swalWithBootstrapButtons = Swal.mixin({
@@ -194,7 +187,6 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
 
   return (
     <div className="p-6 border rounded-lg shadow-md max-w-md mx-auto bg-marble">
-      {/* precio por noche */}
       {datesValid ? (
         <div className="flex items-center space-x-2 mb-4 p-2">
           <h1 className="text-xl font-extrabold">${price}USD</h1>
@@ -202,10 +194,8 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
         </div>
       ) : null}
 
-      {/* Título */}
       <h2 className="text-xl font-semibold mb-4">Reserva tu estadía</h2>
 
-      {/* Input de Fechas */}
       <div className="mb-4 relative">
         <label className="block text-gray-600 font-medium mb-2">¿Cuándo?</label>
         <label>Desde</label>
@@ -246,7 +236,6 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
         )}
       </div>
 
-      {/* Input de Viajeros */}
       <div className="mb-4 relative">
         <label className="block text-gray-600 font-medium mb-2">Viajeros</label>
         <input
@@ -260,8 +249,7 @@ const BookingDetail: React.FC<BookingDetailProps> = ({
           <div className="absolute z-10 bg-white shadow-md mt-2 p-4 border rounded-md">
             <div className="mb-2">
               <label className="block text-gray-600 font-medium mb-1">
-                Adultos{" "}
-                {hasMinor ? "(Edad: más de 13 años)" : "(Edad: más de 18 años)"}
+                Adultos {hasMinor ? "(Edad: más de 13 años)" : "(Edad: más de 18 años)"}
               </label>
               <input
                 type="number"

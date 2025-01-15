@@ -24,11 +24,15 @@ export const Reservations: React.FC = () => {
           // Verificar y procesar compra pendiente
           const compraId = localStorage.getItem("compraId");
           if (compraId) {
+            const parsedCompraId = JSON.parse(compraId)
             const currentUrl = window.location.href;
             const paid = {
               url: currentUrl,
-              contractId: compraId,
+              contractId: parsedCompraId,
             };
+
+            console.log(paid);
+            
 
             try {
               const paidResponse = await PaidReservation(paid);
@@ -43,6 +47,7 @@ export const Reservations: React.FC = () => {
               });
             } catch (error) {
               console.error("Error al procesar la reserva:", error);
+              localStorage.removeItem("compraId");
               Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -54,8 +59,11 @@ export const Reservations: React.FC = () => {
           // Obtener reservas del usuario
           const data = await getUserReservation(parsedUser.id);
 
+          console.log("esto es lo recibo por data", data);
+          
+
           // Asegurarse de que la respuesta esté en formato JSON
-          const reservationsData = await data.json(); // Convertir la respuesta a JSON
+          const reservationsData = await data; // Convertir la respuesta a JSON
           setReservations(reservationsData); // Asignar los datos al estado
           console.log(reservationsData);
         } else {
