@@ -3,6 +3,7 @@ import { IAccount } from "./IAccount";
 
 export interface IProperty {
   id: string;
+  id: string;
   account_: IAccount;
   isActive: boolean;
   name: string;
@@ -10,7 +11,6 @@ export interface IProperty {
   type: string;
   country:string;
   state: string;
-  city: string;
   price: number;
   bedrooms: number;
   bathrooms: number;
@@ -19,6 +19,7 @@ export interface IProperty {
   photos?: string[];
   image_?: { id: string; url: string }[];
   rating: number;
+  type:string,
   hasMinor: boolean;
   pets: boolean;
   amenities_: IAmenities;

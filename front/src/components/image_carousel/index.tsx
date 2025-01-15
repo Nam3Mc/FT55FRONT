@@ -13,7 +13,7 @@ export const ImageCarousel: React.FC<CarouselProps> = ({ photos }) => {
   const defaultImage = casadef; // Imagen predeterminada
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Manejo de imágenes válidas o uso de imagen por defecto
+  
   const validPhotos = photos && photos.length > 0 ? photos : [defaultImage];
 
   const goToPrevious = () => {

@@ -7,7 +7,7 @@ import AmenitiesList from '../amenities_list';
 export const DescriptionDetail: React.FC<IProperty> = (property) => {
 return (
    <div className="p-8 rounded-lg">
-        <h3 className="text-xl font-semibold mb-2">Acerca de este alojamiento</h3>
+        <h3 className="text-xl font-semibold mb-2">Acerca de este alojamiento </h3>
         <p className="text-gray-600 mb-4">
         {property.description}
         </p>
