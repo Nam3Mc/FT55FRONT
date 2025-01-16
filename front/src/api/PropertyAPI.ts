@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getPropertyDB = async (): Promise<IProperty[]> => {
   try {
-    const res = await fetch(`https://rentafacil.onrender.com/property`, {
+    const res = await fetch(`${API_URL}/property`, {
       next: { revalidate: 1200 },
     });
     console.log(res);
@@ -26,88 +26,6 @@ export const getPropertyDB = async (): Promise<IProperty[]> => {
   }
 };
 
-<<<<<<< HEAD
-//prueba 1
-// export const getPropertyDB = async (
-//   searchParams?: SearchParams
-// ): Promise<IProperty[]> => {
-//   try {
-//     let url = `https://rentafacil.onrender.com/property`;
-//     if (searchParams) {
-//       const queryString = new URLSearchParams(
-//         Object.entries(searchParams).filter(([_, v]) => v != null) as [
-//           string,
-//           string
-//         ][]
-//       ).toString();
-//       if (queryString) {
-//         url += `?${queryString}`;
-//       }
-//     }
-
-//     const res = await fetch(url, {
-//       next: { revalidate: 1200 },
-//     });
-//     console.log(res);
-
-//     if (!res.ok) {
-//       throw new Error(
-//         `Fallo al realizar el fetch a Propiedades: ${res.status} ${res.statusText}`
-//       );
-//     }
-//     const properties: IProperty[] = await res.json();
-//     console.log(properties);
-
-//     return properties;
-//   } catch (error: any) {
-//     console.error("Error in getPropertyDB:", error.message || error);
-//     throw new Error(error);
-//   }
-// };
-
-//prueba 2
-// export const getPropertyDB = async (
-//   searchParams?: SearchParams
-// ): Promise<IProperty[]> => {
-//   try {
-//     let url = `${process.env.NEXT_PUBLIC_API_URL}/property`;
-
-//     if (searchParams) {
-//       const queryParams = new URLSearchParams();
-//       Object.entries(searchParams).forEach(([key, value]) => {
-//         if (value) queryParams.append(key, value);
-//       });
-
-//       const queryString = queryParams.toString();
-//       if (queryString) {
-//         url += `?${queryString}`;
-//       }
-//     }
-
-//     console.log("Fetching from URL:", url); // Para depuración
-
-//     const res = await fetch(url, {
-//       next: { revalidate: 1200 },
-//     });
-
-//     if (!res.ok) {
-//       throw new Error(
-//         `Fallo al realizar el fetch a Propiedades: ${res.status} ${res.statusText}`
-//       );
-//     }
-
-//     const properties: IProperty[] = await res.json();
-//     console.log("Fetched properties:", properties); // Para depuración
-
-//     return properties;
-//   } catch (error: any) {
-//     console.error("Error in getPropertyDB:", error.message || error);
-//     throw new Error(error);
-//   }
-// };
-
-=======
->>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
 export const getPropertyById = async (id: string): Promise<IProperty> => {
   try {
     const res = await fetch(`https://rentafacil.onrender.com/property/unique/${id}`, {
