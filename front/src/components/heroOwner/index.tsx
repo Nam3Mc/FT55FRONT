@@ -18,25 +18,19 @@ export default function HeroOwner() {
         </div>
         <div className="container relative mx-auto px-4 pb-24 pt-10">
           <p className="text-xl text-white mb-8 text-center">
-            Publica tu propiedad
+            Conecta con más personas...
           </p>
-          <h2 className="text-4xl text-white font-bold mb-4 text-center">
+          <h2 className="text-4xl text-white font-bold mb-4 text-center mt-20">
             ¿Eres propietario?
           </h2>
-          <h1 className="text-4xl text-white font-bold mb-4 text-center">
-            ¡Publica tu propieda para alquiler con nosotros!
+          <h1 className="text-4xl text-white font-bold mb-8 text-center">
+            ¡Publica tu propiedad para alquiler con nosotros!
           </h1>
-
-          <div className="flex flex-col justify-center md:flex-row md:items-end space-y-4 md:space-y-0 md:space-x-4">
-            <div className="w-full mt-14 md:w-1/5 px-3">
-              <Button
-                type="submit"
-                className="w-full h-10 font-bold text-lg hover:bg-white hover:text-black"
-              >
-                <Link href={"/register"}>Registrate</Link>
-              </Button>
-            </div>
-          </div>
+          <p className="text-xl text-white mb-8 text-center">
+            Alcanza a más personas interesadas en tu propiedad
+            <br />
+            Publica ahora y maximiza tus oportunidades!
+          </p>
         </div>
       </section>
     </div>

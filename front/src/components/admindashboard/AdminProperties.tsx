@@ -91,6 +91,7 @@ const AllProperties: React.FC = () => {
       });
   
       const data = await response.json();
+      
   
       if (response.ok) {
         Swal.fire("Éxito", `La propiedad se pudo ${action} correctamente.`, "success");

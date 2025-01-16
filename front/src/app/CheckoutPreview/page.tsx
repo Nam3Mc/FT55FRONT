@@ -15,7 +15,7 @@ import { ILocalReservation } from "@/interfaces/IReservation";
 
 // API peticiones
 import { getPropertyById } from "@/api/PropertyAPI";
-import { createReservation, getEmailOwner } from "@/api/ResevationApi";
+import { createReservation, getEmailOwner, PaidReservation } from "@/api/ResevationApi";
 import { getUserAccount } from "@/api/UsersAPI";
 
 // Sweet
@@ -35,17 +35,36 @@ const CheckoutPreview = () => {
   const [paypalEmail, setPaypalEmail] = useState<string>("");
 
   useEffect(() => {
+    const fetchData = async () => {
     // Verificar si existe "compraId" en el localStorage
     const compraId = localStorage.getItem("compraId");
     if (compraId) {
-      Swal.fire({
-        icon: "error",
-        title: "Pago fallido",
-        text: "Tu pago anterior no pudo ser procesado. Intenta nuevamente.",
-      }).then(() => {
-        localStorage.removeItem("compraId");
-      });
-    }
+      const currentUrl = window.location.href;
+      const paid = {
+        url: currentUrl,
+        contractId: compraId,
+        };
+    
+      try {
+       const prueba = await PaidReservation(paid);
+       console.log(prueba);
+    
+              Swal.fire({
+                icon: "error",
+                title: "Algo salio mal",
+                text: "Tu reserva no pudo ser realizada",
+              }).then(() => {
+                localStorage.removeItem("compraId");
+              });
+            } catch (error) {
+              console.error("Error al procesar la reserva:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Hubo un problema al realizar la reserva. Por favor, inténtalo nuevamente.",
+              });
+            }
+          }
 
     const reservLocal = localStorage.getItem("reserv");
     const userLocal = localStorage.getItem("user");
@@ -71,6 +90,8 @@ const CheckoutPreview = () => {
         .then((property) => setPropertyData(property))
         .catch((error) => console.error("Error fetching property:", error));
     }
+  }
+  fetchData(); // Llama a la función asíncrona
   }, []);
 
   if (!reservData || !propertyData) {

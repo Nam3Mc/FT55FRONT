@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import Navbar from "@/components/navbar/nav";
+//import Navbar from "@/components/navbar/nav";
 import Footer from "@/components/footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import RoleNavbar from "@/components/navbar/roleNavbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,7 +39,8 @@ export default function RootLayout({
           <AuthProvider>
             <div className="flex flex-col min-h-screen">
               <header>
-                <Navbar />
+                {/* <Navbar /> */}
+                <RoleNavbar />
               </header>
 
               <main>{children}</main>

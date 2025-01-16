@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
 
 interface OwnerInfoProps {
+  id: string;
   name: string;
   lastName: string;
   email: string;
@@ -11,12 +13,13 @@ interface OwnerInfoProps {
   photo?: string; // Hacer que sea opcional
 }
 
-const OwnerInfo: React.FC<OwnerInfoProps> = ({ name, lastName, email, nationality, employmentStatus, photo }) => {
+const OwnerInfo: React.FC<OwnerInfoProps> = ({ id, name, lastName, email, nationality, employmentStatus, photo }) => {
   const defaultPhoto = "https://cdn-icons-png.flaticon.com/512/61/61205.png"; // URL de imagen predeterminada
-
-  const handleContactOwner = () => {
-    window.open(`mailto:${email}?subject=Consulta sobre tu propiedad`);
-  };
+  // const router = useRouter()
+  // const handleContactOwner = () => {
+  //   localStorage.setItem("OwnerId", JSON.stringify(id));
+  //   // router.push("/message")
+  // };
 
   // Determinar qué imagen usar
   const imageSrc = photo && photo.trim() ? photo : defaultPhoto;
@@ -43,12 +46,12 @@ const OwnerInfo: React.FC<OwnerInfoProps> = ({ name, lastName, email, nationalit
           <p className="text-gray-600">Estado laboral: {employmentStatus}</p>
 
           {/* Botón para contactar */}
-          <button
+          {/* <button
             onClick={handleContactOwner}
             className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
           >
             Escribile al propietario
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

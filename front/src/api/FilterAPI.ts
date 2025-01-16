@@ -20,24 +20,20 @@ export const FilterProperties = async (
     if (filters.country) {
       const normalizeCountry = (country: string): string => {
         const countryMapping: Record<string, string> = {
-          mexico: "México",
-          espana: "España",
-          peru: "Perú",
-          costarica: "Costa Rica",
-          "costa rica": "Costa Rica",
-          "united states": "United States",
-          unitedstates: "United States",
-          panama: "Panamá",
+          mexico: "méxico",
+          espana: "españa",
+          peru: "perú",
+          costarica: "costa rica",
+          "costa rica": "costa rica",
+          "united states": "united states",
+          unitedstates: "united states",
+          panama: "panamá",
         };
         const normalized = country.trim().toLowerCase();
         return (
           countryMapping[normalized] ||
-          normalized.charAt(0).toUpperCase() + normalized.slice(1)
+          normalized.charAt(0) + normalized.slice(1)
         );
-        // filters.country = filters.country
-        //   .trim()
-        //   .toLowerCase()
-        //   .replace(/\b\w/g, (char) => char.toUpperCase());
       };
       filters.country = normalizeCountry(filters.country);
     }

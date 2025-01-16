@@ -4,11 +4,10 @@
 import React from "react";
 
 // components
-import BackButton from "../back_button";
 import CardDetail from "../card_detail";
 import DescriptionDetail from "../description_detail";
 import BookingDetail from "../booking_detail";
-// import ReviewsContainer from "../reviews_container";
+import BackHome from "../back_button/backHome";
 import OwnerInfo from "../owner_info";
 
 import { GoogleMaps } from "../map";
@@ -27,7 +26,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({
   return (
     <div className="p-4">
       {/* Volver a la Home */}
-      <BackButton />
+      <BackHome />
 
       {/* Detalles de la Propiedad */}
       <CardDetail property={property} owner={owner} />
@@ -61,6 +60,7 @@ export const ContainerDetail: React.FC<IPropsDetail> = ({
 
       {owner && (
         <OwnerInfo
+          id={owner.id}
           name={owner.name}
           lastName={owner.lastName}
           email={owner.email}

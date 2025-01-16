@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AdminDashboard from "../../components/admindashboard/AdminDashboard";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const ProfilePage: React.FC = () => {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -23,7 +25,7 @@ const ProfilePage: React.FC = () => {
         const user = JSON.parse(userString); 
         const userId = user.id; 
 
-        const response = await fetch(`http://localhost:3002/users/${userId}`, {
+        const response = await fetch(`${API_URL}/users/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

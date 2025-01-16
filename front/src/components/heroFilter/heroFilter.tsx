@@ -19,13 +19,32 @@ interface PropertyContainerProps {
 
 const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
   const router = useRouter();
+
+  // Initialize searchParams with the values from params or default empty strings
   const [searchParams, setSearchParams] = useState({
-    checkIn: " ",
-    checkOut: " ",
-    capacity: "",
-    country: "",
-    type: "",
+    checkIn: params.checkIn || "",
+    checkOut: params.checkOut || "",
+    capacity: params.capacity ? String(params.capacity) : "",
+    country: params.country || "",
+    type: params.type || "",
   });
+
+  // Fecha mínima para `checkIn` (hoy)
+  const today = new Date().toISOString().split("T")[0]; // Formato YYYY-MM-DD
+
+  // Validar fecha de checkOut
+  const handleCheckOutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value && searchParams.checkIn) {
+      const checkInDate = new Date(searchParams.checkIn);
+      const checkOutDate = new Date(value);
+      if (checkOutDate <= checkInDate) {
+        // Si checkOut es igual o menor a checkIn, no lo actualizamos
+        return;
+      }
+    }
+    setSearchParams((prev) => ({ ...prev, checkOut: value }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,6 +62,7 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
     ).toString();
     router.push(`/property/filter?${queryString}`);
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -54,6 +74,7 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
               className="w-full"
               name="checkIn"
               value={searchParams.checkIn}
+              min={today}
               onChange={handleInputChange}
             />
           </label>
@@ -64,7 +85,9 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
               className="w-full"
               name="checkOut"
               value={searchParams.checkOut}
-              onChange={handleInputChange}
+              min={searchParams.checkIn ? searchParams.checkIn : today} //la fecha de salida debe ser mayor a la de ingreso
+              // onChange={handleInputChange}
+              onChange={handleCheckOutChange}
             />
           </label>
           <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
@@ -76,9 +99,7 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue
-                  placeholder={params.type ? params.type : "¿Qué buscas?"}
-                />
+                <SelectValue placeholder="¿Qué buscas?" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -92,9 +113,7 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
           <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
             <span className="text-gray-500 text-sm">Huéspedes</span>
             <Input
-              placeholder={
-                params.capacity ? String(params.capacity) : "¿Cuántos?"
-              }
+              placeholder="¿Cuántos?"
               type="number"
               className="w-full"
               min={1}
@@ -106,7 +125,7 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
           <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">
             <span className="text-gray-500 text-sm">País</span>
             <Input
-              placeholder={params.country ? String(params.country) : "¿Dónde?"}
+              placeholder="¿Dónde?"
               type="text"
               className="w-full"
               name="country"
@@ -124,4 +143,5 @@ const HeroFilterExtend: React.FC<PropertyContainerProps> = ({ params }) => {
     </div>
   );
 };
+
 export default HeroFilterExtend;

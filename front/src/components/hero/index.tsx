@@ -22,6 +22,22 @@ export default function HeroHome() {
     country: "",
     type: "",
   });
+  // Fecha mínima para `checkIn` (hoy)
+  const today = new Date().toISOString().split("T")[0];
+
+  // Validar fecha de checkOut
+  const handleCheckOutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value && searchParams.checkIn) {
+      const checkInDate = new Date(searchParams.checkIn);
+      const checkOutDate = new Date(value);
+      if (checkOutDate <= checkInDate) {
+        // Si checkOut es igual o menor a checkIn, no lo actualizamos
+        return;
+      }
+    }
+    setSearchParams((prev) => ({ ...prev, checkOut: value }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -84,6 +100,7 @@ export default function HeroHome() {
                     className="w-full"
                     name="checkIn"
                     value={searchParams.checkIn}
+                    min={today}
                     onChange={handleInputChange}
                   />
                 </label>
@@ -94,7 +111,8 @@ export default function HeroHome() {
                     className="w-full"
                     name="checkOut"
                     value={searchParams.checkOut}
-                    onChange={handleInputChange}
+                    min={searchParams.checkIn ? searchParams.checkIn : today}
+                    onChange={handleCheckOutChange}
                   />
                 </label>
                 <label className="w-full md:w-1/4 px-3 mb-4 md:mb-0">

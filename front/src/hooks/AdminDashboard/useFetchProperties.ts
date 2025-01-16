@@ -11,22 +11,20 @@ const useFetchProperties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-<<<<<<< HEAD
-        const response = await fetch("https://rentafacil.onrender.com/property", {
-=======
+        const token = localStorage.getItem("token"); 
         const response = await fetch(`${API_URL}/property/all`, {
->>>>>>> 31c41c1a7b3d020d19d4d22d35bdb67e1fe7cd04
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
-
+        
         if (!response.ok) {
-          throw new Error("Error al cargar las propiedades");
+          throw new Error(`Error al cargar las propiedades: ${response.statusText}`);
         }
-
         const data = await response.json();
+        console.log("propiedades", data)
         setProperties(data);
       } catch (err: any) {
         setError(err.message);

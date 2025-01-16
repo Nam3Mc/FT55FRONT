@@ -1,9 +1,11 @@
 import IUser from "@/interfaces/user";
 import Swal from "sweetalert2";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const saveUser = async (updatedUser: IUser): Promise<IUser> => {
   try {
-    const response = await fetch(`https://rentafacil.onrender.com/users/${updatedUser.id}`, {
+    const response = await fetch(`${API_URL}/users/${updatedUser.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
